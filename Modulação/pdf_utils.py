@@ -2,15 +2,15 @@ import textwrap
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen import canvas
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 
 def gerar_pdf(
     caminho, texto_relatorio, campos, titulo="RELATÓRIO DE CORTES",
-    fonte_normal="TimesNewRoman", fonte_bold="TimesNewRoman"
+    fonte_normal="Times-Roman", fonte_bold="Times-Bold"
 ):
-    pdfmetrics.registerFont(TTFont('TimesNewRoman', 'times.ttf'))
+    # Não registra fontes customizadas, usa apenas as padrões do ReportLab
     try:
+        from reportlab.pdfbase import pdfmetrics
+        from reportlab.pdfbase.ttfonts import TTFont
         pdfmetrics.registerFont(TTFont('Calibri', 'calibri.ttf'))
         fonte_calibri = 'Calibri'
     except:
