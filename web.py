@@ -373,27 +373,27 @@ if st.button("Gerar Relatório de Minuta"):
 # --- CSS customizado com suporte automático a tema claro/escuro ---
 st.markdown("""
     <style>
-        /* Tema Claro */
+        /* ---------- TEMA CLARO ---------- */
         @media (prefers-color-scheme: light) {
             body, .main {background-color: #f6f8fa;}
             .block-container {padding-top: 2rem;}
             h1, h2, h3, h4 {color: #2d3a4a;}
             .stButton>button, .stDownloadButton>button {
-                background: linear-gradient(90deg, #b5d0e6 0%, #6ea8c6 100%);
-                color: #223;
-                border-radius: 8px;
-                font-weight: bold;
-                border: none;
-                padding: 0.5em 1.5em;
-                margin-top: 8px;
-                transition: background 0.3s;
+                background: linear-gradient(90deg, #b5d0e6 0%, #6ea8c6 100%) !important;
+                color: #223 !important;
+                border-radius: 8px !important;
+                font-weight: bold !important;
+                border: none !important;
+                padding: 0.5em 1.5em !important;
+                margin-top: 8px !important;
+                transition: background 0.3s !important;
             }
             .stButton>button:hover, .stDownloadButton>button:hover {
-                background: linear-gradient(90deg, #6ea8c6 0%, #b5d0e6 100%);
-                color: #223;
+                background: linear-gradient(90deg, #6ea8c6 0%, #b5d0e6 100%) !important;
+                color: #223 !important;
             }
-            /* Força campos claros para todos os inputs, selects e textareas */
-            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
+            /* Inputs, selects, textareas, dropdowns */
+            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"], .stMultiSelect div[data-baseweb="select"] {
                 background-color: #e9ecef !important;
                 color: #222 !important;
                 border-radius: 6px !important;
@@ -402,14 +402,18 @@ st.markdown("""
             input::placeholder, textarea::placeholder {
                 color: #7b8794 !important;
             }
-            .stRadio>div>label, .stCheckbox>label {color: #2d3a4a;}
-            .sidebar .sidebar-content, .css-1d391kg {background-color: #e9ecef !important;}
-            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #2d3a4a;}
-            .sidebar .sidebar-content, .css-1d391kg {color: #222;}
+            /* Sidebar */
+            .sidebar .sidebar-content, .css-1d391kg, .stSidebar, section[data-testid="stSidebar"] {
+                background-color: #e9ecef !important;
+                color: #222 !important;
+            }
+            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3, .css-1d391kg h2, .css-1d391kg h3 {
+                color: #2d3a4a !important;
+            }
             /* Cabeçalho principal */
-            div[style*="background: #ff4b4b"], .header-corteus {
+            .header-corteus, div[style*="background: #ff4b4b"] {
                 background: #b5d0e6 !important;
-                border-radius: 12px;
+                border-radius: 12px !important;
             }
             img, span { filter: none !important; }
             span[style*="font-size: 56px"] { color: #2d3a4a !important; }
@@ -417,27 +421,27 @@ st.markdown("""
             .stCheckbox>label, .stRadio>div>label {color: #2d3a4a !important;}
         }
 
-        /* Tema Escuro */
+        /* ---------- TEMA ESCURO ---------- */
         @media (prefers-color-scheme: dark) {
             body, .main {background-color: #181c22;}
             .block-container {padding-top: 2rem;}
             h1, h2, h3, h4 {color: #b5d0e6;}
             .stButton>button, .stDownloadButton>button {
-                background: linear-gradient(90deg, #22303c 0%, #3a506b 100%);
-                color: #e9ecef;
-                border-radius: 8px;
-                font-weight: bold;
-                border: none;
-                padding: 0.5em 1.5em;
-                margin-top: 8px;
-                transition: background 0.3s;
+                background: linear-gradient(90deg, #22303c 0%, #3a506b 100%) !important;
+                color: #e9ecef !important;
+                border-radius: 8px !important;
+                font-weight: bold !important;
+                border: none !important;
+                padding: 0.5em 1.5em !important;
+                margin-top: 8px !important;
+                transition: background 0.3s !important;
             }
             .stButton>button:hover, .stDownloadButton>button:hover {
-                background: linear-gradient(90deg, #3a506b 0%, #22303c 100%);
-                color: #b5d0e6;
+                background: linear-gradient(90deg, #3a506b 0%, #22303c 100%) !important;
+                color: #b5d0e6 !important;
             }
-            /* Força campos escuros para todos os inputs, selects e textareas */
-            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
+            /* Inputs, selects, textareas, dropdowns */
+            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"], .stMultiSelect div[data-baseweb="select"] {
                 background-color: #232a34 !important;
                 color: #e9ecef !important;
                 border-radius: 6px !important;
@@ -446,13 +450,18 @@ st.markdown("""
             input::placeholder, textarea::placeholder {
                 color: #b5d0e6 !important;
             }
-            .stRadio>div>label, .stCheckbox>label {color: #b5d0e6;}
-            .sidebar .sidebar-content, .css-1d391kg {background-color: #232a34 !important;}
-            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #b5d0e6;}
-            .sidebar .sidebar-content, .css-1d391kg {color: #e9ecef;}
-            div[style*="background: #ff4b4b"], .header-corteus {
+            /* Sidebar */
+            .sidebar .sidebar-content, .css-1d391kg, .stSidebar, section[data-testid="stSidebar"] {
+                background-color: #232a34 !important;
+                color: #e9ecef !important;
+            }
+            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3, .css-1d391kg h2, .css-1d391kg h3 {
+                color: #b5d0e6 !important;
+            }
+            /* Cabeçalho principal */
+            .header-corteus, div[style*="background: #ff4b4b"] {
                 background: #22303c !important;
-                border-radius: 12px;
+                border-radius: 12px !important;
             }
             img, span { filter: none !important; }
             span[style*="font-size: 56px"] { color: #b5d0e6 !important; }
