@@ -95,7 +95,14 @@ st.sidebar.markdown("**Desenvolvido por Matheus Araújo**")
 st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_html=True)
 
 # --- Cabeçalho principal ---
-st.markdown("""
+
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+logo_base64 = get_base64_image("webfonts/IconeLogo.png")
+
+st.markdown(f"""
 <div style='
     background: #ff4b4b;
     padding: 48px 0 32px 0;
@@ -106,25 +113,15 @@ st.markdown("""
     align-items: center;
     justify-content: center;
 '>
-""", unsafe_allow_html=True)
-
-# Exibe a imagem centralizada
-logo = Image.open("webfonts/IconeLogo.png")
-st.image(logo, width=80)
-
-# Exibe o texto centralizado na caixa laranja
-st.markdown("""
-<div style="
-    font-family: 'Montserrat-Alt1', Arial, sans-serif;
-    font-size: 56px;
-    font-weight: 700;
-    color: #18191a;
-    letter-spacing: -2px;
-    text-align: center;
-    margin-top: -16px;
-">
-Corteus
-</div>
+    <img src="data:image/png;base64,{logo_base64}" width="80" style="margin-bottom: 16px;" />
+    <span style="
+        font-family: 'Montserrat-Alt1', Arial, sans-serif;
+        font-size: 56px;
+        font-weight: 700;
+        color: #18191a;
+        letter-spacing: -2px;
+        text-align: center;
+    ">Corteus</span>
 </div>
 """, unsafe_allow_html=True)
 
