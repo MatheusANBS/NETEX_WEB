@@ -83,15 +83,15 @@ st.markdown("""
 
 # --- Sidebar (Menu Lateral) ---
 st.sidebar.image("https://img.icons8.com/ios-filled/100/ff4b4b/cut.png", width=80)
-st.sidebar.markdown("<h2 style='color:#ff4b4b;'>NETEX</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='color:#ff4b4b;'>NETEXSI</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
-st.sidebar.markdown("**Desenvolvido por Matheus Silva**")
+st.sidebar.markdown("**Desenvolvido por Matheus Araújo**")
 st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_html=True)
 
 # --- Cabeçalho principal ---
 st.markdown("""
 <div style='background: linear-gradient(90deg, #ff4b4b 0%, #ff7b00 100%);padding:18px 0 10px 0;margin-bottom:24px;border-radius:10px;box-shadow:0 2px 8px #0001;'>
-    <h1 style='color:#fff;text-align:center;margin:0;'>NETEX - Otimizador de Cortes</h1>
+    <h1 style='color:#fff;text-align:center;margin:0;'>NETEXSI - Otimizador de Cortes</h1>
     <h4 style='color:#fff;text-align:center;margin:0;font-weight:normal;'>Sistema de Apoio à Gestão de Manufatura</h4>
 </div>
 """, unsafe_allow_html=True)
