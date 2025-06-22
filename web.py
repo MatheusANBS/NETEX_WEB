@@ -42,47 +42,53 @@ def get_base64_image(image_path):
 # --- CSS customizado ---
 st.markdown("""
     <style>
-        body {background-color: #18191a;}
-        .main {background-color: #18191a;}
+        body {background-color: #f4f6fa;}
+        .main {background-color: #f4f6fa;}
         .block-container {padding-top: 2rem;}
-        h1, h2, h3, h4 {color: #ff4b4b;}
+        h1, h2, h3, h4 {color: #3a506b;}
         .stButton>button {
-            background: linear-gradient(90deg, #ff4b4b 0%, #ff7b00 100%);
+            background: linear-gradient(90deg, #5bc0be 0%, #3a506b 100%);
             color: white;
             border-radius: 8px;
             font-weight: bold;
             border: none;
             padding: 0.5em 1.5em;
             margin-top: 8px;
+            transition: background 0.3s;
         }
         .stButton>button:hover {
-            background: linear-gradient(90deg, #ff7b00 0%, #ff4b4b 100%);
+            background: linear-gradient(90deg, #3a506b 0%, #5bc0be 100%);
             color: #fff;
         }
         .stTextInput>div>div>input, .stTextArea>div>textarea {
-            background-color: #23272f !important;
-            color: #fff !important;
+            background-color: #e9ecef !important;
+            color: #222 !important;
             border-radius: 6px;
-            border: 1px solid #444;
+            border: 1px solid #bfc9d1;
         }
         .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
-            color: #aaa !important;
+            color: #7b8794 !important;
         }
-        .stRadio>div>label, .stCheckbox>label {color: #fff;}
-        .sidebar .sidebar-content {background-color: #23272f;}
-        .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #ff4b4b;}
-        .sidebar .sidebar-content {color: #fff;}
+        .stRadio>div>label, .stCheckbox>label {color: #3a506b;}
+        .sidebar .sidebar-content {background-color: #e9ecef;}
+        .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #3a506b;}
+        .sidebar .sidebar-content {color: #222;}
         .stDownloadButton>button {
-            background: #23272f;
+            background: #5bc0be;
             color: #fff;
             border-radius: 8px;
             font-weight: bold;
             border: none;
             padding: 0.5em 1.5em;
+            transition: background 0.3s;
         }
         .stDownloadButton>button:hover {
-            background: #ff4b4b;
+            background: #3a506b;
             color: #fff;
+        }
+        /* Ajuste para o logo e títulos */
+        img, span {
+            filter: none !important;
         }
     </style>
 """, unsafe_allow_html=True)
