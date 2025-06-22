@@ -370,9 +370,6 @@ if st.button("Gerar Relatório de Minuta"):
         except Exception as e:
             st.error(f"Erro: {e}")
 
-# --- Seletor de Tema ---
-tema = st.sidebar.radio("Tema", ["Claro", "Escuro"], horizontal=True)
-
 # --- CSS customizado com suporte automático a tema claro/escuro ---
 st.markdown("""
     <style>
