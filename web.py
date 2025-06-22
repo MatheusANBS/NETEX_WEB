@@ -4,6 +4,7 @@ import os
 import time
 import base64
 import datetime
+from PIL import Image
 
 #streamlit run web.py
 
@@ -105,16 +106,25 @@ st.markdown("""
     align-items: center;
     justify-content: center;
 '>
-    <div style="display: flex; flex-direction: column; align-items: center;">
-        <img src="webfonts/IconeLogo.png" width="80" style="margin-bottom: 16px;" />
-        <span style="
-            font-family: 'Montserrat-Alt1', Arial, sans-serif;
-            font-size: 56px;
-            font-weight: 700;
-            color: #18191a;
-            letter-spacing: -2px;
-        ">Corteus</span>
-    </div>
+""", unsafe_allow_html=True)
+
+# Exibe a imagem centralizada
+logo = Image.open("webfonts/IconeLogo.png")
+st.image(logo, width=80)
+
+# Exibe o texto centralizado na caixa laranja
+st.markdown("""
+<div style="
+    font-family: 'Montserrat-Alt1', Arial, sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: #18191a;
+    letter-spacing: -2px;
+    text-align: center;
+    margin-top: -16px;
+">
+Corteus
+</div>
 </div>
 """, unsafe_allow_html=True)
 
