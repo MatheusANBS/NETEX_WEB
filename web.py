@@ -376,6 +376,36 @@ st.markdown("""
         body, .main {background-color: #181c22;}
         .block-container {padding-top: 2rem;}
         h1, h2, h3, h4 {color: #b5d0e6;}
+        /* Força fundo escuro em todos os campos de input/select/textarea */
+        input, textarea, select {
+            background-color: #232a34 !important;
+            color: #e9ecef !important;
+            border-radius: 6px !important;
+            border: 1px solid #3a506b !important;
+        }
+        /* Força fundo escuro nos containers dos campos */
+        .stTextInput, .stTextArea, .stSelectbox, .stMultiSelect, .stNumberInput, .stDateInput, .stFileUploader, .stTextInput>div, .stTextArea>div, .stSelectbox>div, .stMultiSelect>div {
+            background-color: #232a34 !important;
+        }
+        /* Força fundo escuro nas divs internas dos inputs */
+        .stTextInput>div>div, .stTextArea>div>textarea, .stSelectbox>div[data-baseweb="select"], .stMultiSelect>div[data-baseweb="select"] {
+            background-color: #232a34 !important;
+            color: #e9ecef !important;
+        }
+        /* Força cor dos labels */
+        label, .stTextInput label, .stTextArea label, .stSelectbox label, .stMultiSelect label {
+            color: #b5d0e6 !important;
+            background: transparent !important;
+        }
+        /* Remove fundo estranho dos labels */
+        .stTextInput label, .stTextArea label, .stSelectbox label, .stMultiSelect label {
+            background: transparent !important;
+        }
+        /* Placeholder */
+        input::placeholder, textarea::placeholder {
+            color: #b5d0e6 !important;
+        }
+        /* Botões */
         .stButton>button, .stDownloadButton>button {
             background: linear-gradient(90deg, #22303c 0%, #3a506b 100%) !important;
             color: #e9ecef !important;
@@ -388,16 +418,6 @@ st.markdown("""
         }
         .stButton>button:hover, .stDownloadButton>button:hover {
             background: linear-gradient(90deg, #3a506b 0%, #22303c 100%) !important;
-            color: #b5d0e6 !important;
-        }
-        /* Inputs, selects, textareas, dropdowns */
-        input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"], .stMultiSelect div[data-baseweb="select"] {
-            background-color: #232a34 !important;
-            color: #e9ecef !important;
-            border-radius: 6px !important;
-            border: 1px solid #3a506b !important;
-        }
-        input::placeholder, textarea::placeholder {
             color: #b5d0e6 !important;
         }
         /* Sidebar */
