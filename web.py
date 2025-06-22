@@ -392,13 +392,14 @@ st.markdown("""
                 background: linear-gradient(90deg, #6ea8c6 0%, #b5d0e6 100%);
                 color: #223;
             }
-            .stTextInput>div>div>input, .stTextArea>div>textarea {
+            /* Força campos claros para todos os inputs, selects e textareas */
+            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
                 background-color: #e9ecef !important;
                 color: #222 !important;
-                border-radius: 6px;
-                border: 1px solid #bfc9d1;
+                border-radius: 6px !important;
+                border: 1px solid #bfc9d1 !important;
             }
-            .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
+            input::placeholder, textarea::placeholder {
                 color: #7b8794 !important;
             }
             .stRadio>div>label, .stCheckbox>label {color: #2d3a4a;}
@@ -410,19 +411,9 @@ st.markdown("""
                 background: #b5d0e6 !important;
                 border-radius: 12px;
             }
-            /* Ajuste para o logo e títulos */
-            img, span {
-                filter: none !important;
-            }
-            /* Título Corteus */
-            span[style*="font-size: 56px"] {
-                color: #2d3a4a !important;
-            }
-            /* Subtítulo */
-            span[style*="font-size: 22px"] {
-                color: #223 !important;
-            }
-            /* Checkbox e radio */
+            img, span { filter: none !important; }
+            span[style*="font-size: 56px"] { color: #2d3a4a !important; }
+            span[style*="font-size: 22px"] { color: #223 !important; }
             .stCheckbox>label, .stRadio>div>label {color: #2d3a4a !important;}
         }
 
@@ -445,37 +436,27 @@ st.markdown("""
                 background: linear-gradient(90deg, #3a506b 0%, #22303c 100%);
                 color: #b5d0e6;
             }
-            .stTextInput>div>div>input, .stTextArea>div>textarea {
+            /* Força campos escuros para todos os inputs, selects e textareas */
+            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
                 background-color: #232a34 !important;
                 color: #e9ecef !important;
-                border-radius: 6px;
-                border: 1px solid #3a506b;
+                border-radius: 6px !important;
+                border: 1px solid #3a506b !important;
             }
-            .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
+            input::placeholder, textarea::placeholder {
                 color: #b5d0e6 !important;
             }
             .stRadio>div>label, .stCheckbox>label {color: #b5d0e6;}
             .sidebar .sidebar-content, .css-1d391kg {background-color: #232a34 !important;}
             .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #b5d0e6;}
             .sidebar .sidebar-content, .css-1d391kg {color: #e9ecef;}
-            /* Cabeçalho principal */
             div[style*="background: #ff4b4b"], .header-corteus {
                 background: #22303c !important;
                 border-radius: 12px;
             }
-            /* Ajuste para o logo e títulos */
-            img, span {
-                filter: none !important;
-            }
-            /* Título Corteus */
-            span[style*="font-size: 56px"] {
-                color: #b5d0e6 !important;
-            }
-            /* Subtítulo */
-            span[style*="font-size: 22px"] {
-                color: #e9ecef !important;
-            }
-            /* Checkbox e radio */
+            img, span { filter: none !important; }
+            span[style*="font-size: 56px"] { color: #b5d0e6 !important; }
+            span[style*="font-size: 22px"] { color: #e9ecef !important; }
             .stCheckbox>label, .stRadio>div>label {color: #b5d0e6 !important;}
         }
     </style>
