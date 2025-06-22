@@ -34,61 +34,50 @@ class FakeVar:
     def get(self):
         return self.value
 
-# --- Função utilitária para base64 ---
-def get_base64_image(image_path):
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
-
 # --- CSS customizado ---
 st.markdown("""
     <style>
-        body {background-color: #f4f6fa;}
-        .main {background-color: #f4f6fa;}
+        body {background-color: #18191a;}
+        .main {background-color: #18191a;}
         .block-container {padding-top: 2rem;}
-        h1, h2, h3, h4 {color: #3a506b;}
+        h1, h2, h3, h4 {color: #ff4b4b;}
         .stButton>button {
-            background: linear-gradient(90deg, #5bc0be 0%, #3a506b 100%);
+            background: linear-gradient(90deg, #ff4b4b 0%, #ff7b00 100%);
             color: white;
             border-radius: 8px;
             font-weight: bold;
             border: none;
             padding: 0.5em 1.5em;
             margin-top: 8px;
-            transition: background 0.3s;
         }
         .stButton>button:hover {
-            background: linear-gradient(90deg, #3a506b 0%, #5bc0be 100%);
+            background: linear-gradient(90deg, #ff7b00 0%, #ff4b4b 100%);
             color: #fff;
         }
         .stTextInput>div>div>input, .stTextArea>div>textarea {
-            background-color: #e9ecef !important;
-            color: #222 !important;
+            background-color: #23272f !important;
+            color: #fff !important;
             border-radius: 6px;
-            border: 1px solid #bfc9d1;
+            border: 1px solid #444;
         }
         .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
-            color: #7b8794 !important;
+            color: #aaa !important;
         }
-        .stRadio>div>label, .stCheckbox>label {color: #3a506b;}
-        .sidebar .sidebar-content {background-color: #e9ecef;}
-        .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #3a506b;}
-        .sidebar .sidebar-content {color: #222;}
+        .stRadio>div>label, .stCheckbox>label {color: #fff;}
+        .sidebar .sidebar-content {background-color: #23272f;}
+        .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #ff4b4b;}
+        .sidebar .sidebar-content {color: #fff;}
         .stDownloadButton>button {
-            background: #5bc0be;
+            background: #23272f;
             color: #fff;
             border-radius: 8px;
             font-weight: bold;
             border: none;
             padding: 0.5em 1.5em;
-            transition: background 0.3s;
         }
         .stDownloadButton>button:hover {
-            background: #3a506b;
+            background: #ff4b4b;
             color: #fff;
-        }
-        /* Ajuste para o logo e títulos */
-        img, span {
-            filter: none !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -99,34 +88,24 @@ st.markdown(
 )
 
 # --- Sidebar (Menu Lateral) ---
-logo_base64 = get_base64_image("webfonts/IconeLogo.png")
-st.sidebar.markdown(f"""
-<div style='
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-'>
-    <img src="data:image/png;base64,{logo_base64}" width="60" style="margin-bottom: 8px;" />
-    <span style="
-        font-family: 'Montserrat-Alt1', Arial, sans-serif;
-        font-size: 32px;
-        font-weight: 700;
-        color: #ff4b4b;
-        text-align: center;
-    ">Corteus</span>
-</div>
-""", unsafe_allow_html=True)
+st.sidebar.image("https://img.icons8.com/ios-filled/100/ff4b4b/cut.png", width=80)
+st.sidebar.markdown("<h2 style='color:#ff4b4b;'>Corteus</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Desenvolvido por Matheus Araújo**")
 st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_html=True)
 
 # --- Cabeçalho principal ---
+
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
 logo_base64 = get_base64_image("webfonts/IconeLogo.png")
+
 st.markdown(f"""
-<div class="header-corteus" style='
-    padding: 48px 0 24px 0;
+<div style='
+    background: #ff4b4b;
+    padding: 48px 0 32px 0;
     border-radius: 12px;
     margin-bottom: 32px;
     display: flex;
@@ -139,22 +118,10 @@ st.markdown(f"""
         font-family: 'Montserrat-Alt1', Arial, sans-serif;
         font-size: 56px;
         font-weight: 700;
+        color: #18191a;
         letter-spacing: -2px;
         text-align: center;
-        margin-bottom: 8px;
     ">Corteus</span>
-    <span style="
-        font-family: 'Montserrat-Alt1', Arial, sans-serif;
-        font-size: 22px;
-        font-weight: 400;
-        text-align: center;
-        opacity: 0.85;
-        margin-top: 0;
-        max-width: 90vw;
-        word-break: break-word;
-    ">
-        Otimizador de cortes para manufatura inteligente
-    </span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -369,84 +336,6 @@ if st.button("Gerar Relatório de Minuta"):
                 os.unlink(tmp_path)
         except Exception as e:
             st.error(f"Erro: {e}")
-
-# --- CSS customizado: DARK MODE FORÇADO ---
-st.markdown("""
-    <style>
-        body, .main {background-color: #181c22;}
-        .block-container {padding-top: 2rem;}
-        h1, h2, h3, h4 {color: #b5d0e6;}
-        /* Força fundo escuro em todos os campos de input/select/textarea */
-        input, textarea, select {
-            background-color: #232a34 !important;
-            color: #e9ecef !important;
-            border-radius: 6px !important;
-            border: 1px solid #3a506b !important;
-        }
-        /* Força fundo escuro nos containers dos campos */
-        .stTextInput, .stTextArea, .stSelectbox, .stMultiSelect, .stNumberInput, .stDateInput, .stFileUploader, .stTextInput>div, .stTextArea>div, .stSelectbox>div, .stMultiSelect>div {
-            background-color: #232a34 !important;
-        }
-        /* Força fundo escuro nas divs internas dos inputs */
-        .stTextInput>div>div, .stTextArea>div>textarea, .stSelectbox>div[data-baseweb="select"], .stMultiSelect>div[data-baseweb="select"] {
-            background-color: #232a34 !important;
-            color: #e9ecef !important;
-        }
-        /* Força cor dos labels */
-        label, .stTextInput label, .stTextArea label, .stSelectbox label, .stMultiSelect label {
-            color: #b5d0e6 !important;
-            background: transparent !important;
-        }
-        /* Remove fundo estranho dos labels */
-        .stTextInput label, .stTextArea label, .stSelectbox label, .stMultiSelect label {
-            background: transparent !important;
-        }
-        /* Placeholder */
-        input::placeholder, textarea::placeholder {
-            color: #b5d0e6 !important;
-        }
-        /* Botões */
-        .stButton>button, .stDownloadButton>button {
-            background: linear-gradient(90deg, #22303c 0%, #3a506b 100%) !important;
-            color: #e9ecef !important;
-            border-radius: 8px !important;
-            font-weight: bold !important;
-            border: none !important;
-            padding: 0.5em 1.5em !important;
-            margin-top: 8px !important;
-            transition: background 0.3s !important;
-        }
-        .stButton>button:hover, .stDownloadButton>button:hover {
-            background: linear-gradient(90deg, #3a506b 0%, #22303c 100%) !important;
-            color: #b5d0e6 !important;
-        }
-        /* Sidebar */
-        .sidebar .sidebar-content, .css-1d391kg, .stSidebar, section[data-testid="stSidebar"] {
-            background-color: #232a34 !important;
-            color: #e9ecef !important;
-        }
-        .sidebar .sidebar-content h2, .sidebar .sidebar-content h3, .css-1d391kg h2, .css-1d391kg h3 {
-            color: #b5d0e6 !important;
-        }
-        /* Cabeçalho principal */
-        .header-corteus, div[style*="background: #ff4b4b"] {
-            background: #22303c !important;
-            border-radius: 12px !important;
-        }
-        img, span { filter: none !important; }
-        span[style*="font-size: 56px"] { color: #b5d0e6 !important; }
-        span[style*="font-size: 22px"] { color: #e9ecef !important; }
-        .stCheckbox>label, .stRadio>div>label {color: #b5d0e6 !important;}
-        /* Ajuste para selects e dropdowns do Streamlit */
-        .stSelectbox, .stMultiSelect {
-            background-color: #232a34 !important;
-        }
-        /* Ajuste para linhas divisórias */
-        hr, .stHorizontalBlock {
-            border-color: #3a506b !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
 
 # --- 7. Tutorial ---
 with st.sidebar.expander("Tutorial de Uso"):
