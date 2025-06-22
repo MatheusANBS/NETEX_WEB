@@ -102,13 +102,18 @@ st.markdown("""
     margin-bottom: 32px;
     text-align: center;
 '>
-    <img src='webfonts/IconeLogo.png' width='80' style='margin-bottom: 16px;'/>
+""", unsafe_allow_html=True)
+
+st.image("webfonts/IconeLogo.png", width=80)
+
+st.markdown("""
     <div style='
         font-family: "Montserrat-Alt1", Arial, sans-serif;
         font-size: 56px;
         font-weight: 700;
         color: #18191a;
         letter-spacing: -2px;
+        margin-top: -16px;
     '>Corteus</div>
 </div>
 """, unsafe_allow_html=True)
