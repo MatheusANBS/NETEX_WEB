@@ -87,13 +87,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- Sidebar (Menu Lateral) ---
-st.sidebar.image("https://img.icons8.com/ios-filled/100/ff4b4b/cut.png", width=80)
-st.sidebar.markdown("<h2 style='color:#ff4b4b;'>Corteus</h2>", unsafe_allow_html=True)
-st.sidebar.markdown("---")
-st.sidebar.markdown("**Desenvolvido por Matheus Araújo**")
-st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_html=True)
-
 # --- Cabeçalho principal ---
 
 def get_base64_image(image_path):
@@ -122,8 +115,28 @@ st.markdown(f"""
         letter-spacing: -2px;
         text-align: center;
     ">Corteus</span>
+    <span style="
+        font-family: 'Montserrat-Alt1', Arial, sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+        color: #23272f;
+        margin-top: 8px;
+        text-align: center;
+        letter-spacing: 0px;
+    ">Gestor de Cortes para Manufatura.</span>
 </div>
 """, unsafe_allow_html=True)
+
+# --- Sidebar (Menu Lateral) ---
+sidebar_logo_base64 = logo_base64 
+st.sidebar.markdown(
+    f'<img src="data:image/png;base64,{sidebar_logo_base64}" width="80" style="display:block;margin-left:auto;margin-right:auto;margin-bottom:8px;" />',
+    unsafe_allow_html=True
+)
+st.sidebar.markdown("<h2 style='color:#ff4b4b;'>Corteus</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("---")
+st.sidebar.markdown("**Desenvolvido por Matheus Araújo**")
+st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_html=True)
 
 # --- 1. Dados do Projeto ---
 def sk_to_upper():
