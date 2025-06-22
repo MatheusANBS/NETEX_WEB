@@ -34,6 +34,11 @@ class FakeVar:
     def get(self):
         return self.value
 
+# --- Função utilitária para base64 ---
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
 # --- CSS customizado ---
 st.markdown("""
     <style>
@@ -88,24 +93,35 @@ st.markdown(
 )
 
 # --- Sidebar (Menu Lateral) ---
-st.sidebar.image("https://img.icons8.com/ios-filled/100/ff4b4b/cut.png", width=80)
-st.sidebar.markdown("<h2 style='color:#ff4b4b;'>Corteus</h2>", unsafe_allow_html=True)
+logo_base64 = get_base64_image("webfonts/IconeLogo.png")
+st.sidebar.markdown(f"""
+<div style='
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+'>
+    <img src="data:image/png;base64,{logo_base64}" width="60" style="margin-bottom: 8px;" />
+    <span style="
+        font-family: 'Montserrat-Alt1', Arial, sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        color: #ff4b4b;
+        text-align: center;
+    ">Corteus</span>
+</div>
+""", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 st.sidebar.markdown("**Desenvolvido por Matheus Araújo**")
 st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_html=True)
 
 # --- Cabeçalho principal ---
-
-def get_base64_image(image_path):
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
-
 logo_base64 = get_base64_image("webfonts/IconeLogo.png")
-
 st.markdown(f"""
 <div style='
     background: #ff4b4b;
-    padding: 48px 0 32px 0;
+    padding: 48px 0 24px 0;
     border-radius: 12px;
     margin-bottom: 32px;
     display: flex;
@@ -121,7 +137,21 @@ st.markdown(f"""
         color: #18191a;
         letter-spacing: -2px;
         text-align: center;
+        margin-bottom: 8px;
     ">Corteus</span>
+    <span style="
+        font-family: 'Montserrat-Alt1', Arial, sans-serif;
+        font-size: 22px;
+        font-weight: 400;
+        color: #18191a;
+        text-align: center;
+        opacity: 0.85;
+        margin-top: 0;
+        max-width: 90vw;
+        word-break: break-word;
+    ">
+        Otimizador de cortes para manufatura inteligente
+    </span>
 </div>
 """, unsafe_allow_html=True)
 
