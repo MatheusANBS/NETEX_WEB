@@ -370,103 +370,60 @@ if st.button("Gerar Relatório de Minuta"):
         except Exception as e:
             st.error(f"Erro: {e}")
 
-# --- CSS customizado com suporte automático a tema claro/escuro ---
+# --- CSS customizado: DARK MODE FORÇADO ---
 st.markdown("""
     <style>
-        /* ---------- TEMA CLARO ---------- */
-        @media (prefers-color-scheme: light) {
-            body, .main {background-color: #f6f8fa;}
-            .block-container {padding-top: 2rem;}
-            h1, h2, h3, h4 {color: #2d3a4a;}
-            .stButton>button, .stDownloadButton>button {
-                background: linear-gradient(90deg, #b5d0e6 0%, #6ea8c6 100%) !important;
-                color: #223 !important;
-                border-radius: 8px !important;
-                font-weight: bold !important;
-                border: none !important;
-                padding: 0.5em 1.5em !important;
-                margin-top: 8px !important;
-                transition: background 0.3s !important;
-            }
-            .stButton>button:hover, .stDownloadButton>button:hover {
-                background: linear-gradient(90deg, #6ea8c6 0%, #b5d0e6 100%) !important;
-                color: #223 !important;
-            }
-            /* Inputs, selects, textareas, dropdowns */
-            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"], .stMultiSelect div[data-baseweb="select"] {
-                background-color: #e9ecef !important;
-                color: #222 !important;
-                border-radius: 6px !important;
-                border: 1px solid #bfc9d1 !important;
-            }
-            input::placeholder, textarea::placeholder {
-                color: #7b8794 !important;
-            }
-            /* Sidebar */
-            .sidebar .sidebar-content, .css-1d391kg, .stSidebar, section[data-testid="stSidebar"] {
-                background-color: #e9ecef !important;
-                color: #222 !important;
-            }
-            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3, .css-1d391kg h2, .css-1d391kg h3 {
-                color: #2d3a4a !important;
-            }
-            /* Cabeçalho principal */
-            .header-corteus, div[style*="background: #ff4b4b"] {
-                background: #b5d0e6 !important;
-                border-radius: 12px !important;
-            }
-            img, span { filter: none !important; }
-            span[style*="font-size: 56px"] { color: #2d3a4a !important; }
-            span[style*="font-size: 22px"] { color: #223 !important; }
-            .stCheckbox>label, .stRadio>div>label {color: #2d3a4a !important;}
+        body, .main {background-color: #181c22;}
+        .block-container {padding-top: 2rem;}
+        h1, h2, h3, h4 {color: #b5d0e6;}
+        .stButton>button, .stDownloadButton>button {
+            background: linear-gradient(90deg, #22303c 0%, #3a506b 100%) !important;
+            color: #e9ecef !important;
+            border-radius: 8px !important;
+            font-weight: bold !important;
+            border: none !important;
+            padding: 0.5em 1.5em !important;
+            margin-top: 8px !important;
+            transition: background 0.3s !important;
         }
-
-        /* ---------- TEMA ESCURO ---------- */
-        @media (prefers-color-scheme: dark) {
-            body, .main {background-color: #181c22;}
-            .block-container {padding-top: 2rem;}
-            h1, h2, h3, h4 {color: #b5d0e6;}
-            .stButton>button, .stDownloadButton>button {
-                background: linear-gradient(90deg, #22303c 0%, #3a506b 100%) !important;
-                color: #e9ecef !important;
-                border-radius: 8px !important;
-                font-weight: bold !important;
-                border: none !important;
-                padding: 0.5em 1.5em !important;
-                margin-top: 8px !important;
-                transition: background 0.3s !important;
-            }
-            .stButton>button:hover, .stDownloadButton>button:hover {
-                background: linear-gradient(90deg, #3a506b 0%, #22303c 100%) !important;
-                color: #b5d0e6 !important;
-            }
-            /* Inputs, selects, textareas, dropdowns */
-            input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"], .stMultiSelect div[data-baseweb="select"] {
-                background-color: #232a34 !important;
-                color: #e9ecef !important;
-                border-radius: 6px !important;
-                border: 1px solid #3a506b !important;
-            }
-            input::placeholder, textarea::placeholder {
-                color: #b5d0e6 !important;
-            }
-            /* Sidebar */
-            .sidebar .sidebar-content, .css-1d391kg, .stSidebar, section[data-testid="stSidebar"] {
-                background-color: #232a34 !important;
-                color: #e9ecef !important;
-            }
-            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3, .css-1d391kg h2, .css-1d391kg h3 {
-                color: #b5d0e6 !important;
-            }
-            /* Cabeçalho principal */
-            .header-corteus, div[style*="background: #ff4b4b"] {
-                background: #22303c !important;
-                border-radius: 12px !important;
-            }
-            img, span { filter: none !important; }
-            span[style*="font-size: 56px"] { color: #b5d0e6 !important; }
-            span[style*="font-size: 22px"] { color: #e9ecef !important; }
-            .stCheckbox>label, .stRadio>div>label {color: #b5d0e6 !important;}
+        .stButton>button:hover, .stDownloadButton>button:hover {
+            background: linear-gradient(90deg, #3a506b 0%, #22303c 100%) !important;
+            color: #b5d0e6 !important;
+        }
+        /* Inputs, selects, textareas, dropdowns */
+        input, textarea, select, .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"], .stMultiSelect div[data-baseweb="select"] {
+            background-color: #232a34 !important;
+            color: #e9ecef !important;
+            border-radius: 6px !important;
+            border: 1px solid #3a506b !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #b5d0e6 !important;
+        }
+        /* Sidebar */
+        .sidebar .sidebar-content, .css-1d391kg, .stSidebar, section[data-testid="stSidebar"] {
+            background-color: #232a34 !important;
+            color: #e9ecef !important;
+        }
+        .sidebar .sidebar-content h2, .sidebar .sidebar-content h3, .css-1d391kg h2, .css-1d391kg h3 {
+            color: #b5d0e6 !important;
+        }
+        /* Cabeçalho principal */
+        .header-corteus, div[style*="background: #ff4b4b"] {
+            background: #22303c !important;
+            border-radius: 12px !important;
+        }
+        img, span { filter: none !important; }
+        span[style*="font-size: 56px"] { color: #b5d0e6 !important; }
+        span[style*="font-size: 22px"] { color: #e9ecef !important; }
+        .stCheckbox>label, .stRadio>div>label {color: #b5d0e6 !important;}
+        /* Ajuste para selects e dropdowns do Streamlit */
+        .stSelectbox, .stMultiSelect {
+            background-color: #232a34 !important;
+        }
+        /* Ajuste para linhas divisórias */
+        hr, .stHorizontalBlock {
+            border-color: #3a506b !important;
         }
     </style>
 """, unsafe_allow_html=True)
