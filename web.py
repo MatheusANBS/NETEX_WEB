@@ -373,6 +373,117 @@ if st.button("Gerar Relatório de Minuta"):
         except Exception as e:
             st.error(f"Erro: {e}")
 
+# --- Seletor de Tema ---
+tema = st.sidebar.radio("Tema", ["Claro", "Escuro"], horizontal=True)
+
+# --- CSS customizado com suporte a tema ---
+if tema == "Claro":
+    st.markdown("""
+        <style>
+            body {background-color: #f6f8fa;}
+            .main {background-color: #f6f8fa;}
+            .block-container {padding-top: 2rem;}
+            h1, h2, h3, h4 {color: #2d3a4a;}
+            .stButton>button, .stDownloadButton>button {
+                background: linear-gradient(90deg, #b5d0e6 0%, #6ea8c6 100%);
+                color: #223;
+                border-radius: 8px;
+                font-weight: bold;
+                border: none;
+                padding: 0.5em 1.5em;
+                margin-top: 8px;
+                transition: background 0.3s;
+            }
+            .stButton>button:hover, .stDownloadButton>button:hover {
+                background: linear-gradient(90deg, #6ea8c6 0%, #b5d0e6 100%);
+                color: #223;
+            }
+            .stTextInput>div>div>input, .stTextArea>div>textarea {
+                background-color: #e9ecef !important;
+                color: #222 !important;
+                border-radius: 6px;
+                border: 1px solid #bfc9d1;
+            }
+            .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
+                color: #7b8794 !important;
+            }
+            .stRadio>div>label, .stCheckbox>label {color: #2d3a4a;}
+            .sidebar .sidebar-content {background-color: #e9ecef;}
+            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #2d3a4a;}
+            .sidebar .sidebar-content {color: #222;}
+            /* Cabeçalho principal */
+            .element-container:has(> div[style*="background: #ff4b4b"]) > div {
+                background: #b5d0e6 !important;
+                border-radius: 12px;
+            }
+            /* Ajuste para o logo e títulos */
+            img, span {
+                filter: none !important;
+            }
+            /* Título Corteus */
+            span[style*="font-size: 56px"] {
+                color: #2d3a4a !important;
+            }
+            /* Subtítulo */
+            span[style*="font-size: 22px"] {
+                color: #223 !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+        <style>
+            body {background-color: #181c22;}
+            .main {background-color: #181c22;}
+            .block-container {padding-top: 2rem;}
+            h1, h2, h3, h4 {color: #b5d0e6;}
+            .stButton>button, .stDownloadButton>button {
+                background: linear-gradient(90deg, #22303c 0%, #3a506b 100%);
+                color: #e9ecef;
+                border-radius: 8px;
+                font-weight: bold;
+                border: none;
+                padding: 0.5em 1.5em;
+                margin-top: 8px;
+                transition: background 0.3s;
+            }
+            .stButton>button:hover, .stDownloadButton>button:hover {
+                background: linear-gradient(90deg, #3a506b 0%, #22303c 100%);
+                color: #b5d0e6;
+            }
+            .stTextInput>div>div>input, .stTextArea>div>textarea {
+                background-color: #232a34 !important;
+                color: #e9ecef !important;
+                border-radius: 6px;
+                border: 1px solid #3a506b;
+            }
+            .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
+                color: #7b8794 !important;
+            }
+            .stRadio>div>label, .stCheckbox>label {color: #b5d0e6;}
+            .sidebar .sidebar-content {background-color: #232a34;}
+            .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #b5d0e6;}
+            .sidebar .sidebar-content {color: #e9ecef;}
+            /* Cabeçalho principal */
+            .element-container:has(> div[style*="background: #ff4b4b"]) > div {
+                background: #22303c !important;
+                border-radius: 12px;
+            }
+            /* Ajuste para o logo e títulos */
+            img, span {
+                filter: none !important;
+            }
+            /* Título Corteus */
+            span[style*="font-size: 56px"] {
+                color: #b5d0e6 !important;
+            }
+            /* Subtítulo */
+            span[style*="font-size: 22px"] {
+                color: #e9ecef !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
 # --- 7. Tutorial ---
 with st.sidebar.expander("Tutorial de Uso"):
     st.markdown("""
