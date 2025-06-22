@@ -125,8 +125,7 @@ st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_ht
 # --- Cabeçalho principal ---
 logo_base64 = get_base64_image("webfonts/IconeLogo.png")
 st.markdown(f"""
-<div style='
-    background: #ff4b4b;
+<div class="header-corteus" style='
     padding: 48px 0 24px 0;
     border-radius: 12px;
     margin-bottom: 32px;
@@ -140,7 +139,6 @@ st.markdown(f"""
         font-family: 'Montserrat-Alt1', Arial, sans-serif;
         font-size: 56px;
         font-weight: 700;
-        color: #18191a;
         letter-spacing: -2px;
         text-align: center;
         margin-bottom: 8px;
@@ -149,7 +147,6 @@ st.markdown(f"""
         font-family: 'Montserrat-Alt1', Arial, sans-serif;
         font-size: 22px;
         font-weight: 400;
-        color: #18191a;
         text-align: center;
         opacity: 0.85;
         margin-top: 0;
@@ -376,12 +373,12 @@ if st.button("Gerar Relatório de Minuta"):
 # --- Seletor de Tema ---
 tema = st.sidebar.radio("Tema", ["Claro", "Escuro"], horizontal=True)
 
-# --- CSS customizado com suporte a tema ---
-if tema == "Claro":
-    st.markdown("""
-        <style>
-            body {background-color: #f6f8fa;}
-            .main {background-color: #f6f8fa;}
+# --- CSS customizado com suporte automático a tema claro/escuro ---
+st.markdown("""
+    <style>
+        /* Tema Claro */
+        @media (prefers-color-scheme: light) {
+            body, .main {background-color: #f6f8fa;}
             .block-container {padding-top: 2rem;}
             h1, h2, h3, h4 {color: #2d3a4a;}
             .stButton>button, .stDownloadButton>button {
@@ -408,11 +405,11 @@ if tema == "Claro":
                 color: #7b8794 !important;
             }
             .stRadio>div>label, .stCheckbox>label {color: #2d3a4a;}
-            .sidebar .sidebar-content {background-color: #e9ecef;}
+            .sidebar .sidebar-content, .css-1d391kg {background-color: #e9ecef !important;}
             .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #2d3a4a;}
-            .sidebar .sidebar-content {color: #222;}
+            .sidebar .sidebar-content, .css-1d391kg {color: #222;}
             /* Cabeçalho principal */
-            .element-container:has(> div[style*="background: #ff4b4b"]) > div {
+            div[style*="background: #ff4b4b"], .header-corteus {
                 background: #b5d0e6 !important;
                 border-radius: 12px;
             }
@@ -428,13 +425,13 @@ if tema == "Claro":
             span[style*="font-size: 22px"] {
                 color: #223 !important;
             }
-        </style>
-    """, unsafe_allow_html=True)
-else:
-    st.markdown("""
-        <style>
-            body {background-color: #181c22;}
-            .main {background-color: #181c22;}
+            /* Checkbox e radio */
+            .stCheckbox>label, .stRadio>div>label {color: #2d3a4a !important;}
+        }
+
+        /* Tema Escuro */
+        @media (prefers-color-scheme: dark) {
+            body, .main {background-color: #181c22;}
             .block-container {padding-top: 2rem;}
             h1, h2, h3, h4 {color: #b5d0e6;}
             .stButton>button, .stDownloadButton>button {
@@ -458,14 +455,14 @@ else:
                 border: 1px solid #3a506b;
             }
             .stTextInput>div>div>input::placeholder, .stTextArea>div>textarea::placeholder {
-                color: #7b8794 !important;
+                color: #b5d0e6 !important;
             }
             .stRadio>div>label, .stCheckbox>label {color: #b5d0e6;}
-            .sidebar .sidebar-content {background-color: #232a34;}
+            .sidebar .sidebar-content, .css-1d391kg {background-color: #232a34 !important;}
             .sidebar .sidebar-content h2, .sidebar .sidebar-content h3 {color: #b5d0e6;}
-            .sidebar .sidebar-content {color: #e9ecef;}
+            .sidebar .sidebar-content, .css-1d391kg {color: #e9ecef;}
             /* Cabeçalho principal */
-            .element-container:has(> div[style*="background: #ff4b4b"]) > div {
+            div[style*="background: #ff4b4b"], .header-corteus {
                 background: #22303c !important;
                 border-radius: 12px;
             }
@@ -481,8 +478,11 @@ else:
             span[style*="font-size: 22px"] {
                 color: #e9ecef !important;
             }
-        </style>
-    """, unsafe_allow_html=True)
+            /* Checkbox e radio */
+            .stCheckbox>label, .stRadio>div>label {color: #b5d0e6 !important;}
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # --- 7. Tutorial ---
 with st.sidebar.expander("Tutorial de Uso"):
