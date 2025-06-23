@@ -185,7 +185,7 @@ with col4:
     if not cod_material.isdigit() and cod_material != "":
         st.warning("Digite apenas números no código do material.")
     elif cod_material and not validar_cod_material(cod_material):
-        st.warning("Código do material inválido. Use o formato 1234567890 (10 dígitos).")
+        st.warning("Código do material inválido. Deve conter 10 dígitos numéricos.")
 
 st.markdown("---")
 
