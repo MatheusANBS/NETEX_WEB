@@ -181,7 +181,7 @@ with col3:
         st.warning("SK inválido. Use o formato EST-001.")
 
 with col4:
-    cod_material = st.text_input("Código do material (ex: 1234567890)", max_chars=10)
+    cod_material = st.text_input("Código do material", max_chars=10)
     if not cod_material.isdigit() and cod_material != "":
         st.warning("Digite apenas números no código do material.")
     elif cod_material and not validar_cod_material(cod_material):
