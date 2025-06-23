@@ -151,7 +151,7 @@ with col1:
         "P54-CAM", "P54-PAR", "P55-ACO", "P62-ACO", "P62-CAM", "P62-PAR", "PRA-1"
     ])
 with col2:
-    ss = st.text_input("SS (ex: 0123/2024)", max_chars=9)
+    ss = st.text_input("SS", max_chars=9)
     ano_atual = datetime.datetime.now().year
     ano_min = ano_atual - 1
     ano_max = ano_atual + 4
@@ -171,7 +171,7 @@ with col2:
 
 with col3:
     sk = st.text_input(
-        "SK (ex: EST-001)",
+        "SK",
         max_chars=7,
         key="sk_input",
         on_change=sk_to_upper
@@ -181,9 +181,11 @@ with col3:
         st.warning("SK inválido. Use o formato EST-001.")
 
 with col4:
-    cod_material = st.text_input("Código do material (10 dígitos)", max_chars=10)
+    cod_material = st.text_input("Código do material (ex: 1234567890)", max_chars=10)
     if not cod_material.isdigit() and cod_material != "":
         st.warning("Digite apenas números no código do material.")
+    elif cod_material and not validar_cod_material(cod_material):
+        st.warning("Código do material inválido. Use o formato 1234567890 (10 dígitos).")
 
 st.markdown("---")
 
