@@ -79,6 +79,12 @@ st.markdown("""
             background: #ff4b4b;
             color: #fff;
         }
+        hr {
+            display: none !important;
+        }
+        .stDownloadButton > div > hr {
+            display: none !important;
+        }
     </style>
 """, unsafe_allow_html=True)
 
