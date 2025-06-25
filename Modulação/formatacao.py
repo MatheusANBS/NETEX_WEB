@@ -85,19 +85,21 @@ def gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material):
     eficiencia_12 = 100 * (total_rm_12 - desperdicio_12) / total_rm_12 if total_rm_12 else 0
     eficiencia_12 = min(eficiencia_12, 100)
 
+    total_minutado = sum(cortes)
+
     relatorio = (
         "\nRELATÓRIO DE MINUTA\n"
         f"SS: {ss}   SK: {sk}   Material: {cod_material}\n"
-        f"Total a ser Minutado: {sum(cortes)} mm\n"
     )
 
-    # Bloco RM 6000mm
+    # Bloco 6000mm
     relatorio += (
-        "\nRM COM BARRA DE 6000mm\n"
+        "\nSugestão de barras para a RM (6000mm):\n"
+        "UTILIZANDO BARRA DE 6000mm\n"
+        f"Total a ser Minutado: {total_minutado} mm\n"
         f"Barras comerciais sugeridas: {barras_usadas_6}\n"
         f"Total da RM: {total_rm_6} mm\n"
         f"Eficiência: {eficiencia_6:.2f}%\n"
-        f"\nSugestão de barras para a RM (6000mm):\n"
     )
     for i, (barra, _) in enumerate(barras_ideais_6, 1):
         cortes_contados = Counter(f"{c}mm" for c in barra)
@@ -108,13 +110,14 @@ def gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material):
             relatorio += f" • {q}x {c}\n"
         relatorio += f" • Sobra: {sobra} mm\n"
 
-    # Bloco RM 12000mm
+    # Bloco 12000mm
     relatorio += (
-        "\nRM COM BARRA DE 12000mm\n"
+        "\nSugestão de barras para a RM (12000mm):\n"
+        "UTILIZANDO BARRA DE 12000mm\n"
+        f"Total a ser Minutado: {total_minutado} mm\n"
         f"Barras comerciais sugeridas: {barras_usadas_12}\n"
         f"Total da RM: {total_rm_12} mm\n"
         f"Eficiência: {eficiencia_12:.2f}%\n"
-        f"\nSugestão de barras para a RM (12000mm):\n"
     )
     for i, (barra, _) in enumerate(barras_ideais_12, 1):
         cortes_contados = Counter(f"{c}mm" for c in barra)
