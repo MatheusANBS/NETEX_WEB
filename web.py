@@ -79,10 +79,10 @@ st.markdown("""
             background: #ff4b4b;
             color: #fff;
         }
-        hr {
+        .stDownloadButton hr {
             display: none !important;
         }
-        .stDownloadButton > div > hr {
+        hr {
             display: none !important;
         }
     </style>
