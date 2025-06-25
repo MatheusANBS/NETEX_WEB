@@ -95,7 +95,6 @@ def gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material):
     # Bloco 6000mm
     relatorio += (
         "\nSugestão de barras para a RM (6000mm):\n"
-        "UTILIZANDO BARRA DE 6000mm\n"
         f"Total a ser Minutado: {total_minutado} mm\n"
         f"Barras comerciais sugeridas: {barras_usadas_6}\n"
         f"Total da RM: {total_rm_6} mm\n"
@@ -113,7 +112,6 @@ def gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material):
     # Bloco 12000mm
     relatorio += (
         "\nSugestão de barras para a RM (12000mm):\n"
-        "UTILIZANDO BARRA DE 12000mm\n"
         f"Total a ser Minutado: {total_minutado} mm\n"
         f"Barras comerciais sugeridas: {barras_usadas_12}\n"
         f"Total da RM: {total_rm_12} mm\n"

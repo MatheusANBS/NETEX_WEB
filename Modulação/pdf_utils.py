@@ -67,7 +67,7 @@ def gerar_pdf(
     c.setFont(fonte_normal, tamanho_normal)
     i = 0
 
-    if any(linha.lower().startswith("barra 1") for linha in linhas):
+    if any(linha.lower().startswith("barra 1") for linha in linhas) and "minuta" not in titulo.lower():
         if y < margem + 60:
             c.showPage()
             c.rect(margem, margem, largura - 2 * margem, altura - 2 * margem, stroke=1, fill=0)
