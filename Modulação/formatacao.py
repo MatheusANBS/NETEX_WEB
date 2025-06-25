@@ -73,14 +73,14 @@ def gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material):
     from Modulação.cortes import gerar_barras_ideais
     barras_ideais_6 = gerar_barras_ideais(cortes, comprimento_padrao=6000)
     barras_usadas_6 = len(barras_ideais_6)
-    total_rm_6 = barras_usadas_6 * 6000  # <-- sempre múltiplo de 6000
+    total_rm_6 = barras_usadas_6 * 6000
     desperdicio_6 = sum(6000 - (sum(barra) + 5 * max(len(barra) - 1, 0)) for barra, _ in barras_ideais_6)
     eficiencia_6 = 100 * (total_rm_6 - desperdicio_6) / total_rm_6 if total_rm_6 else 0
     eficiencia_6 = min(eficiencia_6, 100)
 
     barras_ideais_12 = gerar_barras_ideais(cortes, comprimento_padrao=12000)
     barras_usadas_12 = len(barras_ideais_12)
-    total_rm_12 = barras_usadas_12 * 12000  # <-- sempre múltiplo de 12000
+    total_rm_12 = barras_usadas_12 * 12000
     desperdicio_12 = sum(12000 - (sum(barra) + 5 * max(len(barra) - 1, 0)) for barra, _ in barras_ideais_12)
     eficiencia_12 = 100 * (total_rm_12 - desperdicio_12) / total_rm_12 if total_rm_12 else 0
     eficiencia_12 = min(eficiencia_12, 100)
@@ -88,11 +88,15 @@ def gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material):
     relatorio = (
         "\nRELATÓRIO DE MINUTA\n"
         f"SS: {ss}   SK: {sk}   Material: {cod_material}\n"
-        f"Comprimento comercial da barra: 6000 mm\n"
         f"Total a ser Minutado: {sum(cortes)} mm\n"
+    )
+
+    # Bloco RM 6000mm
+    relatorio += (
+        "\nRM COM BARRA DE 6000mm\n"
         f"Barras comerciais sugeridas: {barras_usadas_6}\n"
         f"Total da RM: {total_rm_6} mm\n"
-        f"Eficiência (6000mm): {eficiencia_6:.2f}%\n"
+        f"Eficiência: {eficiencia_6:.2f}%\n"
         f"\nSugestão de barras para a RM (6000mm):\n"
     )
     for i, (barra, _) in enumerate(barras_ideais_6, 1):
@@ -104,11 +108,12 @@ def gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material):
             relatorio += f" • {q}x {c}\n"
         relatorio += f" • Sobra: {sobra} mm\n"
 
+    # Bloco RM 12000mm
     relatorio += (
-        f"\n--- COMPARATIVO COM BARRA DE 12000mm ---\n"
+        "\nRM COM BARRA DE 12000mm\n"
         f"Barras comerciais sugeridas: {barras_usadas_12}\n"
         f"Total da RM: {total_rm_12} mm\n"
-        f"Eficiência (12000mm): {eficiencia_12:.2f}%\n"
+        f"Eficiência: {eficiencia_12:.2f}%\n"
         f"\nSugestão de barras para a RM (12000mm):\n"
     )
     for i, (barra, _) in enumerate(barras_ideais_12, 1):
