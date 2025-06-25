@@ -317,6 +317,12 @@ with col_minuta:
     if st.button("Gerar Relatório de Minuta"):
         if not cortes_str:
             st.error("Informe os cortes desejados.")
+        elif not ss or not validar_ss(ss):
+            st.error("SS inválido. Exemplo: 0123/2024")
+        elif not sk or not validar_sk(sk):
+            st.error("SK inválido. Exemplo: EST-001")
+        elif not cod_material or not validar_cod_material(cod_material):
+            st.error("Código do material inválido (deve ter 10 dígitos numéricos).")
         else:
             try:
                 cortes = parse_entrada(cortes_str)
