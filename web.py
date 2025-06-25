@@ -212,110 +212,64 @@ cortes_str = st.text_area("Cortes desejados (mm, separados por espaço ou vírgu
 
 st.markdown("---")
 
-# --- 4. Otimização ---
-if st.button("🚀 Otimizar"):
-    if not cortes_str:
-        st.error("Informe os cortes desejados.")
-    elif not ss or not validar_ss(ss):
-        st.error("SS inválido. Exemplo: 0123/2024")
-    elif not sk or not validar_sk(sk):
-        st.error("SK inválido. Exemplo: EST-001")
-    elif not cod_material or not validar_cod_material(cod_material):
-        st.error("Código do material inválido (deve ter 10 dígitos numéricos).")
-    elif modo == "Automático" and not comprimento_barra:
-        st.error("Informe o comprimento da barra.")
-    elif modo == "Manual" and not barras_str:
-        st.error("Informe as barras disponíveis no modo manual.")
-    else:
-        try:
-            cortes = parse_entrada(cortes_str)
-            agrupados = agrupar_cortes(cortes)
-            if modo == "Automático":
-                resultado = resolver_com_barras_livres(
-                    agrupados,
-                    int(comprimento_barra),
-                    lambda barras, comprimento_barra, invalidos: gerar_resultado(
-                        barras, comprimento_barra, invalidos,
-                        ss=ss, sk=sk, cod_material=cod_material, modo_var=1
-                    )
-                )
-                titulo = "RELATÓRIO DE CORTES"
-                prefixo = "RELCRT"
-            else:
-                barras = parse_entrada(barras_str)
-                if sugestao_emenda:
-                    resultado = resolver_com_barras_fixas(
+# --- 4. Relatórios (Corte e Minuta) lado a lado ---
+col_corte, col_minuta = st.columns(2)
+
+with col_corte:
+    st.markdown("#### <span style='color:#ff4b4b'>Relatório de Corte</span>", unsafe_allow_html=True)
+    if st.button("Gerar Relatório de Corte"):
+        if not cortes_str:
+            st.error("Informe os cortes desejados.")
+        elif not ss or not validar_ss(ss):
+            st.error("SS inválido. Exemplo: 0123/2024")
+        elif not sk or not validar_sk(sk):
+            st.error("SK inválido. Exemplo: EST-001")
+        elif not cod_material or not validar_cod_material(cod_material):
+            st.error("Código do material inválido (deve ter 10 dígitos numéricos).")
+        elif modo == "Automático" and not comprimento_barra:
+            st.error("Informe o comprimento da barra.")
+        elif modo == "Manual" and not barras_str:
+            st.error("Informe as barras disponíveis no modo manual.")
+        else:
+            try:
+                cortes = parse_entrada(cortes_str)
+                agrupados = agrupar_cortes(cortes)
+                if modo == "Automático":
+                    resultado = resolver_com_barras_livres(
                         agrupados,
-                        barras,
-                        lambda barras, comprimentos, invalidos=0: gerar_resultado_com_barras_fixas(
-                            barras, comprimentos, invalidos,
-                            ss=ss, sk=sk, cod_material=cod_material, modo_var=2
-                        ),
-                        modo_emenda_var=FakeVar(True),
-                        sugerir_emendas_func=sugerir_emendas_baseado_nas_sobras
-                    )
-                else:
-                    resultado = resolver_com_barras_fixas(
-                        agrupados,
-                        barras,
-                        lambda barras, comprimentos, invalidos=0: gerar_resultado_com_barras_fixas(
-                            barras, comprimentos, invalidos,
-                            ss=ss, sk=sk, cod_material=cod_material, modo_var=2
+                        int(comprimento_barra),
+                        lambda barras, comprimento_barra, invalidos: gerar_resultado(
+                            barras, comprimento_barra, invalidos,
+                            ss=ss, sk=sk, cod_material=cod_material, modo_var=1
                         )
                     )
-                titulo = "RELATÓRIO DE CORTES"
-                prefixo = "RELCRT"
+                    titulo = "RELATÓRIO DE CORTES"
+                    prefixo = "RELCRT"
+                else:
+                    barras = parse_entrada(barras_str)
+                    if sugestao_emenda:
+                        resultado = resolver_com_barras_fixas(
+                            agrupados,
+                            barras,
+                            lambda barras, comprimentos, invalidos=0: gerar_resultado_com_barras_fixas(
+                                barras, comprimentos, invalidos,
+                                ss=ss, sk=sk, cod_material=cod_material, modo_var=2
+                            ),
+                            modo_emenda_var=FakeVar(True),
+                            sugerir_emendas_func=sugerir_emendas_baseado_nas_sobras
+                        )
+                    else:
+                        resultado = resolver_com_barras_fixas(
+                            agrupados,
+                            barras,
+                            lambda barras, comprimentos, invalidos=0: gerar_resultado_com_barras_fixas(
+                                barras, comprimentos, invalidos,
+                                ss=ss, sk=sk, cod_material=cod_material, modo_var=2
+                            )
+                        )
+                    titulo = "RELATÓRIO DE CORTES"
+                    prefixo = "RELCRT"
 
-            campos = [
-                ("Projeto:", projeto),
-                ("SS:", ss),
-                ("SK:", sk),
-                ("Material:", cod_material)
-            ]
-            ultimos4 = cod_material[-4:] if len(cod_material) >= 4 else cod_material
-            projeto_nome = projeto.replace("-", "_")
-            ss_nome = ss.replace("/", "_")
-            sk_nome = sk.replace("-", "_")
-            nome_pdf = f"{prefixo}{ultimos4}_{projeto_nome}_SS{ss_nome}_{sk_nome}.pdf"
-
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
-                tmp_path = tmp.name
-
-            gerar_pdf_func(
-                tmp_path,
-                resultado,
-                campos,
-                titulo=titulo
-            )
-
-            with open(tmp_path, "rb") as f:
-                pdf_bytes = f.read()
-                st.download_button(
-                    label="Baixar PDF do Relatório de Cortes",
-                    data=pdf_bytes,
-                    file_name=nome_pdf,
-                    mime="application/pdf"
-                )
-
-            os.unlink(tmp_path)
-            st.success("Otimização concluída!")
-        except Exception as e:
-            st.error(f"Erro: {e}")
-
-# --- 5. Relatório de Minuta ---
-st.markdown("#### <span style='color:#ff4b4b'>Relatório de Minuta</span>", unsafe_allow_html=True)
-if st.button("Gerar Relatório de Minuta"):
-    if not cortes_str:
-        st.error("Informe os cortes desejados.")
-    else:
-        try:
-            cortes = parse_entrada(cortes_str)
-            if any(c > 6000 for c in cortes):
-                st.error("Não é possível gerar minuta se houver cortes maiores que 6000mm.")
-            else:
-                texto = gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material)
-                titulo = "RELATÓRIO DE MINUTA"
-                prefixo = "RELMIN"
                 campos = [
                     ("Projeto:", projeto),
                     ("SS:", ss),
@@ -333,7 +287,7 @@ if st.button("Gerar Relatório de Minuta"):
 
                 gerar_pdf_func(
                     tmp_path,
-                    texto,
+                    resultado,
                     campos,
                     titulo=titulo
                 )
@@ -341,16 +295,66 @@ if st.button("Gerar Relatório de Minuta"):
                 with open(tmp_path, "rb") as f:
                     pdf_bytes = f.read()
                     st.download_button(
-                        label="Baixar PDF da Minuta",
+                        label="Baixar PDF do Relatório de Cortes",
                         data=pdf_bytes,
                         file_name=nome_pdf,
                         mime="application/pdf"
                     )
 
-                st.success("Relatório de minuta gerado com sucesso!")
                 os.unlink(tmp_path)
-        except Exception as e:
-            st.error(f"Erro: {e}")
+                st.success("Otimização concluída!")
+            except Exception as e:
+                st.error(f"Erro: {e}")
+
+with col_minuta:
+    st.markdown("#### <span style='color:#ff4b4b'>Relatório de Minuta</span>", unsafe_allow_html=True)
+    if st.button("Gerar Relatório de Minuta"):
+        if not cortes_str:
+            st.error("Informe os cortes desejados.")
+        else:
+            try:
+                cortes = parse_entrada(cortes_str)
+                if any(c > 6000 for c in cortes):
+                    st.error("Não é possível gerar minuta se houver cortes maiores que 6000mm.")
+                else:
+                    texto = gerar_texto_minuta_para_pdf(cortes, ss, sk, cod_material)
+                    titulo = "RELATÓRIO DE MINUTA"
+                    prefixo = "RELMIN"
+                    campos = [
+                        ("Projeto:", projeto),
+                        ("SS:", ss),
+                        ("SK:", sk),
+                        ("Material:", cod_material)
+                    ]
+                    ultimos4 = cod_material[-4:] if len(cod_material) >= 4 else cod_material
+                    projeto_nome = projeto.replace("-", "_")
+                    ss_nome = ss.replace("/", "_")
+                    sk_nome = sk.replace("-", "_")
+                    nome_pdf = f"{prefixo}{ultimos4}_{projeto_nome}_SS{ss_nome}_{sk_nome}.pdf"
+
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+                        tmp_path = tmp.name
+
+                    gerar_pdf_func(
+                        tmp_path,
+                        texto,
+                        campos,
+                        titulo=titulo
+                    )
+
+                    with open(tmp_path, "rb") as f:
+                        pdf_bytes = f.read()
+                        st.download_button(
+                            label="Baixar PDF da Minuta",
+                            data=pdf_bytes,
+                            file_name=nome_pdf,
+                            mime="application/pdf"
+                        )
+
+                    st.success("Relatório de minuta gerado com sucesso!")
+                    os.unlink(tmp_path)
+            except Exception as e:
+                st.error(f"Erro: {e}")
 
 # --- 7. Tutorial ---
 with st.sidebar.expander("Tutorial de Uso"):
