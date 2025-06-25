@@ -373,19 +373,36 @@ with st.sidebar.expander("Tutorial de Uso"):
     st.markdown("""
     <h3 style='color:#ff4b4b;'>Como usar o Otimizador de Cortes:</h3>
     <ol>
-        <li>Preencha os dados do projeto (Projeto, SS, SK, Código do material).</li>
-        <li>Escolha o modo de operação (Automático ou Manual).</li>
-        <li>Informe os cortes desejados e, se necessário, as barras disponíveis.</li>
-        <li>Clique em <b>Otimizar</b> para ver o resultado.</li>
-        <li>Gere o relatório de minuta se desejar comparar barras comerciais.</li>
-        <li>Exporte o relatório em PDF para salvar ou compartilhar.</li>
+        <li><b>Preencha os dados do projeto:</b><br>
+            Escolha o projeto, digite o número da SS, o SK e o código do material. Todos esses campos são obrigatórios.
+        </li>
+        <li><b>Escolha o modo de operação:</b><br>
+            <b>Automático:</b> Você informa apenas o comprimento padrão da barra (por exemplo, 6000 mm). O sistema calcula automaticamente como cortar as barras para aproveitar ao máximo o material.<br>
+            <b>Manual:</b> Você informa o comprimento de cada barra disponível (por exemplo: 6000, 5800, 4000). Use este modo se você já tem barras de tamanhos diferentes no estoque.<br>
+            <span style="color:#ff4b4b"><b>Dica:</b></span> Se não souber qual modo usar, escolha o <b>Automático</b>.
+        </li>
+        <li><b>Informe os cortes desejados:</b><br>
+            Digite os tamanhos das peças que você precisa cortar, separados por espaço ou vírgula (exemplo: 1500, 2000, 3000).
+        </li>
+        <li><b>Se estiver no modo Manual:</b><br>
+            Preencha também os comprimentos das barras disponíveis, separados por espaço ou vírgula.
+        </li>
+        <li><b>Clique em <b>Gerar Relatório de Corte</b>:</b><br>
+            O sistema irá calcular a melhor forma de cortar as barras e mostrar o resultado. Você pode baixar o relatório em PDF.
+        </li>
+        <li><b>Relatório de Minuta:</b><br>
+            Use para comparar como ficaria o corte usando apenas barras comerciais de 6 metros (6000 mm). Não é possível gerar minuta se algum corte for maior que 6000 mm.
+        </li>
+        <li><b>Baixe os relatórios:</b><br>
+            Após gerar, clique no botão de download para salvar o PDF no seu computador.
+        </li>
     </ol>
-    <b>Dicas:</b>
+    <b>Observações importantes:</b>
     <ul>
-        <li>O campo Código do material aceita apenas números e deve conter exatamente 10 dígitos.</li>
-        <li>No modo manual, preencha as barras antes de otimizar ou gerar PDF de corte.</li>
-        <li>Não é possível gerar minuta se houver cortes maiores que 6000mm.</li>
-        <li>Sempre revise os dados antes de gerar o PDF.</li>
+        <li>O código do material deve ter exatamente 10 números.</li>
+        <li>Preencha todos os campos obrigatórios antes de gerar os relatórios.</li>
+        <li>No modo manual, sempre informe as barras disponíveis.</li>
+        <li>Revise os dados antes de gerar o PDF para evitar erros.</li>
     </ul>
     """, unsafe_allow_html=True)
 
