@@ -8,7 +8,11 @@ from PIL import Image
 
 #streamlit run web.py
 
-st.set_page_config(layout="wide")
+st.set_page_config(
+    page_title="Corteus",
+    page_icon="webfonts/IconeLogo.png",
+    layout="wide"
+)
 
 from Modulação.cortes import (
     agrupar_cortes,
