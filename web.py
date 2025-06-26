@@ -141,7 +141,7 @@ st.sidebar.markdown(
 )
 st.sidebar.markdown("<h2 style='color:#ff4b4b;'>Corteus</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
-st.sidebar.markdown("**Desenvolvido por Matheus Araújo**")
+st.sidebar.markdown("**Desenvolvido por MatheusANBS**")
 st.sidebar.markdown("<small style='color:#888;'>v1.0.6</small>", unsafe_allow_html=True)
 
 # --- 1. Dados do Projeto ---
