@@ -1,3 +1,12 @@
+[server]
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
+
 [theme]
 base="dark"
 primaryColor="#ff4b4b"
