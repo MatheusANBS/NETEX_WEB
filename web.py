@@ -14,6 +14,18 @@ st.set_page_config(
     layout="wide"
 )
 
+# Google Analytics 4
+st.markdown("""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-459TH945J8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-459TH945J8');
+</script>
+""", unsafe_allow_html=True)
+
 from Modulação.cortes import (
     agrupar_cortes,
     agrupar_resultados,
