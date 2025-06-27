@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1
 import tempfile
 import os
 import time
@@ -15,16 +16,28 @@ st.set_page_config(
 )
 
 # Google Analytics 4
-st.markdown("""
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-459TH945J8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-459TH945J8');
-</script>
-""", unsafe_allow_html=True)
+def inject_ga():
+    ga_code = """
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-459TH945J8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-459TH945J8', {
+        page_title: 'Corteus - Gestor de Cortes',
+        page_location: window.location.href,
+        send_page_view: true
+      });
+      
+      // Verificar se carregou
+      console.log('Google Analytics inicializado');
+    </script>
+    """
+    st.markdown(ga_code, unsafe_allow_html=True)
+
+# Injetar Google Analytics
+inject_ga()
 
 from Modulação.cortes import (
     agrupar_cortes,
