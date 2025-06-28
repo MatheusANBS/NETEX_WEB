@@ -23,7 +23,8 @@ templates = Jinja2Templates(directory="app/templates")
 # Incluir routers
 app.include_router(cortes.router, prefix="/api", tags=["cortes"])
 app.include_router(relatorios.router, prefix="/api", tags=["relatorios"])
-app.include_router(analytics.router, prefix="/api", tags=["analytics"])
+# Analytics router sem prefixo para aceitar tanto /track quanto /analytics-data
+app.include_router(analytics.router, tags=["analytics"])
 
 def get_base64_image(image_path):
     """Converte imagem para base64"""

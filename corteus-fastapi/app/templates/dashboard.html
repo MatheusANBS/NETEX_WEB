@@ -47,8 +47,11 @@
                         <span>Voltar ao Site</span>
                     </a>
                 </div>
-                <div class="text-sm text-gray-400">
+                <div class="text-sm text-gray-400 flex items-center space-x-4">
                     <i class="fas fa-chart-bar mr-2"></i>Analytics Dashboard
+                    <div class="bg-green-500/20 px-3 py-1 rounded-full text-green-400 text-xs">
+                        <i class="fas fa-circle text-xs mr-1"></i>Live
+                    </div>
                 </div>
                 <div class="w-20"></div>
             </div>
@@ -56,17 +59,25 @@
     </nav>
 
     <!-- Header -->
-    <div class="bg-gradient-to-br from-corteus-primary via-corteus-secondary to-orange-600 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
-                <i class="fas fa-chart-line mr-3"></i>Analytics Dashboard
-            </h1>
-            <p class="text-xl text-white/90">Acompanhe o desempenho do Corteus em tempo real</p>
+    <div class="bg-gradient-to-br from-corteus-primary via-corteus-secondary to-orange-600 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+                        <i class="fas fa-chart-line mr-3"></i>Analytics Dashboard
+                    </h1>
+                    <p class="text-lg text-white/90">Insights avançados sobre o comportamento dos usuários e performance da aplicação</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-white/80 text-sm">Última atualização</div>
+                    <div class="text-white font-medium" id="lastUpdate">Carregando...</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Filtros -->
         <div class="bg-corteus-gray rounded-2xl p-6 mb-8 border border-gray-700/50">
             <div class="flex flex-wrap items-center gap-4">
@@ -82,9 +93,15 @@
                     <button onclick="loadData()" class="bg-corteus-primary hover:bg-corteus-primary/80 px-4 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-sync mr-2"></i>Atualizar
                     </button>
-                    <button onclick="setToday()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-medium transition-colors">Hoje</button>
-                    <button onclick="setWeek()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-medium transition-colors">7 dias</button>
-                    <button onclick="setMonth()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-medium transition-colors">30 dias</button>
+                    <button onclick="setToday()" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg font-medium transition-colors text-sm">Hoje</button>
+                    <button onclick="setWeek()" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg font-medium transition-colors text-sm">7 dias</button>
+                    <button onclick="setMonth()" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg font-medium transition-colors text-sm">30 dias</button>
+                </div>
+                
+                <div class="ml-auto">
+                    <button onclick="exportData()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-download mr-2"></i>Exportar
+                    </button>
                 </div>
             </div>
         </div>
@@ -92,7 +109,7 @@
         <!-- Loading State -->
         <div id="loading" class="text-center py-12">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-600 border-t-corteus-primary mb-4"></div>
-            <p class="text-gray-400">Carregando dados...</p>
+            <p class="text-gray-400">Carregando insights...</p>
         </div>
 
         <!-- Error State -->
@@ -103,13 +120,18 @@
 
         <!-- Dashboard Content -->
         <div id="dashboard-content" class="hidden space-y-8">
-            <!-- Stats Cards -->
+            <!-- KPI Cards Row 1 -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                <!-- Total Views -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-corteus-primary/50 transition-all">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-400 text-sm font-medium">Total de Visualizações</p>
                             <p class="text-3xl font-bold text-white mt-1" id="totalViews">-</p>
+                            <p class="text-sm text-green-400 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>
+                                <span id="viewsGrowth">-</span>
+                            </p>
                         </div>
                         <div class="bg-corteus-primary/20 p-3 rounded-xl">
                             <i class="fas fa-eye text-2xl text-corteus-primary"></i>
@@ -117,11 +139,16 @@
                     </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                <!-- Unique Users -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-all">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-400 text-sm font-medium">Usuários Únicos</p>
                             <p class="text-3xl font-bold text-white mt-1" id="uniqueUsers">-</p>
+                            <p class="text-sm text-blue-400 mt-1">
+                                <i class="fas fa-users mr-1"></i>
+                                <span id="activeNow">0 ativos agora</span>
+                            </p>
                         </div>
                         <div class="bg-blue-500/20 p-3 rounded-xl">
                             <i class="fas fa-users text-2xl text-blue-400"></i>
@@ -129,52 +156,245 @@
                     </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                <!-- Bounce Rate -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-500/50 transition-all">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-sm font-medium">Páginas Populares</p>
-                            <p class="text-3xl font-bold text-white mt-1" id="topPagesCount">-</p>
+                            <p class="text-gray-400 text-sm font-medium">Taxa de Rejeição</p>
+                            <p class="text-3xl font-bold text-white mt-1" id="bounceRate">-</p>
+                            <p class="text-sm text-yellow-400 mt-1">
+                                <i class="fas fa-chart-line mr-1"></i>
+                                <span id="bounceRateChange">-</span>
+                            </p>
                         </div>
-                        <div class="bg-green-500/20 p-3 rounded-xl">
-                            <i class="fas fa-file-alt text-2xl text-green-400"></i>
+                        <div class="bg-yellow-500/20 p-3 rounded-xl">
+                            <i class="fas fa-chart-pie text-2xl text-yellow-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                <!-- Conversion Rate -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-green-500/50 transition-all">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-400 text-sm font-medium">Última Atualização</p>
-                            <p class="text-lg font-bold text-white mt-1" id="lastUpdate">Agora</p>
+                            <p class="text-gray-400 text-sm font-medium">Taxa de Conversão</p>
+                            <p class="text-3xl font-bold text-white mt-1" id="conversionRate">-</p>
+                            <p class="text-sm text-green-400 mt-1">
+                                <i class="fas fa-target mr-1"></i>
+                                <span id="conversions">- conversões</span>
+                            </p>
                         </div>
-                        <div class="bg-purple-500/20 p-3 rounded-xl">
-                            <i class="fas fa-clock text-2xl text-purple-400"></i>
+                        <div class="bg-green-500/20 p-3 rounded-xl">
+                            <i class="fas fa-bullseye text-2xl text-green-400"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Top Pages Chart -->
+            <!-- KPI Cards Row 2 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Avg Time on Page -->
                 <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
-                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
-                        <i class="fas fa-chart-bar text-corteus-primary mr-3"></i>
-                        Páginas Mais Visitadas
-                    </h3>
-                    <div class="h-80">
-                        <canvas id="topPagesChart"></canvas>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Tempo Médio na Página</p>
+                            <p class="text-2xl font-bold text-white mt-1" id="avgTimeOnPage">-</p>
+                        </div>
+                        <div class="bg-purple-500/20 p-3 rounded-xl">
+                            <i class="fas fa-clock text-xl text-purple-400"></i>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Avg Scroll Depth -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Profundidade de Scroll</p>
+                            <p class="text-2xl font-bold text-white mt-1" id="avgScrollDepth">-</p>
+                        </div>
+                        <div class="bg-indigo-500/20 p-3 rounded-xl">
+                            <i class="fas fa-arrows-alt-v text-xl text-indigo-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Interactions -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Interações Totais</p>
+                            <p class="text-2xl font-bold text-white mt-1" id="totalInteractions">-</p>
+                        </div>
+                        <div class="bg-pink-500/20 p-3 rounded-xl">
+                            <i class="fas fa-mouse-pointer text-xl text-pink-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Peak Hour -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Horário de Pico</p>
+                            <p class="text-2xl font-bold text-white mt-1" id="peakHour">-</p>
+                        </div>
+                        <div class="bg-orange-500/20 p-3 rounded-xl">
+                            <i class="fas fa-fire text-xl text-orange-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 1 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Daily Views Chart -->
                 <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
-                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
-                        <i class="fas fa-chart-line text-corteus-primary mr-3"></i>
-                        Visualizações por Dia
-                    </h3>
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-chart-line text-corteus-primary mr-3"></i>
+                            Visualizações por Dia
+                        </h3>
+                        <div class="text-sm text-gray-400">Últimos 30 dias</div>
+                    </div>
                     <div class="h-80">
                         <canvas id="dailyViewsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Hourly Activity Chart -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-clock text-blue-400 mr-3"></i>
+                            Atividade por Hora
+                        </h3>
+                        <div class="text-sm text-gray-400">24h</div>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="hourlyActivityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Device Analytics -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-mobile-alt text-green-400 mr-3"></i>
+                        Dispositivos
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="deviceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Browser Analytics -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-globe text-purple-400 mr-3"></i>
+                        Navegadores
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="browserChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Conversion Funnel -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-funnel-dollar text-yellow-400 mr-3"></i>
+                        Funil de Conversão
+                    </h3>
+                    <div id="conversionFunnel" class="space-y-4">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tables Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Top Pages -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-file-alt text-corteus-primary mr-3"></i>
+                        Páginas Mais Visitadas
+                    </h3>
+                    <div id="topPagesList" class="space-y-3">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Top Interactions -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-mouse-pointer text-orange-400 mr-3"></i>
+                        Botões Mais Clicados
+                    </h3>
+                    <div id="topButtonsList" class="space-y-3">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time metrics -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Performance Metrics -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-tachometer-alt text-cyan-400 mr-3"></i>
+                        Performance
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Total de Eventos</span>
+                            <span class="text-white font-bold" id="totalEvents">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Eventos por Usuário</span>
+                            <span class="text-white font-bold" id="eventsPerUser">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Sessões Ativas</span>
+                            <span class="text-white font-bold" id="activeSessions">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Sessões por Usuário</span>
+                            <span class="text-white font-bold" id="sessionsPerUser">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engagement Metrics -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-heart text-pink-400 mr-3"></i>
+                        Engajamento
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Formulários Enviados</span>
+                            <span class="text-white font-bold" id="formSubmissions">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-300">Cliques em Ajuda</span>
+                            <span class="text-white font-bold" id="helpClicks">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Metrics -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-chart-line text-emerald-400 mr-3"></i>
+                        Crescimento
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-emerald-400" id="growthRate">+0%</div>
+                            <div class="text-gray-400 text-sm">vs período anterior</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,33 +402,44 @@
     </div>
 
     <script>
-        let topPagesChart = null;
-        let dailyViewsChart = null;
+        // Variáveis globais
+        let currentData = null;
+        let charts = {};
 
+        // Função principal para carregar dados
         async function loadData() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            
             showLoading();
             hideError();
-
+            
             try {
-                const params = new URLSearchParams();
-                if (startDate) params.append('start_date', startDate);
-                if (endDate) params.append('end_date', endDate);
-
-                const response = await fetch(`/api/analytics-data?${params}`);
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
                 
+                let url = '/analytics-data';
+                
+                if (startDate || endDate) {
+                    const params = new URLSearchParams();
+                    if (startDate) params.append('start_date', startDate);
+                    if (endDate) params.append('end_date', endDate);
+                    url += '?' + params.toString();
+                }
+                
+                const response = await fetch(url);
                 if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
+                    throw new Error('Erro HTTP: ' + response.status);
                 }
                 
                 const data = await response.json();
+                currentData = data;
                 
-                updateStats(data);
+                // Atualizar último update
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleString('pt-BR');
+                
+                // Atualizar dashboard
+                updateKPIs(data);
                 updateCharts(data);
-                
-                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('pt-BR');
+                updateTables(data);
+                updateMetrics(data);
                 
                 hideLoading();
                 showDashboard();
@@ -220,90 +451,165 @@
             }
         }
 
-        function updateStats(data) {
+        // Atualizar KPIs
+        function updateKPIs(data) {
             document.getElementById('totalViews').textContent = data.total_views.toLocaleString('pt-BR');
             document.getElementById('uniqueUsers').textContent = data.unique_users.toLocaleString('pt-BR');
-            document.getElementById('topPagesCount').textContent = data.top_pages.length;
-        }
-
-        function updateCharts(data) {
-            updateTopPagesChart(data.top_pages || []);
-            updateDailyViewsChart(data.daily_views || []);
-        }
-
-        function updateTopPagesChart(data) {
-            const ctx = document.getElementById('topPagesChart').getContext('2d');
+            document.getElementById('bounceRate').textContent = data.user_engagement.bounce_rate.toFixed(1) + '%';
+            document.getElementById('conversionRate').textContent = data.conversion_funnel.conversion_rate.toFixed(1) + '%';
+            document.getElementById('avgTimeOnPage').textContent = formatTime(data.user_engagement.avg_time_on_page);
+            document.getElementById('avgScrollDepth').textContent = data.user_engagement.avg_scroll_depth.toFixed(0) + '%';
+            document.getElementById('totalInteractions').textContent = data.user_engagement.total_interactions.toLocaleString('pt-BR');
+            document.getElementById('peakHour').textContent = data.time_analytics.peak_hour + 'h';
             
-            if (topPagesChart) {
-                topPagesChart.destroy();
+            // Dados complementares
+            document.getElementById('conversions').textContent = data.conversion_funnel.report_generations + ' relatórios';
+            document.getElementById('activeNow').textContent = '0 ativos agora'; // Placeholder
+            document.getElementById('viewsGrowth').textContent = '+0%'; // Placeholder
+            document.getElementById('bounceRateChange').textContent = 'vs período anterior'; // Placeholder
+        }
+
+        // Atualizar métricas adicionais
+        function updateMetrics(data) {
+            document.getElementById('totalEvents').textContent = data.performance_metrics.total_events.toLocaleString('pt-BR');
+            document.getElementById('eventsPerUser').textContent = data.performance_metrics.events_per_user.toFixed(1);
+            document.getElementById('activeSessions').textContent = data.performance_metrics.active_sessions.toLocaleString('pt-BR');
+            document.getElementById('sessionsPerUser').textContent = data.performance_metrics.avg_sessions_per_user.toFixed(1);
+            document.getElementById('formSubmissions').textContent = data.interaction_analytics.form_completions.toLocaleString('pt-BR');
+            document.getElementById('helpClicks').textContent = data.interaction_analytics.help_clicks.toLocaleString('pt-BR');
+        }
+
+        // Atualizar gráficos
+        function updateCharts(data) {
+            updateDailyViewsChart(data.daily_views || []);
+            updateHourlyActivityChart(data.time_analytics.hourly_activity || []);
+            updateDeviceChart(data.device_analytics.devices || []);
+            updateBrowserChart(data.device_analytics.browsers || []);
+        }
+
+        // Atualizar tabelas
+        function updateTables(data) {
+            updateTopPagesList(data.top_pages || []);
+            updateTopButtonsList(data.interaction_analytics.top_buttons || []);
+            updateConversionFunnel(data.conversion_funnel || {});
+        }
+
+        function updateDailyViewsChart(data) {
+            const ctx = document.getElementById('dailyViewsChart').getContext('2d');
+            
+            if (charts.dailyViews) {
+                charts.dailyViews.destroy();
             }
             
-            topPagesChart = new Chart(ctx, {
-                type: 'bar',
+            charts.dailyViews = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: data.map(item => item.page),
+                    labels: data.map(item => {
+                        const date = new Date(item.date);
+                        return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+                    }),
                     datasets: [{
                         label: 'Visualizações',
                         data: data.map(item => item.count),
-                        backgroundColor: 'rgba(255, 75, 75, 0.8)',
-                        borderColor: 'rgba(255, 75, 75, 1)',
+                        borderColor: '#ff4b4b',
+                        backgroundColor: 'rgba(255, 75, 75, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#ff4b4b',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: '#ff4b4b',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(156, 163, 175, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateHourlyActivityChart(data) {
+            const ctx = document.getElementById('hourlyActivityChart').getContext('2d');
+            
+            if (charts.hourlyActivity) {
+                charts.hourlyActivity.destroy();
+            }
+            
+            // Criar array com todas as horas (0-23)
+            const hourlyData = Array.from({ length: 24 }, (_, i) => {
+                const hourData = data.find(item => item.hour === i);
+                return hourData ? hourData.activity : 0;
+            });
+            
+            charts.hourlyActivity = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Array.from({ length: 24 }, (_, i) => i + 'h'),
+                    datasets: [{
+                        label: 'Atividade',
+                        data: hourlyData,
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#1d4ed8',
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'white'
-                            }
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: {
-                                color: 'white'
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(156, 163, 175, 0.1)' }
                         },
                         x: {
-                            ticks: {
-                                color: 'white'
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
+                            ticks: { color: '#9ca3af' },
+                            grid: { display: false }
                         }
                     }
                 }
             });
         }
 
-        function updateDailyViewsChart(data) {
-            const ctx = document.getElementById('dailyViewsChart').getContext('2d');
+        function updateDeviceChart(data) {
+            const ctx = document.getElementById('deviceChart').getContext('2d');
             
-            if (dailyViewsChart) {
-                dailyViewsChart.destroy();
+            if (charts.device) {
+                charts.device.destroy();
             }
             
-            dailyViewsChart = new Chart(ctx, {
-                type: 'line',
+            const colors = ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+            
+            charts.device = new Chart(ctx, {
+                type: 'doughnut',
                 data: {
-                    labels: data.map(item => {
-                        const date = new Date(item.date);
-                        return date.toLocaleDateString('pt-BR');
-                    }),
+                    labels: data.map(item => item.type),
                     datasets: [{
-                        label: 'Visualizações',
                         data: data.map(item => item.count),
-                        borderColor: 'rgba(255, 123, 0, 1)',
-                        backgroundColor: 'rgba(255, 123, 0, 0.1)',
-                        tension: 0.4,
-                        fill: true
+                        backgroundColor: colors,
+                        borderWidth: 0
                     }]
                 },
                 options: {
@@ -311,32 +617,130 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            labels: {
-                                color: 'white'
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                color: 'white'
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: 'white'
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
+                            position: 'bottom',
+                            labels: { color: 'white', padding: 20 }
                         }
                     }
                 }
             });
+        }
+
+        function updateBrowserChart(data) {
+            const ctx = document.getElementById('browserChart').getContext('2d');
+            
+            if (charts.browser) {
+                charts.browser.destroy();
+            }
+            
+            const colors = ['#8b5cf6', '#ec4899', '#06b6d4', '#84cc16', '#f97316'];
+            
+            charts.browser = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(item => item.browser),
+                    datasets: [{
+                        data: data.map(item => item.count),
+                        backgroundColor: colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: 'white', padding: 20 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateConversionFunnel(data) {
+            const container = document.getElementById('conversionFunnel');
+            const steps = [
+                { label: 'Visitantes', value: data.visitors || 0, color: 'bg-blue-500' },
+                { label: 'Interações', value: data.form_interactions || 0, color: 'bg-yellow-500' },
+                { label: 'Relatórios', value: data.report_generations || 0, color: 'bg-green-500' }
+            ];
+            
+            const maxValue = Math.max(...steps.map(s => s.value));
+            
+            container.innerHTML = steps.map((step, index) => {
+                const percentage = maxValue > 0 ? (step.value / maxValue) * 100 : 0;
+                const dropoff = index > 0 ? ((steps[index-1].value - step.value) / steps[index-1].value * 100) : 0;
+                
+                return '<div class="space-y-2">' +
+                    '<div class="flex justify-between items-center">' +
+                        '<span class="text-gray-300 font-medium">' + step.label + '</span>' +
+                        '<span class="text-white font-bold">' + step.value.toLocaleString('pt-BR') + '</span>' +
+                    '</div>' +
+                    '<div class="w-full bg-gray-700 rounded-full h-3">' +
+                        '<div class="' + step.color + ' h-3 rounded-full" style="width: ' + percentage + '%"></div>' +
+                    '</div>' +
+                    (index > 0 && dropoff > 0 ? '<div class="text-red-400 text-sm">-' + dropoff.toFixed(1) + '% dropoff</div>' : '') +
+                '</div>';
+            }).join('');
+        }
+
+        function updateTopPagesList(data) {
+            const container = document.getElementById('topPagesList');
+            container.innerHTML = data.map((page, index) =>
+                '<div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">' +
+                    '<div class="flex items-center space-x-3">' +
+                        '<div class="w-8 h-8 rounded-full bg-corteus-primary/20 flex items-center justify-center text-corteus-primary font-bold text-sm">' +
+                            (index + 1) +
+                        '</div>' +
+                        '<span class="text-white font-medium">' + page.page + '</span>' +
+                    '</div>' +
+                    '<div class="text-right">' +
+                        '<div class="text-white font-bold">' + page.count.toLocaleString('pt-BR') + '</div>' +
+                        '<div class="text-gray-400 text-sm">visualizações</div>' +
+                    '</div>' +
+                '</div>'
+            ).join('');
+        }
+
+        function updateTopButtonsList(data) {
+            const container = document.getElementById('topButtonsList');
+            container.innerHTML = data.map((button, index) =>
+                '<div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">' +
+                    '<div class="flex items-center space-x-3">' +
+                        '<div class="w-8 h-8 rounded-full bg-orange-400/20 flex items-center justify-center text-orange-400 font-bold text-sm">' +
+                            (index + 1) +
+                        '</div>' +
+                        '<span class="text-white font-medium">' + button.button + '</span>' +
+                    '</div>' +
+                    '<div class="text-right">' +
+                        '<div class="text-white font-bold">' + button.clicks.toLocaleString('pt-BR') + '</div>' +
+                        '<div class="text-gray-400 text-sm">cliques</div>' +
+                    '</div>' +
+                '</div>'
+            ).join('');
+        }
+
+        function formatTime(seconds) {
+            if (seconds < 60) return seconds.toFixed(0) + 's';
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return minutes + 'm ' + remainingSeconds + 's';
+        }
+
+        function exportData() {
+            if (!currentData) {
+                alert('Nenhum dado para exportar. Carregue os dados primeiro.');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(currentData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'corteus-analytics-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
         }
 
         function setToday() {
@@ -382,16 +786,12 @@
         }
 
         // Carregar dados iniciais
-        window.addEventListener('load', () => {
-            // Verificar se tem permissão de admin
-            if (localStorage.getItem('corteus_admin_mode') !== 'true') {
-                alert('Acesso negado! Você precisa estar no modo admin.');
-                window.location.href = '/';
-                return;
-            }
-            
+        window.addEventListener('load', function() {
             setWeek(); // Definir período padrão
             loadData();
+            
+            // Auto-refresh a cada 5 minutos
+            setInterval(loadData, 5 * 60 * 1000);
         });
     </script>
 </body>

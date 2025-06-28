@@ -1,4 +1,4 @@
-// Sistema de Analytics Customizado para Corteus
+// Sistema de Analytics Customizado Avançado para Corteus
 class CorteuAnalytics {
     constructor() {
         this.serverUrl = window.location.origin;
@@ -6,6 +6,15 @@ class CorteuAnalytics {
         this.userId = this.getUserId();
         this.startTime = Date.now();
         this.maxScroll = 0;
+        this.scrollMilestones = new Set();
+        this.interactions = 0;
+        this.mouseMoves = 0;
+        this.keystrokes = 0;
+        this.lastActivity = Date.now();
+        this.pageLoadTime = null;
+        this.performanceData = {};
+        this.heatmapData = [];
+        this.errors = [];
         this.init();
     }
 
@@ -30,11 +39,18 @@ class CorteuAnalytics {
             user_id: this.userId,
             referrer: document.referrer,
             screen_resolution: `${screen.width}x${screen.height}`,
-            data: data
+            viewport: `${window.innerWidth}x${window.innerHeight}`,
+            user_agent: navigator.userAgent,
+            timestamp: new Date().toISOString(),
+            data: {
+                ...data,
+                interactions_count: this.interactions,
+                time_since_load: Date.now() - this.startTime
+            }
         };
 
         try {
-            await fetch(`${this.serverUrl}/api/track`, {
+            await fetch(`${this.serverUrl}/track`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,35 +59,132 @@ class CorteuAnalytics {
             });
         } catch (error) {
             console.error('Erro ao enviar analytics:', error);
+            this.errors.push({
+                error: error.message,
+                timestamp: new Date().toISOString(),
+                event: event
+            });
         }
     }
 
     init() {
-        // Track page view automaticamente
-        this.track('page_view');
+        this.setupPerformanceTracking();
+        this.trackPageView();
+        this.setupEventListeners();
+        this.setupHeatmapTracking();
+        this.setupErrorTracking();
+        this.setupEngagementTracking();
+        this.trackCorteuEvents();
+    }
 
-        // Track clicks em links
-        document.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A') {
-                this.track('link_click', {
-                    link_text: e.target.textContent.trim(),
-                    link_url: e.target.href,
-                    link_target: e.target.getAttribute('target')
+    setupPerformanceTracking() {
+        // Track page load performance
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                this.pageLoadTime = perfData.loadEventEnd - perfData.fetchStart;
+                
+                this.performanceData = {
+                    dns_lookup: perfData.domainLookupEnd - perfData.domainLookupStart,
+                    tcp_connect: perfData.connectEnd - perfData.connectStart,
+                    server_response: perfData.responseEnd - perfData.requestStart,
+                    dom_processing: perfData.domContentLoadedEventEnd - perfData.responseEnd,
+                    page_load: this.pageLoadTime,
+                    first_paint: this.getFirstPaint(),
+                    largest_contentful_paint: this.getLCP()
+                };
+
+                this.track('performance_metrics', this.performanceData);
+            }, 1000);
+        });
+    }
+
+    getFirstPaint() {
+        const paintEntries = performance.getEntriesByType('paint');
+        const firstPaint = paintEntries.find(entry => entry.name === 'first-paint');
+        return firstPaint ? firstPaint.startTime : null;
+    }
+
+    getLCP() {
+        return new Promise((resolve) => {
+            if ('PerformanceObserver' in window) {
+                const observer = new PerformanceObserver((list) => {
+                    const entries = list.getEntries();
+                    const lastEntry = entries[entries.length - 1];
+                    resolve(lastEntry.startTime);
                 });
-            }
-            
-            // Track clicks em botões
-            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-                const button = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
-                this.track('button_click', {
-                    button_text: button.textContent.trim(),
-                    button_id: button.id,
-                    button_class: button.className
-                });
+                observer.observe({ entryTypes: ['largest-contentful-paint'] });
+                
+                setTimeout(() => resolve(null), 5000); // timeout after 5s
+            } else {
+                resolve(null);
             }
         });
+    }
 
-        // Track scroll depth
+    trackPageView() {
+        // Track page view with additional context
+        const pageData = {
+            url: window.location.href,
+            title: document.title,
+            loading_time: this.pageLoadTime,
+            device_type: this.getDeviceType(),
+            browser_info: this.getBrowserInfo(),
+            connection_type: this.getConnectionType(),
+            language: navigator.language,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        };
+
+        this.track('page_view', pageData);
+    }
+
+    setupEventListeners() {
+        // Enhanced click tracking
+        document.addEventListener('click', (e) => {
+            this.interactions++;
+            this.lastActivity = Date.now();
+            
+            const clickData = {
+                element_tag: e.target.tagName.toLowerCase(),
+                element_text: e.target.textContent.trim().substring(0, 100),
+                element_id: e.target.id,
+                element_classes: e.target.className,
+                click_x: e.clientX,
+                click_y: e.clientY,
+                page_x: e.pageX,
+                page_y: e.pageY,
+                timestamp: Date.now() - this.startTime
+            };
+
+            // Specific tracking for different elements
+            if (e.target.tagName === 'A') {
+                this.track('link_click', {
+                    ...clickData,
+                    link_url: e.target.href,
+                    link_target: e.target.getAttribute('target'),
+                    external: !e.target.href.includes(window.location.origin)
+                });
+            } else if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                const button = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+                this.track('button_click', {
+                    ...clickData,
+                    button_type: button.type,
+                    button_form: button.form?.id || null
+                });
+            } else {
+                this.track('element_click', clickData);
+            }
+
+            // Add to heatmap data
+            this.heatmapData.push({
+                x: e.clientX,
+                y: e.clientY,
+                timestamp: Date.now(),
+                element: e.target.tagName.toLowerCase()
+            });
+        });
+
+        // Enhanced scroll tracking
         let scrollTimeout;
         window.addEventListener('scroll', () => {
             clearTimeout(scrollTimeout);
@@ -82,122 +195,375 @@ class CorteuAnalytics {
                 
                 if (scrollPercent > this.maxScroll) {
                     this.maxScroll = scrollPercent;
-                    
-                    // Track marcos de scroll
-                    if ([25, 50, 75, 100].includes(scrollPercent)) {
-                        this.track('scroll_depth', { 
-                            depth: scrollPercent,
-                            page_height: document.body.scrollHeight,
-                            viewport_height: window.innerHeight
+                }
+
+                // Track scroll milestones
+                const milestones = [10, 25, 50, 75, 90, 100];
+                milestones.forEach(milestone => {
+                    if (scrollPercent >= milestone && !this.scrollMilestones.has(milestone)) {
+                        this.scrollMilestones.add(milestone);
+                        this.track('scroll_milestone', { 
+                            depth: milestone,
+                            time_to_reach: Date.now() - this.startTime,
+                            scroll_speed: this.calculateScrollSpeed()
                         });
                     }
-                }
+                });
             }, 100);
         });
 
-        // Track form submissions
-        document.addEventListener('submit', (e) => {
-            if (e.target.tagName === 'FORM') {
-                this.track('form_submit', {
-                    form_id: e.target.id,
-                    form_action: e.target.action,
-                    form_method: e.target.method
+        // Form interaction tracking
+        document.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+                this.interactions++;
+                this.track('form_interaction', {
+                    field_id: e.target.id,
+                    field_name: e.target.name,
+                    field_type: e.target.type,
+                    field_value_length: e.target.value.length,
+                    time_since_load: Date.now() - this.startTime
                 });
             }
         });
 
-        // Track downloads/reports (específico para Corteus)
-        this.trackCorteuEvents();
+        // Keystroke tracking (general activity)
+        document.addEventListener('keydown', () => {
+            this.keystrokes++;
+            this.lastActivity = Date.now();
+        });
 
-        // Track time on page quando sair
-        window.addEventListener('beforeunload', () => {
-            const timeOnPage = Date.now() - this.startTime;
-            
-            // Use sendBeacon para garantir que o evento seja enviado
+        // Mouse movement tracking (activity indicator)
+        let mouseMoveTimeout;
+        document.addEventListener('mousemove', () => {
+            clearTimeout(mouseMoveTimeout);
+            mouseMoveTimeout = setTimeout(() => {
+                this.mouseMoves++;
+                this.lastActivity = Date.now();
+            }, 100);
+        });
+
+        // Right-click tracking
+        document.addEventListener('contextmenu', (e) => {
+            this.track('right_click', {
+                element_tag: e.target.tagName.toLowerCase(),
+                element_text: e.target.textContent.trim().substring(0, 50),
+                x: e.clientX,
+                y: e.clientY
+            });
+        });
+
+        // Copy/paste tracking
+        document.addEventListener('copy', () => {
+            this.track('copy_action', { timestamp: Date.now() - this.startTime });
+        });
+
+        document.addEventListener('paste', () => {
+            this.track('paste_action', { timestamp: Date.now() - this.startTime });
+        });
+    }
+
+    setupHeatmapTracking() {
+        // Send heatmap data periodically
+        setInterval(() => {
+            if (this.heatmapData.length > 0) {
+                this.track('heatmap_data', {
+                    clicks: this.heatmapData.splice(0, 50), // Send max 50 points at a time
+                    viewport: `${window.innerWidth}x${window.innerHeight}`
+                });
+            }
+        }, 30000); // Every 30 seconds
+    }
+
+    setupErrorTracking() {
+        // JavaScript error tracking
+        window.addEventListener('error', (e) => {
+            this.track('javascript_error', {
+                message: e.message,
+                filename: e.filename,
+                line: e.lineno,
+                column: e.colno,
+                stack: e.error?.stack?.substring(0, 500)
+            });
+        });
+
+        // Promise rejection tracking
+        window.addEventListener('unhandledrejection', (e) => {
+            this.track('promise_rejection', {
+                reason: e.reason?.toString()?.substring(0, 200)
+            });
+        });
+    }
+
+    setupEngagementTracking() {
+        // Track user engagement score
+        setInterval(() => {
+            const engagementScore = this.calculateEngagementScore();
+            this.track('engagement_pulse', {
+                score: engagementScore,
+                interactions: this.interactions,
+                mouse_moves: this.mouseMoves,
+                keystrokes: this.keystrokes,
+                max_scroll: this.maxScroll,
+                time_active: Date.now() - this.startTime,
+                last_activity: Date.now() - this.lastActivity
+            });
+        }, 60000); // Every minute
+
+        // Track idle detection
+        let idleTimer;
+        const resetIdleTimer = () => {
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => {
+                this.track('user_idle', {
+                    idle_time: 5 * 60 * 1000, // 5 minutes
+                    last_activity: Date.now() - this.lastActivity
+                });
+            }, 5 * 60 * 1000);
+        };
+
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+            document.addEventListener(event, resetIdleTimer);
+        });
+        resetIdleTimer();
+    }
+
+    calculateEngagementScore() {
+        const timeOnPage = (Date.now() - this.startTime) / 1000;
+        const interactionRate = this.interactions / Math.max(timeOnPage / 60, 1); // per minute
+        const scrollEngagement = this.maxScroll / 100;
+        const activityRecency = Math.max(0, 1 - (Date.now() - this.lastActivity) / 60000); // decay over 1 minute
+        
+        return Math.round((interactionRate * 30 + scrollEngagement * 40 + activityRecency * 30));
+    }
+
+    calculateScrollSpeed() {
+        // Simple scroll speed calculation (can be improved)
+        return 'medium'; // placeholder
+    }
+
+    getDeviceType() {
+        const width = window.innerWidth;
+        if (width <= 768) return 'mobile';
+        if (width <= 1024) return 'tablet';
+        return 'desktop';
+    }
+
+    getBrowserInfo() {
+        const ua = navigator.userAgent;
+        let browser = 'unknown';
+        
+        if (ua.includes('Chrome')) browser = 'chrome';
+        else if (ua.includes('Firefox')) browser = 'firefox';
+        else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'safari';
+        else if (ua.includes('Edge')) browser = 'edge';
+        
+        return {
+            name: browser,
+            version: this.getBrowserVersion(ua),
+            mobile: /Mobi|Android/i.test(ua)
+        };
+    }
+
+    getBrowserVersion(ua) {
+        const version = ua.match(/(chrome|firefox|safari|edge)\/(\d+)/i);
+        return version ? version[2] : 'unknown';
+    }
+
+    getConnectionType() {
+        if ('connection' in navigator) {
+            return navigator.connection.effectiveType || 'unknown';
+        }
+        return 'unknown';
+    }
+
+    trackCorteuEvents() {
+        // Enhanced Corteus-specific tracking
+        const corteuForm = document.getElementById('corteus-form');
+        if (corteuForm) {
+            // Track form completion funnel
+            const formFields = corteuForm.querySelectorAll('input, select, textarea');
+            const totalFields = formFields.length;
+            let completedFields = 0;
+
+            formFields.forEach((field, index) => {
+                field.addEventListener('change', () => {
+                    if (field.value.trim() !== '') {
+                        completedFields++;
+                    }
+
+                    const completionRate = (completedFields / totalFields) * 100;
+                    
+                    this.track('form_field_change', {
+                        field_id: field.id,
+                        field_index: index,
+                        field_value_length: field.value.length,
+                        completion_rate: completionRate,
+                        field_type: field.type || field.tagName.toLowerCase()
+                    });
+
+                    // Track completion milestones
+                    if ([25, 50, 75, 100].includes(Math.round(completionRate))) {
+                        this.track('form_completion_milestone', {
+                            milestone: Math.round(completionRate),
+                            time_to_reach: Date.now() - this.startTime
+                        });
+                    }
+                });
+
+                // Track field focus time
+                let focusTime;
+                field.addEventListener('focus', () => {
+                    focusTime = Date.now();
+                });
+
+                field.addEventListener('blur', () => {
+                    if (focusTime) {
+                        this.track('field_focus_time', {
+                            field_id: field.id,
+                            focus_duration: Date.now() - focusTime
+                        });
+                    }
+                });
+            });
+        }
+
+        // Track help usage patterns
+        const helpButton = document.getElementById('help-button');
+        if (helpButton) {
+            helpButton.addEventListener('click', () => {
+                this.track('help_clicked', {
+                    time_since_load: Date.now() - this.startTime,
+                    form_completion: this.getFormCompletionRate()
+                });
+            });
+        }
+
+        // Enhanced report generation tracking
+        const reportButtons = document.querySelectorAll('[id*="relatorio"], [onclick*="relatorio"]');
+        reportButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                this.track('report_generation', {
+                    report_type: button.textContent.trim(),
+                    form_data_present: this.checkFormDataPresent(),
+                    time_to_generate: Date.now() - this.startTime,
+                    user_engagement_score: this.calculateEngagementScore()
+                });
+            });
+        });
+
+        // Track logo triple-click for admin mode
+        let logoClickCount = 0;
+        let logoClickTimer;
+        const logo = document.querySelector('.logo, [onclick*="logo"], img[src*="logo"]');
+        if (logo) {
+            logo.addEventListener('click', () => {
+                logoClickCount++;
+                clearTimeout(logoClickTimer);
+                
+                if (logoClickCount === 3) {
+                    this.track('admin_mode_attempt', {
+                        time_since_load: Date.now() - this.startTime
+                    });
+                    logoClickCount = 0;
+                } else {
+                    logoClickTimer = setTimeout(() => {
+                        logoClickCount = 0;
+                    }, 1000);
+                }
+            });
+        }
+    }
+
+    getFormCompletionRate() {
+        const form = document.getElementById('corteus-form');
+        if (!form) return 0;
+        
+        const fields = form.querySelectorAll('input, select, textarea');
+        const completedFields = Array.from(fields).filter(field => field.value.trim() !== '').length;
+        return fields.length > 0 ? (completedFields / fields.length) * 100 : 0;
+    }
+
+    checkFormDataPresent() {
+        const form = document.getElementById('corteus-form');
+        if (!form) return false;
+        
+        const fields = form.querySelectorAll('input, select, textarea');
+        return Array.from(fields).some(field => field.value.trim() !== '');
+    }
+
+    // Enhanced beforeunload tracking
+    trackPageExit() {
+        const exitData = {
+            time_on_page: Date.now() - this.startTime,
+            max_scroll: this.maxScroll,
+            interactions: this.interactions,
+            mouse_moves: this.mouseMoves,
+            keystrokes: this.keystrokes,
+            engagement_score: this.calculateEngagementScore(),
+            form_completion: this.getFormCompletionRate(),
+            errors_count: this.errors.length,
+            scroll_milestones: Array.from(this.scrollMilestones),
+            exit_type: 'beforeunload'
+        };
+
+        // Use sendBeacon for reliable exit tracking
+        if (navigator.sendBeacon) {
             const payload = {
-                event: 'time_on_page',
+                event: 'page_exit',
                 page: window.location.pathname,
                 session_id: this.sessionId,
                 user_id: this.userId,
                 referrer: document.referrer,
                 screen_resolution: `${screen.width}x${screen.height}`,
-                data: { 
-                    duration: timeOnPage,
-                    max_scroll: this.maxScroll
-                }
+                data: exitData
             };
 
-            if (navigator.sendBeacon) {
-                navigator.sendBeacon(
-                    `${this.serverUrl}/api/track`, 
-                    JSON.stringify(payload)
-                );
-            }
-        });
-
-        // Track visibility change (tab focus/blur)
-        document.addEventListener('visibilitychange', () => {
-            this.track('visibility_change', {
-                visible: !document.hidden,
-                timestamp: new Date().toISOString()
-            });
-        });
+            navigator.sendBeacon(
+                `${this.serverUrl}/track`, 
+                JSON.stringify(payload)
+            );
+        }
     }
 
-    trackCorteuEvents() {
-        // Track quando formulários do Corteus são preenchidos
-        const corteuForm = document.getElementById('corteus-form');
-        if (corteuForm) {
-            // Track mudanças nos selects/inputs importantes
-            const importantFields = ['projeto', 'ss', 'lote', 'comprimento-barra'];
-            
-            importantFields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (field) {
-                    field.addEventListener('change', () => {
-                        this.track('form_field_change', {
-                            field_id: fieldId,
-                            field_value: field.value,
-                            field_type: field.tagName.toLowerCase()
-                        });
-                    });
-                }
-            });
-        }
-
-        // Track uso do help button
-        const helpButton = document.getElementById('help-button');
-        if (helpButton) {
-            helpButton.addEventListener('click', () => {
-                this.track('help_clicked');
-            });
-        }
-
-        // Track geração de relatórios (se os botões existirem)
-        const reportButtons = document.querySelectorAll('[id*="relatorio"], [onclick*="relatorio"]');
-        reportButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                this.track('report_generation', {
-                    report_type: button.textContent.trim()
-                });
-            });
-        });
-    }
-
-    // Método público para tracking customizado
+    // Public method for custom tracking
     trackCustomEvent(eventName, data = {}) {
         this.track(eventName, data);
     }
+
+    // Method to get current analytics state
+    getAnalyticsState() {
+        return {
+            sessionId: this.sessionId,
+            userId: this.userId,
+            interactions: this.interactions,
+            timeOnPage: Date.now() - this.startTime,
+            maxScroll: this.maxScroll,
+            engagementScore: this.calculateEngagementScore()
+        };
+    }
 }
 
-// Inicializar analytics quando a página carregar
+// Initialize analytics when page loads
 if (typeof window !== 'undefined') {
     window.addEventListener('DOMContentLoaded', () => {
         window.corteuAnalytics = new CorteuAnalytics();
+        
+        // Setup page exit tracking
+        window.addEventListener('beforeunload', () => {
+            window.corteuAnalytics.trackPageExit();
+        });
+
+        // Track visibility changes (tab switching)
+        document.addEventListener('visibilitychange', () => {
+            window.corteuAnalytics.track('visibility_change', {
+                visible: !document.hidden,
+                time_since_load: Date.now() - window.corteuAnalytics.startTime
+            });
+        });
     });
 }
 
-// Exportar para uso em outros scripts se necessário
+// Export for use in other scripts if needed
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CorteuAnalytics;
 }
