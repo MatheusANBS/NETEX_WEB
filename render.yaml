@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: corteus-app
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run web.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true --server.fileWatcherType=none
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.9.16
