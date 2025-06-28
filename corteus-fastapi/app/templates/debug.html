@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Debug - Corteus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <h1 class="text-2xl mb-4">Teste de Debug - Corteus</h1>
+    
+    <div class="bg-gray-800 p-4 rounded-lg mb-4">
+        <h2 class="text-xl mb-2">Teste Simples</h2>
+        <button id="teste-corte" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+            Testar Relatório de Corte
+        </button>
+        <button id="teste-minuta" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded ml-2">
+            Testar Relatório de Minuta
+        </button>
+    </div>
+    
+    <div id="resultado" class="bg-gray-800 p-4 rounded-lg hidden">
+        <h3 class="text-lg mb-2">Resultado:</h3>
+        <pre id="resultado-text" class="text-xs text-green-400"></pre>
+    </div>
+    
+    <script>
+        document.getElementById('teste-corte').addEventListener('click', async () => {
+            console.log('Testando corte...');
+            
+            const dados = {
+                projeto: "P31-CAM",
+                ss: "0123/2024",
+                sk: "EST-001", 
+                cod_material: "1234567890",
+                modo: "Automático",
+                sugestao_emenda: true,
+                comprimento_barra: 6000,
+                cortes_desejados: [1500, 2000, 3000]
+            };
+            
+            try {
+                const response = await fetch('/api/cortes/gerar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dados)
+                });
+                
+                const resultado = await response.json();
+                
+                document.getElementById('resultado').classList.remove('hidden');
+                document.getElementById('resultado-text').textContent = JSON.stringify({
+                    status: response.status,
+                    headers: Object.fromEntries(response.headers),
+                    body: resultado
+                }, null, 2);
+                
+            } catch (error) {
+                document.getElementById('resultado').classList.remove('hidden');
+                document.getElementById('resultado-text').textContent = 'Erro: ' + error.message;
+            }
+        });
+        
+        document.getElementById('teste-minuta').addEventListener('click', async () => {
+            console.log('Testando minuta...');
+            
+            const dados = {
+                projeto: "P31-CAM",
+                ss: "0123/2024",
+                sk: "EST-001",
+                cod_material: "1234567890",
+                cortes_desejados: [1500, 2000, 3000]
+            };
+            
+            try {
+                const response = await fetch('/api/minuta/gerar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dados)
+                });
+                
+                const resultado = await response.json();
+                
+                document.getElementById('resultado').classList.remove('hidden');
+                document.getElementById('resultado-text').textContent = JSON.stringify({
+                    status: response.status,
+                    headers: Object.fromEntries(response.headers),
+                    body: resultado
+                }, null, 2);
+                
+            } catch (error) {
+                document.getElementById('resultado').classList.remove('hidden');
+                document.getElementById('resultado-text').textContent = 'Erro: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
