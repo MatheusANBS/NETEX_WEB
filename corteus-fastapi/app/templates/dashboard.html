@@ -98,7 +98,10 @@
                     <button onclick="setMonth()" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg font-medium transition-colors text-sm">30 dias</button>
                 </div>
                 
-                <div class="ml-auto">
+                <div class="ml-auto flex space-x-3">
+                    <button onclick="clearAllData()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Limpar Dados
+                    </button>
                     <button onclick="exportData()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-download mr-2"></i>Exportar
                     </button>
@@ -435,11 +438,17 @@
                 // Atualizar último update
                 document.getElementById('lastUpdate').textContent = new Date().toLocaleString('pt-BR');
                 
-                // Atualizar dashboard
-                updateKPIs(data);
-                updateCharts(data);
-                updateTables(data);
-                updateMetrics(data);
+                // Atualizar dashboard com tratamento de erro
+                try {
+                    updateKPIs(data);
+                    updateCharts(data);
+                    updateTables(data);
+                    updateMetrics(data);
+                } catch (updateError) {
+                    console.error('Erro ao atualizar dashboard:', updateError);
+                    showError('Erro ao processar dados: ' + updateError.message);
+                    return;
+                }
                 
                 hideLoading();
                 showDashboard();
@@ -487,11 +496,15 @@
             updateBrowserChart(data.device_analytics.browsers || []);
         }
 
-        // Atualizar tabelas
+        // Atualizar tabelas com validação
         function updateTables(data) {
-            updateTopPagesList(data.top_pages || []);
-            updateTopButtonsList(data.interaction_analytics.top_buttons || []);
-            updateConversionFunnel(data.conversion_funnel || {});
+            try {
+                updateTopPagesList(data.top_pages || []);
+                updateTopButtonsList(data.interaction_analytics?.top_buttons || []);
+                updateConversionFunnel(data.conversion_funnel || {});
+            } catch (error) {
+                console.error('Erro ao atualizar tabelas:', error);
+            }
         }
 
         function updateDailyViewsChart(data) {
@@ -669,7 +682,29 @@
             
             container.innerHTML = steps.map((step, index) => {
                 const percentage = maxValue > 0 ? (step.value / maxValue) * 100 : 0;
-                const dropoff = index > 0 ? ((steps[index-1].value - step.value) / steps[index-1].value * 100) : 0;
+                
+                // Corrigir cálculo de dropoff com validações robustas
+                let dropoffHtml = '';
+                
+                if (index > 0) {
+                    const previousValue = steps[index-1]?.value || 0;
+                    const currentValue = step.value || 0;
+                    
+                    if (previousValue > 0 && currentValue < previousValue) {
+                        const dropoff = ((previousValue - currentValue) / previousValue * 100);
+                        if (!isNaN(dropoff) && isFinite(dropoff)) {
+                            dropoffHtml = '<div class="text-red-400 text-sm">-' + dropoff.toFixed(1) + '% dropoff</div>';
+                        }
+                    } else if (currentValue > previousValue && previousValue > 0) {
+                        // Se o valor atual é maior que o anterior, mostrar crescimento
+                        const growth = ((currentValue - previousValue) / previousValue * 100);
+                        if (!isNaN(growth) && isFinite(growth)) {
+                            dropoffHtml = '<div class="text-green-400 text-sm">+' + growth.toFixed(1) + '% crescimento</div>';
+                        }
+                    } else if (currentValue === previousValue) {
+                        dropoffHtml = '<div class="text-gray-400 text-sm">sem variação</div>';
+                    }
+                }
                 
                 return '<div class="space-y-2">' +
                     '<div class="flex justify-between items-center">' +
@@ -679,7 +714,7 @@
                     '<div class="w-full bg-gray-700 rounded-full h-3">' +
                         '<div class="' + step.color + ' h-3 rounded-full" style="width: ' + percentage + '%"></div>' +
                     '</div>' +
-                    (index > 0 && dropoff > 0 ? '<div class="text-red-400 text-sm">-' + dropoff.toFixed(1) + '% dropoff</div>' : '') +
+                    dropoffHtml +
                 '</div>';
             }).join('');
         }
@@ -711,7 +746,7 @@
                             (index + 1) +
                         '</div>' +
                         '<span class="text-white font-medium">' + button.button + '</span>' +
-                    '</div>' +
+                    </div>' +
                     '<div class="text-right">' +
                         '<div class="text-white font-bold">' + button.clicks.toLocaleString('pt-BR') + '</div>' +
                         '<div class="text-gray-400 text-sm">cliques</div>' +
@@ -741,6 +776,49 @@
             link.download = 'corteus-analytics-' + new Date().toISOString().split('T')[0] + '.json';
             link.click();
             URL.revokeObjectURL(url);
+        }
+
+        function clearAllData() {
+            if (!confirm('⚠️ ATENÇÃO: Esta ação irá apagar TODOS os dados de analytics permanentemente.\\n\\nTem certeza que deseja continuar?')) {
+                return;
+            }
+            
+            if (!confirm('🚨 CONFIRMAÇÃO FINAL: Todos os dados serão perdidos para sempre.\\n\\nClique OK para confirmar:')) {
+                return;
+            }
+            
+            // Mostrar loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('dashboard-content').style.display = 'none';
+            
+            fetch('/clear-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Dados limpos com sucesso!\\n\\nO dashboard será recarregado com dados zerados.');
+                    
+                    // Limpar dados locais
+                    currentData = null;
+                    
+                    // Recarregar dados (agora vazios)
+                    loadData();
+                } else {
+                    throw new Error(data.message || 'Erro ao limpar dados');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao limpar dados:', error);
+                alert('❌ Erro ao limpar dados: ' + error.message);
+                
+                // Esconder loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
+            });
         }
 
         function setToday() {
@@ -783,6 +861,8 @@
 
         function hideError() {
             document.getElementById('error-message').classList.add('hidden');
+        }
+
         }
 
         // Carregar dados iniciais

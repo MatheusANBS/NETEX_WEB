@@ -166,10 +166,76 @@ class CorteuAnalytics {
                 });
             } else if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
                 const button = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+                
+                // Melhor detecção de texto do botão
+                let buttonText = button.textContent?.trim() || button.innerText?.trim() || '';
+                if (!buttonText && button.title) buttonText = button.title;
+                if (!buttonText && button.alt) buttonText = button.alt;
+                if (!buttonText && button.value) buttonText = button.value;
+                if (!buttonText && button.getAttribute('aria-label')) buttonText = button.getAttribute('aria-label');
+                if (!buttonText && button.id) buttonText = button.id.replace(/[-_]/g, ' ');
+                if (!buttonText && button.className) {
+                    const classList = button.className.split(' ');
+                    buttonText = classList.find(cls => cls.includes('btn') || cls.includes('button'))?.replace(/btn-?|button-?/g, '') || '';
+                }
+                if (!buttonText) buttonText = 'Button';
+
+                // Não rastrear cliques do botão de ajuda aqui (será rastreado especificamente)
+                if (button.id === 'help-button' || buttonText.toLowerCase().includes('ajuda')) {
+                    return; // Parar aqui para evitar tracking duplo
+                }
+                
                 this.track('button_click', {
                     ...clickData,
+                    button_text: buttonText,
                     button_type: button.type,
-                    button_form: button.form?.id || null
+                    button_form: button.form?.id || null,
+                    button_id: button.id
+                });
+            } else if (e.target.closest('label') || e.target.tagName === 'LABEL') {
+                // Rastrear cliques em labels (podem ser botões estilizados)
+                const label = e.target.closest('label') || e.target;
+                let labelText = label.textContent?.trim() || label.innerText?.trim() || '';
+                if (!labelText && label.getAttribute('for')) {
+                    const targetElement = document.getElementById(label.getAttribute('for'));
+                    if (targetElement) labelText = targetElement.getAttribute('placeholder') || targetElement.name || 'Form Label';
+                }
+                if (!labelText) labelText = 'Label';
+                
+                this.track('button_click', {
+                    ...clickData,
+                    button_text: labelText,
+                    button_type: 'label',
+                    element_for: label.getAttribute('for')
+                });
+            } else if (e.target.onclick || e.target.getAttribute('onclick') || 
+                       e.target.style.cursor === 'pointer' || 
+                       e.target.closest('[onclick]') ||
+                       e.target.getAttribute('role') === 'button' ||
+                       e.target.classList.contains('btn') ||
+                       e.target.classList.contains('button') ||
+                       e.target.classList.contains('clickable')) {
+                // Rastrear elementos que funcionam como botões mas não são <button>
+                const clickableElement = e.target.closest('[onclick]') || e.target;
+                let elementText = clickableElement.textContent?.trim() || clickableElement.innerText?.trim() || '';
+                if (!elementText && clickableElement.title) elementText = clickableElement.title;
+                if (!elementText && clickableElement.alt) elementText = clickableElement.alt;
+                if (!elementText && clickableElement.getAttribute('aria-label')) elementText = clickableElement.getAttribute('aria-label');
+                if (!elementText && clickableElement.id) elementText = clickableElement.id.replace(/[-_]/g, ' ');
+                
+                // Melhor descrição para elementos específicos
+                if (!elementText) {
+                    if (clickableElement.tagName === 'IMG') elementText = 'Image';
+                    else if (clickableElement.tagName === 'SPAN') elementText = 'Text Element';
+                    else if (clickableElement.tagName === 'DIV') elementText = 'Container';
+                    else elementText = `${clickableElement.tagName.toLowerCase()} clickable`;
+                }
+                
+                this.track('button_click', {
+                    ...clickData,
+                    button_text: elementText,
+                    button_type: 'clickable_element',
+                    element_onclick: clickableElement.getAttribute('onclick')?.substring(0, 50) || null
                 });
             } else {
                 this.track('element_click', clickData);
@@ -430,10 +496,14 @@ class CorteuAnalytics {
         // Track help usage patterns
         const helpButton = document.getElementById('help-button');
         if (helpButton) {
-            helpButton.addEventListener('click', () => {
+            helpButton.addEventListener('click', (e) => {
+                // Evitar tracking duplo - parar propagação do evento geral
+                e.stopPropagation();
+                
                 this.track('help_clicked', {
                     time_since_load: Date.now() - this.startTime,
-                    form_completion: this.getFormCompletionRate()
+                    form_completion: this.getFormCompletionRate(),
+                    button_text: 'Ajuda' // Texto específico para o botão de ajuda
                 });
             });
         }

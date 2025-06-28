@@ -77,3 +77,16 @@ async def analytics_dashboard(request: Request):
         "request": request,
         "title": "Analytics Dashboard - Corteus"
     })
+
+@router.post("/clear-data")
+async def clear_analytics_data():
+    """Endpoint para limpar todos os dados de analytics"""
+    try:
+        # Limpar os dados
+        analytics_storage.clear_all_data()
+        
+        return {"success": True, "message": "Dados de analytics limpos com sucesso"}
+        
+    except Exception as e:
+        print(f"Erro ao limpar dados de analytics: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao limpar dados")

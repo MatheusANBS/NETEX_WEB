@@ -66,12 +66,34 @@ class AnalyticsStorage:
             if start_date or end_date:
                 filtered_data = []
                 for event in data:
-                    event_time = datetime.fromisoformat(event['timestamp'])
-                    if start_date and event_time < start_date:
+                    try:
+                        timestamp_str = event['timestamp']
+                        # Remover timezone se presente para normalizar
+                        if 'Z' in timestamp_str:
+                            timestamp_str = timestamp_str.replace('Z', '+00:00')
+                        
+                        event_time = datetime.fromisoformat(timestamp_str)
+                        
+                        # Converter para naive datetime se necessário
+                        if event_time.tzinfo is not None:
+                            event_time = event_time.replace(tzinfo=None)
+                        
+                        # Normalizar start_date e end_date também
+                        if start_date:
+                            start_naive = start_date.replace(tzinfo=None) if start_date.tzinfo else start_date
+                            if event_time < start_naive:
+                                continue
+                        
+                        if end_date:
+                            end_naive = end_date.replace(tzinfo=None) if end_date.tzinfo else end_date
+                            if event_time > end_naive:
+                                continue
+                        
+                        filtered_data.append(event)
+                    except Exception as e:
+                        print(f"Erro ao processar timestamp {event.get('timestamp', 'N/A')}: {e}")
                         continue
-                    if end_date and event_time > end_date:
-                        continue
-                    filtered_data.append(event)
+                
                 return filtered_data
             
             return data
@@ -129,7 +151,13 @@ class AnalyticsStorage:
         
         # 3. Análise de Engajamento
         avg_time_on_page = 0
-        if time_events:
+        # Buscar por eventos de saída de página que contêm tempo na página
+        page_exit_events = [e for e in events if e.get('event') == 'page_exit']
+        if page_exit_events:
+            total_time = sum(e.get('data', {}).get('time_on_page', 0) for e in page_exit_events)
+            avg_time_on_page = total_time / len(page_exit_events) / 1000  # converter para segundos
+        elif time_events:
+            # Fallback para outros eventos de tempo
             total_time = sum(e.get('data', {}).get('duration', 0) for e in time_events)
             avg_time_on_page = total_time / len(time_events) / 1000  # converter para segundos
         
@@ -154,31 +182,48 @@ class AnalyticsStorage:
             "conversion_rate": (report_generations / total_visitors * 100) if total_visitors > 0 else 0
         }
         
-        # 5. Análise de Dispositivos
-        device_data = {}
-        browser_data = {}
+        # 5. Análise de Dispositivos e Navegadores (por usuários únicos)
+        device_users = {}
+        browser_users = {}
+        
+        # Agrupar por usuário para evitar contagem dupla
+        user_devices = {}
+        user_browsers = {}
+        
         for event in events:
+            user_id = event.get('user_id', '')
+            if not user_id:
+                continue
+                
             user_agent = event.get('user_agent', '')
-            resolution = event.get('screen_resolution', '')
             
-            # Detectar dispositivo móvel
-            is_mobile = any(mobile in user_agent.lower() for mobile in ['mobile', 'android', 'iphone'])
-            device_type = 'Mobile' if is_mobile else 'Desktop'
-            device_data[device_type] = device_data.get(device_type, 0) + 1
+            # Detectar dispositivo móvel para este usuário (só conta uma vez por usuário)
+            if user_id not in user_devices:
+                is_mobile = any(mobile in user_agent.lower() for mobile in ['mobile', 'android', 'iphone'])
+                device_type = 'Mobile' if is_mobile else 'Desktop'
+                user_devices[user_id] = device_type
             
-            # Detectar navegador
-            if 'Chrome' in user_agent:
-                browser = 'Chrome'
-            elif 'Firefox' in user_agent:
-                browser = 'Firefox'
-            elif 'Safari' in user_agent and 'Chrome' not in user_agent:
-                browser = 'Safari'
-            elif 'Edge' in user_agent:
-                browser = 'Edge'
-            else:
-                browser = 'Outros'
+            # Detectar navegador para este usuário (só conta uma vez por usuário)
+            if user_id not in user_browsers:
+                if 'Chrome' in user_agent:
+                    browser = 'Chrome'
+                elif 'Firefox' in user_agent:
+                    browser = 'Firefox'
+                elif 'Safari' in user_agent and 'Chrome' not in user_agent:
+                    browser = 'Safari'
+                elif 'Edge' in user_agent:
+                    browser = 'Edge'
+                else:
+                    browser = 'Outros'
+                user_browsers[user_id] = browser
+        
+        # Contar usuários únicos por dispositivo
+        for device in user_devices.values():
+            device_users[device] = device_users.get(device, 0) + 1
             
-            browser_data[browser] = browser_data.get(browser, 0) + 1
+        # Contar usuários únicos por navegador
+        for browser in user_browsers.values():
+            browser_users[browser] = browser_users.get(browser, 0) + 1
         
         # 6. Análise Temporal (horários de pico)
         hourly_activity = {}
@@ -190,11 +235,13 @@ class AnalyticsStorage:
             except:
                 continue
         
-        # 7. Botões mais clicados
+        # 7. Botões mais clicados (excluindo botão de ajuda)
         button_clicks_count = {}
         for event in button_clicks:
             button_text = event.get('data', {}).get('button_text', 'Unknown')
-            button_clicks_count[button_text] = button_clicks_count.get(button_text, 0) + 1
+            # Excluir cliques de ajuda da contagem geral de botões
+            if button_text.lower() not in ['ajuda', 'help']:
+                button_clicks_count[button_text] = button_clicks_count.get(button_text, 0) + 1
         
         top_buttons = [{"button": btn, "clicks": count} for btn, count in 
                       sorted(button_clicks_count.items(), key=lambda x: x[1], reverse=True)[:5]]
@@ -204,6 +251,12 @@ class AnalyticsStorage:
         if scroll_events:
             total_scroll = sum(e.get('data', {}).get('depth', 0) for e in scroll_events)
             avg_scroll_depth = total_scroll / len(scroll_events)
+        else:
+            # Tentar obter scroll depth de eventos page_exit
+            exit_events_with_scroll = [e for e in events if e.get('event') == 'page_exit' and e.get('data', {}).get('max_scroll', 0) > 0]
+            if exit_events_with_scroll:
+                total_scroll = sum(e.get('data', {}).get('max_scroll', 0) for e in exit_events_with_scroll)
+                avg_scroll_depth = total_scroll / len(exit_events_with_scroll)
         
         return {
             "total_views": len(page_views),
@@ -226,8 +279,8 @@ class AnalyticsStorage:
             },
             "conversion_funnel": conversion_funnel,
             "device_analytics": {
-                "devices": [{"type": device, "count": count} for device, count in device_data.items()],
-                "browsers": [{"browser": browser, "count": count} for browser, count in browser_data.items()],
+                "devices": [{"type": device, "count": count} for device, count in device_users.items()],
+                "browsers": [{"browser": browser, "count": count} for browser, count in browser_users.items()],
                 "top_resolutions": self._get_top_resolutions(events)
             },
             "time_analytics": {
@@ -251,6 +304,16 @@ class AnalyticsStorage:
         
         return [{"resolution": res, "count": count} for res, count in 
                sorted(resolutions.items(), key=lambda x: x[1], reverse=True)[:5]]
+    
+    def clear_all_data(self):
+        """Limpa todos os dados de analytics"""
+        try:
+            with open(self.file_path, 'w') as f:
+                json.dump([], f)
+            print("Dados de analytics limpos com sucesso")
+        except Exception as e:
+            print(f"Erro ao limpar dados de analytics: {e}")
+            raise e
 
 # Instância global do storage
 analytics_storage = AnalyticsStorage()
