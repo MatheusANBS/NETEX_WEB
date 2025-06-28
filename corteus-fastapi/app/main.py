@@ -4,8 +4,9 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import os
 import base64
+from decouple import config
 
-from app.routers import cortes, relatorios
+from app.routers import cortes, relatorios, analytics
 
 app = FastAPI(
     title="Corteus - Gestor de Cortes",
@@ -22,6 +23,7 @@ templates = Jinja2Templates(directory="app/templates")
 # Incluir routers
 app.include_router(cortes.router, prefix="/api", tags=["cortes"])
 app.include_router(relatorios.router, prefix="/api", tags=["relatorios"])
+app.include_router(analytics.router, prefix="/api", tags=["analytics"])
 
 def get_base64_image(image_path):
     """Converte imagem para base64"""
@@ -40,10 +42,12 @@ async def read_root(request: Request):
         return HTMLResponse("")
     
     logo_base64 = get_base64_image("app/static/images/IconeLogo.png")
+    admin_password = config("ADMIN_PASSWORD", default="admin123")  # Senha padrão se não estiver definida
     
     return templates.TemplateResponse("index.html", {
         "request": request,
         "logo_base64": logo_base64,
+        "admin_password": admin_password,
         "projetos": [
             "P31-CAM", "P51-CAM", "P51-PAR", "P52-ACO", "P52-CAM", "P53-CAM",
             "P54-CAM", "P54-PAR", "P55-ACO", "P62-ACO", "P62-CAM", "P62-PAR", "PRA-1"
@@ -60,6 +64,14 @@ async def health_check():
 async def debug_page(request: Request):
     """Página de debug"""
     return templates.TemplateResponse("debug.html", {"request": request})
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def analytics_dashboard(request: Request):
+    """Dashboard de Analytics"""
+    return templates.TemplateResponse("dashboard.html", {
+        "request": request,
+        "title": "Analytics Dashboard - Corteus"
+    })
 
 if __name__ == "__main__":
     import uvicorn

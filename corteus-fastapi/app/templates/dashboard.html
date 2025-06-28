@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="icon" href="{{ url_for('static', path='images/IconeLogo.png') }}" type="image/png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'corteus': {
+                            'primary': '#ff4b4b',
+                            'secondary': '#ff7b00',
+                            'dark': '#18191a',
+                            'gray': '#23272f',
+                            'light': '#f8fafc'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-white font-inter min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-corteus-gray border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-2 text-corteus-primary hover:text-corteus-secondary transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Voltar ao Site</span>
+                    </a>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <i class="fas fa-chart-bar mr-2"></i>Analytics Dashboard
+                </div>
+                <div class="w-20"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-corteus-primary via-corteus-secondary to-orange-600 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                <i class="fas fa-chart-line mr-3"></i>Analytics Dashboard
+            </h1>
+            <p class="text-xl text-white/90">Acompanhe o desempenho do Corteus em tempo real</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Filtros -->
+        <div class="bg-corteus-gray rounded-2xl p-6 mb-8 border border-gray-700/50">
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-calendar text-corteus-primary"></i>
+                    <label class="text-gray-300 font-medium">Período:</label>
+                </div>
+                <input type="date" id="startDate" class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-corteus-primary">
+                <span class="text-gray-400">até</span>
+                <input type="date" id="endDate" class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-corteus-primary">
+                
+                <div class="flex space-x-2">
+                    <button onclick="loadData()" class="bg-corteus-primary hover:bg-corteus-primary/80 px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-sync mr-2"></i>Atualizar
+                    </button>
+                    <button onclick="setToday()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-medium transition-colors">Hoje</button>
+                    <button onclick="setWeek()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-medium transition-colors">7 dias</button>
+                    <button onclick="setMonth()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-medium transition-colors">30 dias</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-600 border-t-corteus-primary mb-4"></div>
+            <p class="text-gray-400">Carregando dados...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-message" class="bg-red-900/20 border border-red-700 text-red-400 px-6 py-4 rounded-lg mb-8 hidden">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            <span id="error-text">Erro ao carregar dados</span>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard-content" class="hidden space-y-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Total de Visualizações</p>
+                            <p class="text-3xl font-bold text-white mt-1" id="totalViews">-</p>
+                        </div>
+                        <div class="bg-corteus-primary/20 p-3 rounded-xl">
+                            <i class="fas fa-eye text-2xl text-corteus-primary"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Usuários Únicos</p>
+                            <p class="text-3xl font-bold text-white mt-1" id="uniqueUsers">-</p>
+                        </div>
+                        <div class="bg-blue-500/20 p-3 rounded-xl">
+                            <i class="fas fa-users text-2xl text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Páginas Populares</p>
+                            <p class="text-3xl font-bold text-white mt-1" id="topPagesCount">-</p>
+                        </div>
+                        <div class="bg-green-500/20 p-3 rounded-xl">
+                            <i class="fas fa-file-alt text-2xl text-green-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Última Atualização</p>
+                            <p class="text-lg font-bold text-white mt-1" id="lastUpdate">Agora</p>
+                        </div>
+                        <div class="bg-purple-500/20 p-3 rounded-xl">
+                            <i class="fas fa-clock text-2xl text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Top Pages Chart -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-chart-bar text-corteus-primary mr-3"></i>
+                        Páginas Mais Visitadas
+                    </h3>
+                    <div class="h-80">
+                        <canvas id="topPagesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Daily Views Chart -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-chart-line text-corteus-primary mr-3"></i>
+                        Visualizações por Dia
+                    </h3>
+                    <div class="h-80">
+                        <canvas id="dailyViewsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let topPagesChart = null;
+        let dailyViewsChart = null;
+
+        async function loadData() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            showLoading();
+            hideError();
+
+            try {
+                const params = new URLSearchParams();
+                if (startDate) params.append('start_date', startDate);
+                if (endDate) params.append('end_date', endDate);
+
+                const response = await fetch(`/api/analytics-data?${params}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                updateStats(data);
+                updateCharts(data);
+                
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('pt-BR');
+                
+                hideLoading();
+                showDashboard();
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                hideLoading();
+                showError('Erro ao carregar dados: ' + error.message);
+            }
+        }
+
+        function updateStats(data) {
+            document.getElementById('totalViews').textContent = data.total_views.toLocaleString('pt-BR');
+            document.getElementById('uniqueUsers').textContent = data.unique_users.toLocaleString('pt-BR');
+            document.getElementById('topPagesCount').textContent = data.top_pages.length;
+        }
+
+        function updateCharts(data) {
+            updateTopPagesChart(data.top_pages || []);
+            updateDailyViewsChart(data.daily_views || []);
+        }
+
+        function updateTopPagesChart(data) {
+            const ctx = document.getElementById('topPagesChart').getContext('2d');
+            
+            if (topPagesChart) {
+                topPagesChart.destroy();
+            }
+            
+            topPagesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.page),
+                    datasets: [{
+                        label: 'Visualizações',
+                        data: data.map(item => item.count),
+                        backgroundColor: 'rgba(255, 75, 75, 0.8)',
+                        borderColor: 'rgba(255, 75, 75, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDailyViewsChart(data) {
+            const ctx = document.getElementById('dailyViewsChart').getContext('2d');
+            
+            if (dailyViewsChart) {
+                dailyViewsChart.destroy();
+            }
+            
+            dailyViewsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(item => {
+                        const date = new Date(item.date);
+                        return date.toLocaleDateString('pt-BR');
+                    }),
+                    datasets: [{
+                        label: 'Visualizações',
+                        data: data.map(item => item.count),
+                        borderColor: 'rgba(255, 123, 0, 1)',
+                        backgroundColor: 'rgba(255, 123, 0, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setToday() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = today;
+            document.getElementById('endDate').value = today;
+        }
+
+        function setWeek() {
+            const today = new Date();
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            document.getElementById('startDate').value = weekAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
+
+        function setMonth() {
+            const today = new Date();
+            const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+            document.getElementById('startDate').value = monthAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('dashboard-content').classList.add('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard-content').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('error-text').textContent = message;
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('error-message').classList.add('hidden');
+        }
+
+        // Carregar dados iniciais
+        window.addEventListener('load', () => {
+            // Verificar se tem permissão de admin
+            if (localStorage.getItem('corteus_admin_mode') !== 'true') {
+                alert('Acesso negado! Você precisa estar no modo admin.');
+                window.location.href = '/';
+                return;
+            }
+            
+            setWeek(); // Definir período padrão
+            loadData();
+        });
+    </script>
+</body>
+</html>

@@ -48,10 +48,23 @@
     <!-- Navigation -->
     <nav class="bg-corteus-gray border-b border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-center h-16">
-                <div class="text-sm text-gray-400">
-                    v2.0.0 | Desenvolvido por Matheus Araújo
+            <div class="flex items-center justify-between h-16">
+                <!-- Botão Admin Secreto -->
+                <div id="admin-access" class="hidden">
+                    <a href="/dashboard" class="bg-corteus-primary/20 hover:bg-corteus-primary/30 px-3 py-2 rounded-lg text-corteus-primary font-medium transition-all duration-200 flex items-center space-x-2">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </a>
                 </div>
+                
+                <div class="flex-1 flex items-center justify-center">
+                    <div class="text-sm text-gray-400">
+                        v2.0.0 | Desenvolvido por Matheus Araújo
+                    </div>
+                </div>
+                
+                <!-- Espaço vazio para balancear o layout -->
+                <div class="w-20"></div>
             </div>
         </div>
     </nav>
@@ -284,5 +297,139 @@
     </div>
 
     <script src="/static/js/app.js"></script>
+    <script src="/static/js/analytics.js"></script>
+    
+    <!-- Script de detecção de admin -->
+    <script>
+        // Sistema simples de admin via logo
+        let tentativasIncorretas = 0;
+        let bloqueadoAte = 0;
+        
+        function checkAdminAccess() {
+            // Verificar se já está no modo admin (localStorage)
+            if (localStorage.getItem('corteus_admin_mode') === 'true') {
+                activateAdminMode();
+            }
+        }
+        
+        function toggleAdminMode() {
+            if (localStorage.getItem('corteus_admin_mode') === 'true') {
+                deactivateAdminMode();
+            } else {
+                // Verificar se está bloqueado
+                const agora = Date.now();
+                if (agora < bloqueadoAte) {
+                    const tempoRestante = Math.ceil((bloqueadoAte - agora) / 1000);
+                    showNotification(`Aguarde ${tempoRestante}s antes de tentar novamente`, 'fas fa-clock', 'bg-orange-500/90');
+                    return;
+                }
+                
+                // Pedir senha antes de ativar
+                const senha = prompt("🔐 Digite a senha de admin:");
+                if (senha && senha === "{{ admin_password }}") {
+                    activateAdminMode();
+                    tentativasIncorretas = 0; // Reset tentativas
+                } else if (senha !== null) {
+                    // Se cancelou (null), não mostra erro
+                    tentativasIncorretas++;
+                    
+                    if (tentativasIncorretas >= 3) {
+                        // Bloquear por 30 segundos após 3 tentativas
+                        bloqueadoAte = Date.now() + 30000;
+                        showNotification('Muitas tentativas! Bloqueado por 30s', 'fas fa-ban', 'bg-red-600/90');
+                    } else {
+                        const restantes = 3 - tentativasIncorretas;
+                        showNotification(`Senha incorreta! ${restantes} tentativa(s) restante(s)`, 'fas fa-times-circle', 'bg-red-500/90');
+                    }
+                }
+            }
+        }
+        
+        function activateAdminMode() {
+            localStorage.setItem('corteus_admin_mode', 'true');
+            document.getElementById('admin-access').classList.remove('hidden');
+            
+            // Mostrar notificação sutil
+            showNotification('Modo Admin Ativado', 'fas fa-user-shield', 'bg-corteus-primary/90');
+        }
+        
+        function deactivateAdminMode() {
+            localStorage.removeItem('corteus_admin_mode');
+            document.getElementById('admin-access').classList.add('hidden');
+            
+            // Mostrar notificação de saída
+            showNotification('Modo Admin Desativado', 'fas fa-user-times', 'bg-red-500/90');
+        }
+        
+        function showNotification(message, icon, bgColor) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all transform translate-x-full`;
+            notification.innerHTML = `<i class="${icon} mr-2"></i>${message}`;
+            document.body.appendChild(notification);
+            
+            // Animação de entrada
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Remover notificação após 3 segundos
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Triplo clique no logo para ativar/desativar admin
+        document.addEventListener('DOMContentLoaded', function() {
+            const logo = document.querySelector('img[alt="Logo Corteus"]');
+            if (logo) {
+                let clickCount = 0;
+                let lastClickTime = 0;
+                
+                logo.addEventListener('click', function(e) {
+                    const now = Date.now();
+                    
+                    // Reset se passou muito tempo entre cliques (mais de 2 segundos)
+                    if (now - lastClickTime > 2000) {
+                        clickCount = 0;
+                    }
+                    
+                    clickCount++;
+                    lastClickTime = now;
+                    
+                    if (clickCount === 3) {
+                        // Prevenir comportamento padrão
+                        e.preventDefault();
+                        
+                        // Pequena vibração visual no logo
+                        logo.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            logo.style.transform = 'scale(1)';
+                        }, 150);
+                        
+                        toggleAdminMode();
+                        clickCount = 0;
+                    }
+                    
+                    // Reset automático após 2 segundos
+                    setTimeout(() => {
+                        if (Date.now() - lastClickTime >= 2000) {
+                            clickCount = 0;
+                        }
+                    }, 2000);
+                });
+                
+                // Adicionar transição suave ao logo
+                logo.style.transition = 'transform 0.15s ease';
+            }
+        });
+        
+        // Inicializar sistema de detecção
+        checkAdminAccess();
+    </script>
 </body>
 </html>
