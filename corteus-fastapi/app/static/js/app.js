@@ -411,46 +411,190 @@ function coletarDados() {
     return dados;
 }
 
-// Validar formulário completo
+// Validar formulário completo com indicação específica de erros
 function validarFormulario() {
     console.log('Validando formulário...');
-    
-    const ss = validarSS();
-    const sk = validarSK();
-    const cod = validarCodMaterial();
-    const cortes = validarCortes();
     
     const dados = coletarDados();
     console.log('Dados coletados:', dados);
     
-    // Verificar campos obrigatórios
-    if (!dados.ss || !dados.sk || !dados.cod_material || !dados.cortes_desejados.length) {
-        console.log('Campos obrigatórios em falta');
-        showAlert('error', 'Preencha todos os campos obrigatórios');
+    const erros = [];
+    
+    // Validar SS
+    if (!dados.ss.trim()) {
+        erros.push('SS é obrigatório');
+    } else if (!validarSS()) {
+        erros.push('SS está em formato incorreto (deve ser XXXX/YYYY)');
+    }
+    
+    // Validar SK
+    if (!dados.sk.trim()) {
+        erros.push('SK é obrigatório');
+    } else if (!validarSK()) {
+        erros.push('SK está em formato incorreto (deve ser EST-XXX ou TU-XXX)');
+    }
+    
+    // Validar Código do Material
+    if (!dados.cod_material.trim()) {
+        erros.push('Código do Material é obrigatório');
+    } else if (!validarCodMaterial()) {
+        erros.push('Código do Material deve ter exatamente 10 dígitos');
+    }
+    
+    // Validar Cortes Desejados
+    if (!dados.cortes_desejados || dados.cortes_desejados.length === 0) {
+        erros.push('Cortes Desejados é obrigatório');
+    } else if (!validarCortes()) {
+        erros.push('Cortes Desejados contém valores inválidos');
+    }
+    
+    // Validações específicas por modo
+    if (dados.modo === 'Automático') {
+        if (!dados.comprimento_barra || dados.comprimento_barra <= 0) {
+            erros.push('Comprimento da Barra é obrigatório no modo automático');
+        }
+    } else if (dados.modo === 'Manual') {
+        if (!dados.barras_disponiveis || dados.barras_disponiveis.length === 0) {
+            erros.push('Barras Disponíveis é obrigatório no modo manual');
+        } else if (!validarBarras()) {
+            erros.push('Barras Disponíveis contém valores inválidos');
+        }
+    }
+    
+    // Se há erros, exibir todos
+    if (erros.length > 0) {
+        const mensagemErro = 'Corrija os seguintes erros:\n• ' + erros.join('\n• ');
+        showAlert('error', mensagemErro);
+        console.log('Erros de validação:', erros);
         return false;
     }
     
-    if (dados.modo === 'Automático' && !dados.comprimento_barra) {
-        showAlert('error', 'Informe o comprimento da barra no modo automático');
+    console.log('Formulário válido');
+    return true;
+}
+
+// Validação específica para relatório de corte
+function validarFormularioCorte() {
+    console.log('Validando formulário para corte...');
+    
+    const dados = coletarDados();
+    const erros = [];
+    
+    // Validações básicas
+    if (!validarFormularioBase(dados, erros)) {
         return false;
     }
     
-    if (dados.modo === 'Manual' && !dados.barras_disponiveis.length) {
-        validarBarras();
-        showAlert('error', 'Informe as barras disponíveis no modo manual');
+    // Validações específicas para corte
+    if (dados.modo === 'Automático') {
+        if (!dados.comprimento_barra || dados.comprimento_barra <= 0) {
+            erros.push('Comprimento da Barra é obrigatório para gerar relatório de corte no modo automático');
+        }
+        if (dados.comprimento_barra && dados.comprimento_barra < Math.max(...dados.cortes_desejados)) {
+            erros.push('Comprimento da Barra deve ser maior que o maior corte desejado');
+        }
+    } else {
+        if (!dados.barras_disponiveis || dados.barras_disponiveis.length === 0) {
+            erros.push('Barras Disponíveis é obrigatório para gerar relatório de corte no modo manual');
+        }
+    }
+    
+    if (erros.length > 0) {
+        const mensagemErro = 'Não é possível gerar o relatório de corte:\n• ' + erros.join('\n• ');
+        showAlert('error', mensagemErro);
         return false;
     }
     
-    const isValid = ss && sk && cod && cortes;
-    console.log('Formulário válido:', isValid);
-    return isValid;
+    return true;
+}
+
+// Validação específica para relatório de minuta
+function validarFormularioMinuta() {
+    console.log('Validando formulário para minuta...');
+    
+    const dados = coletarDados();
+    const erros = [];
+    
+    // Validações básicas
+    if (!validarFormularioBase(dados, erros)) {
+        return false;
+    }
+    
+    // Validações específicas para minuta
+    if (dados.cortes_desejados.some(c => c > 6000)) {
+        erros.push('Cortes maiores que 6000mm não são permitidos para relatório de minuta');
+    }
+    
+    if (erros.length > 0) {
+        const mensagemErro = 'Não é possível gerar o relatório de minuta:\n• ' + erros.join('\n• ');
+        showAlert('error', mensagemErro);
+        return false;
+    }
+    
+    return true;
+}
+
+// Função auxiliar para validações básicas
+function validarFormularioBase(dados, erros) {
+    // Validar SS
+    if (!dados.ss.trim()) {
+        erros.push('SS é obrigatório');
+        focusField('ss');
+    } else if (!validarSS()) {
+        erros.push('SS está em formato incorreto (deve ser XXXX/YYYY)');
+        focusField('ss');
+    }
+    
+    // Validar SK
+    if (!dados.sk.trim()) {
+        erros.push('SK é obrigatório');
+        focusField('sk');
+    } else if (!validarSK()) {
+        erros.push('SK está em formato incorreto (deve ser EST-XXX ou TU-XXX)');
+        focusField('sk');
+    }
+    
+    // Validar Código do Material
+    if (!dados.cod_material.trim()) {
+        erros.push('Código do Material é obrigatório');
+        focusField('cod_material');
+    } else if (!validarCodMaterial()) {
+        erros.push('Código do Material deve ter exatamente 10 dígitos');
+        focusField('cod_material');
+    }
+    
+    // Validar Cortes Desejados
+    if (!dados.cortes_desejados || dados.cortes_desejados.length === 0) {
+        erros.push('Cortes Desejados é obrigatório');
+        focusField('cortes_desejados');
+    } else if (!validarCortes()) {
+        erros.push('Cortes Desejados contém valores inválidos (devem ser números positivos menores que 6000mm)');
+        focusField('cortes_desejados');
+    }
+    
+    if (erros.length > 0) {
+        const mensagemErro = 'Corrija os seguintes erros:\n• ' + erros.join('\n• ');
+        showAlert('error', mensagemErro);
+        return false;
+    }
+    
+    return true;
+}
+
+// Função para focar no campo com erro
+function focusField(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.focus();
+        field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 }
 
 // Gerar relatório de corte
 async function gerarCorte() {
     console.log('=== GERANDO CORTE ===');
     
-    if (!validarFormulario()) {
+    if (!validarFormularioCorte()) {
         console.log('Validação falhou');
         return;
     }
@@ -506,15 +650,12 @@ async function gerarCorte() {
 async function gerarMinuta() {
     console.log('=== GERANDO MINUTA ===');
     
-    if (!validarFormulario()) return;
-    
-    const dados = coletarDados();
-    
-    // Validação específica da minuta
-    if (dados.cortes_desejados.some(c => c > 6000)) {
-        showAlert('error', 'Não é possível gerar minuta com cortes maiores que 6000mm');
+    if (!validarFormularioMinuta()) {
+        console.log('Validação falhou');
         return;
     }
+    
+    const dados = coletarDados();
     
     const resultadoEl = document.getElementById('resultado-minuta');
     
@@ -627,18 +768,22 @@ function hideLoading() {
     }
 }
 
-// Alert genérico
+// Alert genérico com suporte a múltiplas linhas
 function showAlert(type, message) {
     console.log('Exibindo alerta:', type, message);
     
     // Criar toast notification
     const alert = document.createElement('div');
     const bgColor = type === 'error' ? 'bg-red-600' : 'bg-blue-600';
-    alert.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-4 rounded-lg shadow-lg z-50 transform transition-all duration-300`;
+    alert.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-4 rounded-lg shadow-lg z-50 transform transition-all duration-300 max-w-md`;
+    
+    // Formatear mensagem para múltiplas linhas
+    const formattedMessage = message.replace(/\n/g, '<br>');
+    
     alert.innerHTML = `
-        <div class="flex items-center">
-            <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-2"></i>
-            <span>${message}</span>
+        <div class="flex items-start">
+            <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-2 mt-1 flex-shrink-0"></i>
+            <div class="text-sm leading-relaxed">${formattedMessage}</div>
         </div>
     `;
     
@@ -647,7 +792,7 @@ function showAlert(type, message) {
     // Animar entrada
     setTimeout(() => alert.classList.add('translate-x-0'), 100);
     
-    // Remover após 5 segundos
+    // Remover após 8 segundos (mais tempo para ler múltiplas linhas)
     setTimeout(() => {
         alert.classList.add('translate-x-full');
         setTimeout(() => {
@@ -655,7 +800,7 @@ function showAlert(type, message) {
                 document.body.removeChild(alert);
             }
         }, 300);
-    }, 5000);
+    }, 8000);
 }
 
 // Tutorial modal
