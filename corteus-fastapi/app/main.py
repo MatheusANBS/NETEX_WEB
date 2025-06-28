@@ -32,8 +32,13 @@ def get_base64_image(image_path):
         return ""
 
 @app.get("/", response_class=HTMLResponse)
+@app.head("/")
 async def read_root(request: Request):
     """Página principal"""
+    # Para requisições HEAD, retorna apenas os headers (para UptimeRobot)
+    if request.method == "HEAD":
+        return HTMLResponse("")
+    
     logo_base64 = get_base64_image("app/static/images/IconeLogo.png")
     
     return templates.TemplateResponse("index.html", {
@@ -46,6 +51,7 @@ async def read_root(request: Request):
     })
 
 @app.get("/health")
+@app.head("/health")
 async def health_check():
     """Health check para monitoramento"""
     return {"status": "ok", "message": "Corteus API funcionando"}
