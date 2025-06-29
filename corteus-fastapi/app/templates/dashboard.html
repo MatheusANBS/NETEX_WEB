@@ -149,29 +149,12 @@
                             <p class="text-gray-400 text-sm font-medium">Usuários Únicos</p>
                             <p class="text-3xl font-bold text-white mt-1" id="uniqueUsers">-</p>
                             <p class="text-sm text-blue-400 mt-1">
-                                <i class="fas fa-users mr-1"></i>
-                                <span id="activeNow">0 ativos agora</span>
+                                <i class="fas fa-user-check mr-1"></i>
+                                <span id="uniqueUsersInfo">únicos no período</span>
                             </p>
                         </div>
                         <div class="bg-blue-500/20 p-3 rounded-xl">
                             <i class="fas fa-users text-2xl text-blue-400"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Conversion Rate -->
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-green-500/50 transition-all">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm font-medium">Taxa de Conversão</p>
-                            <p class="text-3xl font-bold text-white mt-1" id="conversionRate">-</p>
-                            <p class="text-sm text-green-400 mt-1">
-                                <i class="fas fa-target mr-1"></i>
-                                <span id="conversions">- conversões</span>
-                            </p>
-                        </div>
-                        <div class="bg-green-500/20 p-3 rounded-xl">
-                            <i class="fas fa-bullseye text-2xl text-green-400"></i>
                         </div>
                     </div>
                 </div>
@@ -236,6 +219,68 @@
                 </div>
             </div>
 
+            <!-- Log Management Section -->
+            <div class="bg-gradient-to-br from-red-900/20 to-orange-900/20 rounded-2xl p-6 border border-red-500/30 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-cogs text-red-400 mr-3"></i>
+                        Administração do Log
+                    </h3>
+                    <button onclick="loadLogInfo()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-refresh mr-2"></i>Atualizar Info
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <!-- File Size -->
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-gray-400 text-sm">Tamanho do Arquivo</p>
+                        <p class="text-xl font-bold text-white" id="logFileSize">- KB</p>
+                    </div>
+                    
+                    <!-- Event Count -->
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-gray-400 text-sm">Total de Eventos</p>
+                        <p class="text-xl font-bold text-white" id="logEventCount">-</p>
+                    </div>
+                    
+                    <!-- Oldest Event -->
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-gray-400 text-sm">Evento Mais Antigo</p>
+                        <p class="text-sm font-medium text-white" id="logOldestEvent">-</p>
+                    </div>
+                    
+                    <!-- Compaction Status -->
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <p class="text-gray-400 text-sm">Status</p>
+                        <p class="text-sm font-medium" id="logCompactionStatus">
+                            <span class="text-green-400">✓ OK</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="compactLog()" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-compress-alt mr-2"></i>Compactar Log
+                    </button>
+                    
+                    <button onclick="showEventTypes()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-list mr-2"></i>Ver Tipos de Evento
+                    </button>
+                    
+                    <button onclick="clearAllData()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Limpar Todos os Dados
+                    </button>
+                </div>
+                
+                <!-- Results Area -->
+                <div id="logManagementResults" class="mt-4 hidden">
+                    <div class="bg-gray-800/50 rounded-lg p-4">
+                        <pre id="logManagementOutput" class="text-sm text-gray-300 whitespace-pre-wrap"></pre>
+                    </div>
+                </div>
+            </div>
+
             <!-- Charts Row 1 -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Daily Views Chart -->
@@ -268,7 +313,7 @@
             </div>
 
             <!-- Charts Row 2 -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Device Analytics -->
                 <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center">
@@ -288,17 +333,6 @@
                     </h3>
                     <div class="h-64">
                         <canvas id="browserChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Conversion Funnel -->
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
-                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
-                        <i class="fas fa-funnel-dollar text-yellow-400 mr-3"></i>
-                        Funil de Conversão
-                    </h3>
-                    <div id="conversionFunnel" class="space-y-4">
-                        <!-- Será preenchido dinamicamente -->
                     </div>
                 </div>
             </div>
@@ -406,18 +440,23 @@
         // Função para buscar usuários ativos
         async function updateActiveUsers() {
             try {
+                // Indicar que está atualizando
+                document.getElementById('lastActiveUpdate').textContent = 'atualizando...';
+                
                 const response = await fetch('/active-users');
                 if (response.ok) {
                     const data = await response.json();
                     const count = data.active_users_now || 0;
                     
                     document.getElementById('activeUsersNow').textContent = count;
-                    document.getElementById('lastActiveUpdate').textContent = 'há poucos segundos';
+                    document.getElementById('lastActiveUpdate').textContent = 'agora mesmo';
                     
                     // Adicionar animação se houver mudança
                     const element = document.getElementById('activeUsersNow');
                     element.classList.add('animate-pulse');
                     setTimeout(() => element.classList.remove('animate-pulse'), 500);
+                } else {
+                    document.getElementById('lastActiveUpdate').textContent = 'erro na consulta';
                 }
             } catch (error) {
                 console.debug('Erro ao buscar usuários ativos:', error);
@@ -487,7 +526,6 @@
                     daily_views: data.daily_views || [],
                     user_engagement: data.user_engagement || {},
                     performance_metrics: data.performance_metrics || {},
-                    conversion_funnel: data.conversion_funnel || {},
                     device_analytics: data.device_analytics || {},
                     time_analytics: data.time_analytics || {},
                     interaction_analytics: data.interaction_analytics || {}
@@ -531,13 +569,9 @@
             
             document.getElementById('totalViews').textContent = safeValue(data.total_views).toLocaleString('pt-BR');
             document.getElementById('uniqueUsers').textContent = safeValue(data.unique_users).toLocaleString('pt-BR');
-            document.getElementById('conversionRate').textContent = safeFixed(data.conversion_funnel?.conversion_rate) + '%';
             document.getElementById('avgTimeOnPage').textContent = formatTime(safeValue(data.user_engagement?.avg_time_on_page));
             document.getElementById('totalInteractions').textContent = safeValue(data.user_engagement?.total_interactions).toLocaleString('pt-BR');
             document.getElementById('peakHour').textContent = safeValue(data.time_analytics?.peak_hour, 0) + 'h';
-            
-            // Dados complementares
-            document.getElementById('conversions').textContent = safeValue(data.conversion_funnel?.report_generations) + ' relatórios';
             // Não sobrescrever activeUsersNow aqui - será atualizado pelo sistema em tempo real
             document.getElementById('viewsGrowth').textContent = '+0%'; // Placeholder
         }
@@ -572,7 +606,6 @@
             try {
                 updateTopPagesList(data.top_pages || []);
                 updateTopButtonsList(data.interaction_analytics?.top_buttons || []);
-                updateConversionFunnel(data.conversion_funnel || {});
             } catch (error) {
                 console.error('Erro ao atualizar tabelas:', error);
             }
@@ -587,8 +620,10 @@
             
             // Se não há dados, criar dados vazios para evitar erros
             const chartData = data && Array.isArray(data) && data.length > 0 ? data : [
-                { date: new Date().toISOString().split('T')[0], count: 0 }
-            ];                charts.dailyViews = new Chart(ctx, {
+                { date: new Date().toISOString().split('T')[0], views: 0 }
+            ];
+            
+            charts.dailyViews = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: chartData.map(item => {
@@ -600,7 +635,7 @@
                     }),
                     datasets: [{
                         label: 'Visualizações',
-                        data: chartData.map(item => item.count || 0),
+                        data: chartData.map(item => item.views || 0),
                         borderColor: '#ff4b4b',
                         backgroundColor: 'rgba(255, 75, 75, 0.1)',
                         borderWidth: 3,
@@ -754,68 +789,23 @@
             });
         }
 
-        function updateConversionFunnel(data) {
-            const container = document.getElementById('conversionFunnel');
-            const steps = [
-                { label: 'Visitantes', value: data.visitors || 0, color: 'bg-blue-500' },
-                { label: 'Interações', value: data.form_interactions || 0, color: 'bg-yellow-500' },
-                { label: 'Relatórios', value: data.report_generations || 0, color: 'bg-green-500' }
-            ];
-            
-            const maxValue = Math.max(...steps.map(s => s.value));
-            
-            container.innerHTML = steps.map((step, index) => {
-                const percentage = maxValue > 0 ? (step.value / maxValue) * 100 : 0;
-                
-                // Calcular dropoff/crescimento de forma mais precisa
-                let dropoffHtml = '';
-                
-                if (index > 0) {
-                    const previousValue = steps[index-1]?.value || 0;
-                    const currentValue = step.value || 0;
-                    
-                    if (previousValue === 0 && currentValue === 0) {
-                        dropoffHtml = '<div class="text-gray-400 text-sm">sem dados</div>';
-                    } else if (previousValue === 0) {
-                        dropoffHtml = '<div class="text-blue-400 text-sm">novos usuários</div>';
-                    } else if (currentValue === 0) {
-                        dropoffHtml = '<div class="text-red-400 text-sm">-100% dropoff</div>';
-                    } else if (currentValue < previousValue) {
-                        const dropoff = ((previousValue - currentValue) / previousValue * 100);
-                        dropoffHtml = '<div class="text-red-400 text-sm">-' + dropoff.toFixed(1) + '% dropoff</div>';
-                    } else if (currentValue > previousValue) {
-                        const growth = ((currentValue - previousValue) / previousValue * 100);
-                        dropoffHtml = '<div class="text-green-400 text-sm">+' + growth.toFixed(1) + '% crescimento</div>';
-                    } else if (currentValue === previousValue) {
-                        dropoffHtml = '<div class="text-gray-400 text-sm">sem variação</div>';
-                    }
-                }
-                
-                return '<div class="space-y-2">' +
-                    '<div class="flex justify-between items-center">' +
-                        '<span class="text-gray-300 font-medium">' + step.label + '</span>' +
-                        '<span class="text-white font-bold">' + step.value.toLocaleString('pt-BR') + '</span>' +
-                    '</div>' +
-                    '<div class="w-full bg-gray-700 rounded-full h-3">' +
-                        '<div class="' + step.color + ' h-3 rounded-full" style="width: ' + percentage + '%"></div>' +
-                    '</div>' +
-                    dropoffHtml +
-                '</div>';
-            }).join('');
-        }
-
         function updateTopPagesList(data) {
             const container = document.getElementById('topPagesList');
+            if (!data || !Array.isArray(data)) {
+                container.innerHTML = '<div class="text-gray-400 text-center p-4">Nenhum dado disponível</div>';
+                return;
+            }
+            
             container.innerHTML = data.map((page, index) =>
                 '<div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">' +
                     '<div class="flex items-center space-x-3">' +
                         '<div class="w-8 h-8 rounded-full bg-corteus-primary/20 flex items-center justify-center text-corteus-primary font-bold text-sm">' +
                             (index + 1) +
                         '</div>' +
-                        '<span class="text-white font-medium">' + page.page + '</span>' +
+                        '<span class="text-white font-medium">' + (page.page || '/') + '</span>' +
                     '</div>' +
                     '<div class="text-right">' +
-                        '<div class="text-white font-bold">' + page.count.toLocaleString('pt-BR') + '</div>' +
+                        '<div class="text-white font-bold">' + (page.views || page.count || 0).toLocaleString('pt-BR') + '</div>' +
                         '<div class="text-gray-400 text-sm">visualizações</div>' +
                     '</div>' +
                 '</div>'
@@ -824,16 +814,21 @@
 
         function updateTopButtonsList(data) {
             const container = document.getElementById('topButtonsList');
+            if (!data || !Array.isArray(data)) {
+                container.innerHTML = '<div class="text-gray-400 text-center p-4">Nenhum dado disponível</div>';
+                return;
+            }
+            
             container.innerHTML = data.map((button, index) =>
                 '<div class="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">' +
                     '<div class="flex items-center space-x-3">' +
                         '<div class="w-8 h-8 rounded-full bg-orange-400/20 flex items-center justify-center text-orange-400 font-bold text-sm">' +
                             (index + 1) +
                         '</div>' +
-                        '<span class="text-white font-medium">' + button.button + '</span>' +
+                        '<span class="text-white font-medium">' + (button.button || 'Unknown') + '</span>' +
                     '</div>' +
                     '<div class="text-right">' +
-                        '<div class="text-white font-bold">' + button.clicks.toLocaleString('pt-BR') + '</div>' +
+                        '<div class="text-white font-bold">' + (button.clicks || 0).toLocaleString('pt-BR') + '</div>' +
                         '<div class="text-gray-400 text-sm">cliques</div>' +
                     '</div>' +
                 '</div>'
@@ -975,6 +970,172 @@
             document.getElementById('error-message').classList.add('hidden');
         }
 
+        // === Log Management Functions ===
+        
+        async function loadLogInfo() {
+            try {
+                const response = await fetch('/log-info');
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Atualizar interface com validação
+                    document.getElementById('logFileSize').textContent = `${data.file_size_kb || 0} KB`;
+                    document.getElementById('logEventCount').textContent = (data.event_count || 0).toLocaleString('pt-BR');
+                    
+                    // Formatar data do evento mais antigo
+                    if (data.oldest_event) {
+                        const oldestDate = new Date(data.oldest_event);
+                        document.getElementById('logOldestEvent').textContent = oldestDate.toLocaleDateString('pt-BR');
+                    } else {
+                        document.getElementById('logOldestEvent').textContent = 'Nenhum';
+                    }
+                    
+                    // Status de compactação
+                    const statusElement = document.getElementById('logCompactionStatus');
+                    if (data.needs_compaction) {
+                        statusElement.innerHTML = '<span class="text-yellow-400">⚠ Precisa compactar</span>';
+                    } else {
+                        statusElement.innerHTML = '<span class="text-green-400">✓ OK</span>';
+                    }
+                    
+                    // Mostrar tipos de evento se disponível
+                    if (data.event_types && Object.keys(data.event_types).length > 0) {
+                        let eventTypesText = 'Tipos de evento:\n';
+                        for (const [type, count] of Object.entries(data.event_types)) {
+                            eventTypesText += `- ${type}: ${count}\n`;
+                        }
+                        showLogResult(eventTypesText, 'info');
+                    }
+                } else {
+                    showLogResult('Erro ao carregar informações do log', 'error');
+                }
+            } catch (error) {
+                showLogResult('Erro: ' + error.message, 'error');
+            }
+        }
+        
+        async function compactLog() {
+            try {
+                showLogResult('Iniciando compactação...', 'info');
+                
+                const response = await fetch('/compact', { method: 'POST' });
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        const message = `Compactação concluída!
+Original: ${result.original_count} eventos
+Final: ${result.final_count} eventos
+Removidos: ${result.removed_count} eventos
+Taxa de compressão: ${result.compression_ratio}`;
+                        showLogResult(message, 'success');
+                        
+                        // Recarregar informações do log
+                        setTimeout(loadLogInfo, 1000);
+                    } else {
+                        showLogResult('Erro na compactação: ' + result.error, 'error');
+                    }
+                } else {
+                    showLogResult('Erro HTTP na compactação', 'error');
+                }
+            } catch (error) {
+                showLogResult('Erro: ' + error.message, 'error');
+            }
+        }
+        
+        async function showEventTypes() {
+            try {
+                const response = await fetch('/log-info');
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.event_types && Object.keys(data.event_types).length > 0) {
+                        let eventTypesText = 'TIPOS DE EVENTOS:\n\n';
+                        const sortedTypes = Object.entries(data.event_types)
+                            .sort((a, b) => b[1] - a[1]);
+                        
+                        for (const [type, count] of sortedTypes) {
+                            const percentage = ((count / data.event_count) * 100).toFixed(1);
+                            eventTypesText += `${type}: ${count} (${percentage}%)\n`;
+                        }
+                        
+                        showLogResult(eventTypesText, 'info');
+                    } else {
+                        showLogResult('Nenhum tipo de evento encontrado', 'info');
+                    }
+                } else {
+                    showLogResult('Erro ao carregar tipos de evento', 'error');
+                }
+            } catch (error) {
+                showLogResult('Erro: ' + error.message, 'error');
+            }
+        }
+        
+        async function clearAllData() {
+            const confirmed = confirm('⚠️ ATENÇÃO!\n\nIsso irá deletar TODOS os dados de analytics permanentemente!\n\nTem certeza que deseja continuar?');
+            
+            if (!confirmed) {
+                return;
+            }
+            
+            const doubleConfirm = confirm('🛑 ÚLTIMA CONFIRMAÇÃO!\n\nEsta ação NÃO pode ser desfeita!\n\nTodos os dados históricos serão perdidos!\n\nConfirma mesmo?');
+            
+            if (!doubleConfirm) {
+                return;
+            }
+            
+            try {
+                showLogResult('Limpando todos os dados...', 'info');
+                
+                const response = await fetch('/clear-data', { method: 'POST' });
+                if (response.ok) {
+                    const result = await response.json();
+                    showLogResult('✅ Todos os dados foram limpos com sucesso!', 'success');
+                    
+                    // Recarregar página após 2 segundos
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    showLogResult('Erro ao limpar dados', 'error');
+                }
+            } catch (error) {
+                showLogResult('Erro: ' + error.message, 'error');
+            }
+        }
+        
+        function showLogResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('logManagementResults');
+            const outputPre = document.getElementById('logManagementOutput');
+            
+            // Mostrar resultado
+            resultsDiv.classList.remove('hidden');
+            outputPre.textContent = message;
+            
+            // Aplicar cor baseada no tipo
+            outputPre.className = 'text-sm whitespace-pre-wrap ';
+            switch (type) {
+                case 'success':
+                    outputPre.className += 'text-green-400';
+                    break;
+                case 'error':
+                    outputPre.className += 'text-red-400';
+                    break;
+                case 'warning':
+                    outputPre.className += 'text-yellow-400';
+                    break;
+                default:
+                    outputPre.className += 'text-gray-300';
+            }
+            
+            // Auto-hide após 10 segundos para mensagens de sucesso
+            if (type === 'success') {
+                setTimeout(() => {
+                    resultsDiv.classList.add('hidden');
+                }, 10000);
+            }
+        }
+
         // Carregar dados iniciais
         window.addEventListener('load', function() {
             setToday(); // Definir período padrão para hoje
@@ -982,6 +1143,9 @@
             
             // Iniciar monitoramento de usuários ativos
             startActiveUsersMonitoring();
+            
+            // Carregar informações do log
+            loadLogInfo();
             
             // Auto-refresh a cada 5 minutos
             setInterval(loadData, 5 * 60 * 1000);

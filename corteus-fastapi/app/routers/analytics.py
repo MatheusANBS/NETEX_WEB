@@ -161,16 +161,12 @@ async def get_analytics_stats():
 
 @router.post("/clear-data")
 async def clear_analytics_data():
-    """Endpoint para limpar todos os dados de analytics"""
+    """Endpoint para limpar todos os dados de analytics (cuidado!)"""
     try:
-        # Limpar os dados
         analytics_storage.clear_all_data()
-        
         return {"success": True, "message": "Dados de analytics limpos com sucesso"}
-        
     except Exception as e:
-        print(f"Erro ao limpar dados de analytics: {e}")
-        raise HTTPException(status_code=500, detail="Erro ao limpar dados")
+        raise HTTPException(status_code=500, detail=f"Erro ao limpar dados: {str(e)}")
 
 @router.post("/heartbeat")
 async def heartbeat(heartbeat_data: HeartbeatRequest):
@@ -212,3 +208,21 @@ async def get_active_users_details():
     except Exception as e:
         print(f"Erro ao obter detalhes dos usuários ativos: {e}")
         raise HTTPException(status_code=500, detail="Erro ao obter detalhes")
+
+@router.post("/compact")
+async def compact_analytics_log():
+    """Endpoint para compactar o log de analytics"""
+    try:
+        result = analytics_storage.compact_log()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro durante compactação: {str(e)}")
+
+@router.get("/log-info")
+async def get_log_info():
+    """Endpoint para obter informações sobre o log de analytics"""
+    try:
+        info = analytics_storage.get_log_info()
+        return info
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao obter informações do log: {str(e)}")

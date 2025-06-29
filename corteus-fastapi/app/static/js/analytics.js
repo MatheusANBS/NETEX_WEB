@@ -121,16 +121,26 @@ class CorteuAnalyticsLite {
         // Visibility change - quando usuário sai da página
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
+                this.isActive = false;
                 this.track('page_exit', {
                     time_on_page: Date.now() - this.startTime,
                     total_interactions: this.interactions
                 });
                 this.flushBuffer(); // Enviar imediatamente ao sair
+            } else {
+                this.isActive = true;
+                // Só enviar heartbeat se não for dashboard
+                if (!this.isDashboardPage() && this.heartbeatInterval) {
+                    this.sendHeartbeat(); // Heartbeat imediato ao voltar
+                }
             }
         });
 
         // Unload - última chance de enviar dados
         window.addEventListener('beforeunload', () => {
+            if (this.heartbeatInterval) {
+                clearInterval(this.heartbeatInterval);
+            }
             this.flushBuffer();
         });
 
@@ -210,31 +220,8 @@ class CorteuAnalyticsLite {
             document.addEventListener(event, markActive, { passive: true });
         });
         
-        // Detectar mudanças de visibilidade da página
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.isActive = false;
-                this.track('page_exit', {
-                    time_on_page: Date.now() - this.startTime,
-                    total_interactions: this.interactions
-                });
-                this.flushBuffer(); // Enviar imediatamente ao sair
-            } else {
-                this.isActive = true;
-                // Só enviar heartbeat se não for dashboard
-                if (!this.isDashboardPage() && this.heartbeatInterval) {
-                    this.sendHeartbeat(); // Heartbeat imediato ao voltar
-                }
-            }
-        });
-        
-        // Cleanup ao sair da página
-        window.addEventListener('beforeunload', () => {
-            if (this.heartbeatInterval) {
-                clearInterval(this.heartbeatInterval);
-            }
-            this.flushBuffer();
-        });
+        // Marcar como ativo inicialmente
+        markActive();
     }
 
     handleClick(event) {
