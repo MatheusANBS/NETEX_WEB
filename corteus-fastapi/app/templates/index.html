@@ -282,6 +282,60 @@
         </div>
     </div>
 
+    <!-- Modal de Senha Admin -->
+    <div id="admin-password-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-corteus-gray rounded-xl p-8 max-w-md w-full shadow-2xl border border-gray-700/50">
+                <div class="text-center mb-6">
+                    <div class="bg-corteus-primary/20 p-4 rounded-full w-16 h-16 mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-corteus-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Acesso Admin</h3>
+                    <p class="text-gray-400 mt-2">Digite a senha para acessar o painel administrativo</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="admin-password-input" 
+                            placeholder="Digite a senha..."
+                            class="w-full bg-gray-900/80 border border-gray-600 rounded-xl px-4 py-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-corteus-primary focus:border-corteus-primary transition-all backdrop-blur-sm text-lg pr-12"
+                            autocomplete="current-password"
+                        >
+                        <button 
+                            type="button" 
+                            id="toggle-password-visibility" 
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                        >
+                            <i class="fas fa-eye" id="password-eye-icon"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="admin-password-error" class="text-red-400 text-sm hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        <span></span>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-2">
+                        <button 
+                            id="admin-password-cancel" 
+                            class="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-xl transition-all"
+                        >
+                            <i class="fas fa-times mr-2"></i>Cancelar
+                        </button>
+                        <button 
+                            id="admin-password-confirm" 
+                            class="flex-1 bg-gradient-to-r from-corteus-primary to-corteus-secondary hover:from-corteus-secondary hover:to-corteus-primary text-white font-semibold py-3 px-4 rounded-xl transition-all"
+                        >
+                            <i class="fas fa-unlock mr-2"></i>Entrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Help Button -->
     <button id="help-button" class="fixed bottom-8 right-8 bg-gradient-to-r from-corteus-primary to-corteus-secondary hover:from-corteus-secondary hover:to-corteus-primary text-white p-5 rounded-full shadow-2xl transition-all transform hover:scale-110 z-40 border border-white/20">
         <i class="fas fa-question text-2xl"></i>
@@ -325,23 +379,70 @@
                     return;
                 }
                 
-                // Pedir senha antes de ativar
-                const senha = prompt("🔐 Digite a senha de admin:");
-                if (senha && senha === "{{ admin_password }}") {
-                    activateAdminMode();
-                    tentativasIncorretas = 0; // Reset tentativas
-                } else if (senha !== null) {
-                    // Se cancelou (null), não mostra erro
-                    tentativasIncorretas++;
+                // Mostrar modal de senha
+                showAdminPasswordModal();
+            }
+        }
+        
+        function showAdminPasswordModal() {
+            const modal = document.getElementById('admin-password-modal');
+            const input = document.getElementById('admin-password-input');
+            const errorDiv = document.getElementById('admin-password-error');
+            
+            // Limpar campos
+            input.value = '';
+            errorDiv.classList.add('hidden');
+            
+            // Mostrar modal
+            modal.classList.remove('hidden');
+            
+            // Focar no input após animação
+            setTimeout(() => {
+                input.focus();
+            }, 100);
+        }
+        
+        function hideAdminPasswordModal() {
+            const modal = document.getElementById('admin-password-modal');
+            modal.classList.add('hidden');
+        }
+        
+        function showAdminPasswordError(message) {
+            const errorDiv = document.getElementById('admin-password-error');
+            const errorSpan = errorDiv.querySelector('span');
+            
+            errorSpan.textContent = message;
+            errorDiv.classList.remove('hidden');
+            
+            // Vibrar o input
+            const input = document.getElementById('admin-password-input');
+            input.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => {
+                input.style.animation = '';
+            }, 500);
+        }
+        
+        function validateAdminPassword() {
+            const senha = document.getElementById('admin-password-input').value;
+            
+            if (senha === "{{ admin_password }}") {
+                hideAdminPasswordModal();
+                activateAdminMode();
+                tentativasIncorretas = 0; // Reset tentativas
+            } else {
+                tentativasIncorretas++;
+                
+                if (tentativasIncorretas >= 3) {
+                    // Bloquear por 30 segundos após 3 tentativas
+                    bloqueadoAte = Date.now() + 30000;
+                    hideAdminPasswordModal();
+                    showNotification('Muitas tentativas! Bloqueado por 30s', 'fas fa-ban', 'bg-red-600/90');
+                } else {
+                    const restantes = 3 - tentativasIncorretas;
+                    showAdminPasswordError(`Senha incorreta! ${restantes} tentativa(s) restante(s)`);
                     
-                    if (tentativasIncorretas >= 3) {
-                        // Bloquear por 30 segundos após 3 tentativas
-                        bloqueadoAte = Date.now() + 30000;
-                        showNotification('Muitas tentativas! Bloqueado por 30s', 'fas fa-ban', 'bg-red-600/90');
-                    } else {
-                        const restantes = 3 - tentativasIncorretas;
-                        showNotification(`Senha incorreta! ${restantes} tentativa(s) restante(s)`, 'fas fa-times-circle', 'bg-red-500/90');
-                    }
+                    // Limpar campo para nova tentativa
+                    document.getElementById('admin-password-input').value = '';
                 }
             }
         }
@@ -427,6 +528,57 @@
                 // Adicionar transição suave ao logo
                 logo.style.transition = 'transform 0.15s ease';
             }
+            
+            // Event listeners para o modal de senha admin
+            const adminPasswordModal = document.getElementById('admin-password-modal');
+            const adminPasswordInput = document.getElementById('admin-password-input');
+            const adminPasswordCancel = document.getElementById('admin-password-cancel');
+            const adminPasswordConfirm = document.getElementById('admin-password-confirm');
+            const togglePasswordVisibility = document.getElementById('toggle-password-visibility');
+            const passwordEyeIcon = document.getElementById('password-eye-icon');
+            
+            // Cancelar modal
+            adminPasswordCancel.addEventListener('click', hideAdminPasswordModal);
+            
+            // Confirmar senha
+            adminPasswordConfirm.addEventListener('click', validateAdminPassword);
+            
+            // Enter para confirmar senha
+            adminPasswordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    validateAdminPassword();
+                }
+            });
+            
+            // Escape para cancelar
+            adminPasswordInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    hideAdminPasswordModal();
+                }
+            });
+            
+            // Toggle visibilidade da senha
+            togglePasswordVisibility.addEventListener('click', function() {
+                const input = adminPasswordInput;
+                const icon = passwordEyeIcon;
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            // Fechar modal clicando fora
+            adminPasswordModal.addEventListener('click', function(e) {
+                if (e.target === adminPasswordModal) {
+                    hideAdminPasswordModal();
+                }
+            });
         });
         
         // Inicializar sistema de detecção
