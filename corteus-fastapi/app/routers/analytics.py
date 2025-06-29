@@ -7,7 +7,7 @@ from pydantic import BaseModel
 import os
 import json
 
-from app.models.analytics import AnalyticsEvent, analytics_storage
+from app.models.analytics import AnalyticsEvent, analytics_storage, active_users_tracker
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -20,6 +20,11 @@ class TrackRequest(BaseModel):
     referrer: str = ""
     screen_resolution: str = ""
     data: dict = {}
+
+class HeartbeatRequest(BaseModel):
+    user_id: str
+    session_id: str = ""
+    page: str = "/"
 
 @router.post("/track")
 async def track_event(track_data: TrackRequest, request: Request):
@@ -166,3 +171,44 @@ async def clear_analytics_data():
     except Exception as e:
         print(f"Erro ao limpar dados de analytics: {e}")
         raise HTTPException(status_code=500, detail="Erro ao limpar dados")
+
+@router.post("/heartbeat")
+async def heartbeat(heartbeat_data: HeartbeatRequest):
+    """Endpoint para heartbeat de usuários ativos (não salva em arquivo)"""
+    try:
+        # Atualizar atividade do usuário apenas na memória
+        success = active_users_tracker.update_user_activity(
+            user_id=heartbeat_data.user_id,
+            session_id=heartbeat_data.session_id,
+            page=heartbeat_data.page
+        )
+        
+        if success:
+            return {
+                "success": True,
+                "active_users_count": active_users_tracker.get_active_users_count()
+            }
+        else:
+            return {"success": False, "error": "Invalid user_id"}
+        
+    except Exception as e:
+        print(f"Erro no heartbeat: {e}")
+        return {"success": False, "error": "Internal error"}
+
+@router.get("/active-users")
+async def get_active_users():
+    """Endpoint para obter usuários ativos agora"""
+    try:
+        return active_users_tracker.get_stats_summary()
+    except Exception as e:
+        print(f"Erro ao obter usuários ativos: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao obter usuários ativos")
+
+@router.get("/active-users/details")
+async def get_active_users_details():
+    """Endpoint para obter detalhes dos usuários ativos (admin)"""
+    try:
+        return active_users_tracker.get_active_users_details()
+    except Exception as e:
+        print(f"Erro ao obter detalhes dos usuários ativos: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao obter detalhes")

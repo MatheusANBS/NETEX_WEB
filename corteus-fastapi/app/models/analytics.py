@@ -383,3 +383,134 @@ class AnalyticsStorage:
 
 # Instância global do storage
 analytics_storage = AnalyticsStorage()
+
+# Sistema de usuários ativos em tempo real (apenas em memória)
+class ActiveUsersTracker:
+    """Sistema para rastrear usuários ativos em tempo real usando apenas memória RAM"""
+    
+    def __init__(self):
+        # Dicionário para armazenar último heartbeat de cada usuário
+        # Estrutura: {user_id: {'last_seen': datetime, 'session_id': str, 'page': str}}
+        self.active_users = {}
+        
+        # Timeout em segundos - usuário é considerado inativo após 2 minutos
+        self.timeout_seconds = 120
+        
+        # Cache para otimizar consultas frequentes
+        self._last_cleanup = datetime.now()
+        self._cached_count = 0
+        self._cache_valid_until = datetime.now()
+    
+    def update_user_activity(self, user_id: str, session_id: str = "", page: str = "/"):
+        """Atualiza a atividade de um usuário (heartbeat)"""
+        if not user_id or not user_id.strip():
+            return False
+            
+        now = datetime.now()
+        
+        # Atualizar informações do usuário
+        self.active_users[user_id] = {
+            'last_seen': now,
+            'session_id': session_id,
+            'page': page
+        }
+        
+        # Invalidar cache
+        self._cache_valid_until = now
+        
+        # Fazer limpeza automática a cada 30 segundos
+        if (now - self._last_cleanup).seconds >= 30:
+            self._cleanup_inactive_users()
+            
+        return True
+    
+    def _cleanup_inactive_users(self):
+        """Remove usuários inativos da memória"""
+        now = datetime.now()
+        timeout_threshold = now - timedelta(seconds=self.timeout_seconds)
+        
+        # Remover usuários inativos
+        inactive_users = [
+            user_id for user_id, data in self.active_users.items()
+            if data['last_seen'] < timeout_threshold
+        ]
+        
+        for user_id in inactive_users:
+            del self.active_users[user_id]
+        
+        self._last_cleanup = now
+        
+        # Log apenas se houve limpeza significativa
+        if len(inactive_users) > 0:
+            print(f"ActiveUsers: Removidos {len(inactive_users)} usuários inativos")
+    
+    def get_active_users_count(self) -> int:
+        """Retorna o número de usuários ativos agora"""
+        now = datetime.now()
+        
+        # Usar cache se ainda for válido (válido por 10 segundos)
+        if now < self._cache_valid_until + timedelta(seconds=10):
+            return self._cached_count
+        
+        # Fazer limpeza antes de contar
+        self._cleanup_inactive_users()
+        
+        # Contar usuários ativos
+        timeout_threshold = now - timedelta(seconds=self.timeout_seconds)
+        active_count = sum(
+            1 for data in self.active_users.values()
+            if data['last_seen'] >= timeout_threshold
+        )
+        
+        # Atualizar cache
+        self._cached_count = active_count
+        self._cache_valid_until = now
+        
+        return active_count
+    
+    def get_active_users_details(self) -> dict:
+        """Retorna detalhes dos usuários ativos (para debugging/admin)"""
+        self._cleanup_inactive_users()
+        
+        now = datetime.now()
+        timeout_threshold = now - timedelta(seconds=self.timeout_seconds)
+        
+        active_users_info = []
+        pages_count = {}
+        
+        for user_id, data in self.active_users.items():
+            if data['last_seen'] >= timeout_threshold:
+                seconds_ago = int((now - data['last_seen']).total_seconds())
+                
+                active_users_info.append({
+                    'user_id': user_id[:8] + "...",  # Truncar por privacidade
+                    'session_id': data['session_id'][:8] + "..." if data['session_id'] else "",
+                    'page': data['page'],
+                    'last_seen_seconds_ago': seconds_ago
+                })
+                
+                # Contar páginas
+                page = data['page']
+                pages_count[page] = pages_count.get(page, 0) + 1
+        
+        return {
+            'active_count': len(active_users_info),
+            'users': active_users_info,
+            'pages_distribution': [
+                {'page': page, 'users': count} 
+                for page, count in sorted(pages_count.items(), key=lambda x: x[1], reverse=True)
+            ],
+            'last_cleanup': self._last_cleanup.isoformat(),
+            'timeout_seconds': self.timeout_seconds
+        }
+    
+    def get_stats_summary(self) -> dict:
+        """Retorna estatísticas resumidas para o dashboard"""
+        return {
+            'active_users_now': self.get_active_users_count(),
+            'last_updated': datetime.now().isoformat(),
+            'timeout_minutes': self.timeout_seconds // 60
+        }
+
+# Instância global do tracker de usuários ativos
+active_users_tracker = ActiveUsersTracker()

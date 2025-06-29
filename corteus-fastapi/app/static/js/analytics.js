@@ -15,6 +15,11 @@ class CorteuAnalyticsLite {
         this.eventBuffer = [];
         this.bufferTimeout = null;
         
+        // Sistema de heartbeat para usuários ativos
+        this.heartbeatInterval = null;
+        this.heartbeatFrequency = 45000; // 45 segundos
+        this.isActive = true;
+        
         this.init();
     }
 
@@ -35,6 +40,13 @@ class CorteuAnalyticsLite {
             localStorage.setItem('corteus_analytics_user_id', userId);
         }
         return userId;
+    }
+
+    isDashboardPage() {
+        // Verificar se é a página do dashboard
+        return window.location.pathname.includes('/dashboard') || 
+               window.location.pathname.includes('/analytics') ||
+               document.title.includes('Analytics Dashboard');
     }
 
     // Método otimizado para track com buffer
@@ -127,6 +139,101 @@ class CorteuAnalyticsLite {
             setTimeout(() => {
                 this.trackPerformance();
             }, 1000);
+        });
+
+        // Iniciar sistema de heartbeat para usuários ativos (exceto no dashboard)
+        if (!this.isDashboardPage()) {
+            this.startHeartbeat();
+        }
+
+        // Detectar quando usuário está ativo/inativo
+        this.setupActivityDetection();
+    }
+
+    // Sistema de heartbeat para usuários ativos
+    startHeartbeat() {
+        // Enviar heartbeat inicial
+        this.sendHeartbeat();
+        
+        // Configurar interval para heartbeats regulares
+        this.heartbeatInterval = setInterval(() => {
+            if (this.isActive && !document.hidden) {
+                this.sendHeartbeat();
+            }
+        }, this.heartbeatFrequency);
+    }
+
+    async sendHeartbeat() {
+        try {
+            const response = await fetch(`${this.serverUrl}/heartbeat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_id: this.userId,
+                    session_id: this.sessionId,
+                    page: window.location.pathname
+                })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                // Atualizar contagem de usuários ativos no dashboard se existir
+                if (window.updateActiveUsersCount && typeof window.updateActiveUsersCount === 'function') {
+                    window.updateActiveUsersCount(data.active_users_count);
+                }
+            }
+        } catch (error) {
+            // Falha silenciosa no heartbeat - não é crítico
+            console.debug('Heartbeat failed:', error);
+        }
+    }
+
+    setupActivityDetection() {
+        // Detectar atividade do usuário
+        const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+        
+        let activityTimeout;
+        
+        const markActive = () => {
+            this.isActive = true;
+            this.lastActivity = Date.now();
+            
+            // Reset timeout de inatividade
+            clearTimeout(activityTimeout);
+            activityTimeout = setTimeout(() => {
+                this.isActive = false;
+            }, 60000); // Marcar como inativo após 1 minuto sem atividade
+        };
+        
+        // Adicionar listeners para detectar atividade
+        activityEvents.forEach(event => {
+            document.addEventListener(event, markActive, { passive: true });
+        });
+        
+        // Detectar mudanças de visibilidade da página
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.isActive = false;
+                this.track('page_exit', {
+                    time_on_page: Date.now() - this.startTime,
+                    total_interactions: this.interactions
+                });
+                this.flushBuffer(); // Enviar imediatamente ao sair
+            } else {
+                this.isActive = true;
+                // Só enviar heartbeat se não for dashboard
+                if (!this.isDashboardPage() && this.heartbeatInterval) {
+                    this.sendHeartbeat(); // Heartbeat imediato ao voltar
+                }
+            }
+        });
+        
+        // Cleanup ao sair da página
+        window.addEventListener('beforeunload', () => {
+            if (this.heartbeatInterval) {
+                clearInterval(this.heartbeatInterval);
+            }
+            this.flushBuffer();
         });
     }
 

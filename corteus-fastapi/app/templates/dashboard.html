@@ -175,6 +175,23 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Active Users Now -->
+                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-orange-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Usuários Ativos Agora</p>
+                            <p class="text-3xl font-bold text-white mt-1" id="activeUsersNow">-</p>
+                            <p class="text-sm text-orange-400 mt-1">
+                                <i class="fas fa-circle text-xs mr-1 animate-pulse"></i>
+                                <span id="lastActiveUpdate">Atualizando...</span>
+                            </p>
+                        </div>
+                        <div class="bg-orange-500/20 p-3 rounded-xl">
+                            <i class="fas fa-broadcast-tower text-2xl text-orange-400"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- KPI Cards Row 2 -->
@@ -378,6 +395,55 @@
         // Variáveis globais
         let currentData = null;
         let charts = {};
+        let activeUsersInterval = null;
+
+        // Função global para atualizar contagem de usuários ativos (chamada pelo analytics.js)
+        window.updateActiveUsersCount = function(count) {
+            document.getElementById('activeUsersNow').textContent = count;
+            document.getElementById('lastActiveUpdate').textContent = 'Atualizado agora';
+        };
+
+        // Função para buscar usuários ativos
+        async function updateActiveUsers() {
+            try {
+                const response = await fetch('/active-users');
+                if (response.ok) {
+                    const data = await response.json();
+                    const count = data.active_users_now || 0;
+                    
+                    document.getElementById('activeUsersNow').textContent = count;
+                    document.getElementById('lastActiveUpdate').textContent = 'há poucos segundos';
+                    
+                    // Adicionar animação se houver mudança
+                    const element = document.getElementById('activeUsersNow');
+                    element.classList.add('animate-pulse');
+                    setTimeout(() => element.classList.remove('animate-pulse'), 500);
+                }
+            } catch (error) {
+                console.debug('Erro ao buscar usuários ativos:', error);
+                document.getElementById('lastActiveUpdate').textContent = 'erro na atualização';
+            }
+        }
+
+        // Iniciar monitoramento de usuários ativos
+        function startActiveUsersMonitoring() {
+            // Buscar imediatamente
+            updateActiveUsers();
+            
+            // Atualizar a cada 30 segundos
+            if (activeUsersInterval) {
+                clearInterval(activeUsersInterval);
+            }
+            
+            activeUsersInterval = setInterval(updateActiveUsers, 30000);
+        }
+
+        // Parar monitoramento quando sair da página
+        window.addEventListener('beforeunload', () => {
+            if (activeUsersInterval) {
+                clearInterval(activeUsersInterval);
+            }
+        });
 
         // Função principal para carregar dados
         async function loadData() {
@@ -472,7 +538,7 @@
             
             // Dados complementares
             document.getElementById('conversions').textContent = safeValue(data.conversion_funnel?.report_generations) + ' relatórios';
-            document.getElementById('activeNow').textContent = '0 ativos agora'; // Placeholder
+            // Não sobrescrever activeUsersNow aqui - será atualizado pelo sistema em tempo real
             document.getElementById('viewsGrowth').textContent = '+0%'; // Placeholder
         }
 
@@ -913,6 +979,9 @@
         window.addEventListener('load', function() {
             setToday(); // Definir período padrão para hoje
             loadData();
+            
+            // Iniciar monitoramento de usuários ativos
+            startActiveUsersMonitoring();
             
             // Auto-refresh a cada 5 minutos
             setInterval(loadData, 5 * 60 * 1000);
