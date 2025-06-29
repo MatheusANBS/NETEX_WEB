@@ -155,8 +155,6 @@ class AnalyticsStorage:
                 "daily_views": [],
                 "user_engagement": {
                     "avg_time_on_page": 0,
-                    "bounce_rate": 0,
-                    "avg_scroll_depth": 0,
                     "total_interactions": 0
                 },
                 "performance_metrics": {
@@ -197,7 +195,7 @@ class AnalyticsStorage:
         
         # ✅ CORRIGIDO: Usuários únicos baseados em user_id (persistente) - APENAS com user_id válido
         unique_users = set(e.get('user_id', '') for e in events if e.get('user_id') and e.get('user_id').strip())
-        # Sessões únicas para análise de bounce rate - APENAS com session_id válido
+        # Sessões únicas - APENAS com session_id válido
         unique_sessions = set(e.get('session_id', '') for e in events if e.get('session_id') and e.get('session_id').strip())
         
         # 1. Páginas mais visitadas
@@ -246,49 +244,22 @@ class AnalyticsStorage:
             if session_times:
                 avg_time_on_page = sum(session_times.values()) / len(session_times) / 1000
         
-        bounce_rate = 0
-        if unique_sessions:
-            single_page_sessions = 0
-            for session in unique_sessions:
-                session_events = [e for e in page_views if e.get('session_id') == session]
-                if len(session_events) <= 1:
-                    single_page_sessions += 1
-            bounce_rate = (single_page_sessions / len(unique_sessions)) * 100
-        
         # 4. Análise de Conversão (Funil) - Adaptado para eventos disponíveis
         total_visitors = len(unique_users)  # ✅ Usuários únicos reais
         
-        # Interações: usuários que clicaram em botões ou fizeram scroll (engajaram com a página)
-        engaged_users = set()
-        for event in events:
-            user_id = event.get('user_id')
-            if user_id and event.get('event') in ['button_click', 'element_click', 'scroll_milestone', 'help_clicked']:
-                engaged_users.add(user_id)
+        # Interações com formulários: contar cliques em "Gerar Relatório" (preenchimento de formulário)
+        form_interactions = sum(1 for event in button_clicks 
+                               if 'Gerar Relatório' in event.get('data', {}).get('button_text', ''))
         
-        # "Relatórios": usuários que clicaram no botão de ajuda ou realizaram ações específicas
-        # Como proxy para conversão, vamos usar usuários que clicaram em ajuda (interesse em usar o sistema)
-        conversion_users = set()
-        for event in help_clicks:
-            user_id = event.get('user_id')
-            if user_id:
-                conversion_users.add(user_id)
-        
-        # Se não há help_clicks, usar usuários que tiveram alta interação (mais de 3 eventos)
-        if not conversion_users:
-            user_interaction_count = {}
-            for event in events:
-                user_id = event.get('user_id')
-                if user_id:
-                    user_interaction_count[user_id] = user_interaction_count.get(user_id, 0) + 1
-            
-            # Usuários com mais de 3 interações são considerados "convertidos"
-            conversion_users = set(user for user, count in user_interaction_count.items() if count > 3)
+        # "Relatórios": contar apenas downloads de PDF (relatórios consolidados)
+        pdf_downloads = sum(1 for event in button_clicks 
+                           if 'Baixar PDF' in event.get('data', {}).get('button_text', ''))
         
         conversion_funnel = {
             "visitors": total_visitors,
-            "form_interactions": len(engaged_users),
-            "report_generations": len(conversion_users),
-            "conversion_rate": (len(conversion_users) / total_visitors * 100) if total_visitors > 0 else 0
+            "form_interactions": form_interactions,
+            "report_generations": pdf_downloads,
+            "conversion_rate": (pdf_downloads / total_visitors * 100) if total_visitors > 0 else 0
         }
         
         # 5. Análise de Dispositivos e Navegadores (por usuários únicos)
@@ -355,31 +326,6 @@ class AnalyticsStorage:
         top_buttons = [{"button": btn, "clicks": count} for btn, count in 
                       sorted(button_clicks_count.items(), key=lambda x: x[1], reverse=True)[:5]]
         
-        # 8. Scroll depth médio - Usar eventos scroll_milestone
-        avg_scroll_depth = 0
-        if scroll_events:
-            # Obter o máximo scroll depth por usuário para evitar múltiplos scrolls do mesmo usuário
-            user_max_scroll = {}
-            for event in scroll_events:
-                user_id = event.get('user_id', '')
-                scroll_depth = event.get('data', {}).get('depth', 0)
-                if user_id and scroll_depth > 0:
-                    if user_id not in user_max_scroll or scroll_depth > user_max_scroll[user_id]:
-                        user_max_scroll[user_id] = scroll_depth
-            
-            if user_max_scroll:
-                avg_scroll_depth = sum(user_max_scroll.values()) / len(user_max_scroll)
-        else:
-            # Fallback: usar scroll depth de outros eventos se disponível
-            scroll_depths = []
-            for event in events:
-                depth = event.get('data', {}).get('scroll_depth', 0)
-                if depth > 0:
-                    scroll_depths.append(depth)
-            
-            if scroll_depths:
-                avg_scroll_depth = sum(scroll_depths) / len(scroll_depths)
-        
         return {
             "total_views": len(page_views),
             "unique_users": len(unique_users),  # ✅ Usuários únicos reais
@@ -388,8 +334,6 @@ class AnalyticsStorage:
             "daily_views": daily_views,
             "user_engagement": {
                 "avg_time_on_page": round(avg_time_on_page, 2),
-                "bounce_rate": round(bounce_rate, 2),
-                "avg_scroll_depth": round(avg_scroll_depth, 2),
                 "total_interactions": len(button_clicks) + len(form_submissions)
             },
             "performance_metrics": {

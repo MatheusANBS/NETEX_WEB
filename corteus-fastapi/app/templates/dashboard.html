@@ -159,23 +159,6 @@
                     </div>
                 </div>
 
-                <!-- Bounce Rate -->
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-500/50 transition-all">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm font-medium">Taxa de Rejeição</p>
-                            <p class="text-3xl font-bold text-white mt-1" id="bounceRate">-</p>
-                            <p class="text-sm text-yellow-400 mt-1">
-                                <i class="fas fa-chart-line mr-1"></i>
-                                <span id="bounceRateChange">-</span>
-                            </p>
-                        </div>
-                        <div class="bg-yellow-500/20 p-3 rounded-xl">
-                            <i class="fas fa-chart-pie text-2xl text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Conversion Rate -->
                 <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50 hover:border-green-500/50 transition-all">
                     <div class="flex items-center justify-between">
@@ -205,19 +188,6 @@
                         </div>
                         <div class="bg-purple-500/20 p-3 rounded-xl">
                             <i class="fas fa-clock text-xl text-purple-400"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Avg Scroll Depth -->
-                <div class="bg-gradient-to-br from-corteus-gray to-gray-800 rounded-2xl p-6 border border-gray-700/50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-400 text-sm font-medium">Profundidade de Scroll</p>
-                            <p class="text-2xl font-bold text-white mt-1" id="avgScrollDepth">-</p>
-                        </div>
-                        <div class="bg-indigo-500/20 p-3 rounded-xl">
-                            <i class="fas fa-arrows-alt-v text-xl text-indigo-400"></i>
                         </div>
                     </div>
                 </div>
@@ -495,10 +465,8 @@
             
             document.getElementById('totalViews').textContent = safeValue(data.total_views).toLocaleString('pt-BR');
             document.getElementById('uniqueUsers').textContent = safeValue(data.unique_users).toLocaleString('pt-BR');
-            document.getElementById('bounceRate').textContent = safeFixed(data.user_engagement?.bounce_rate) + '%';
             document.getElementById('conversionRate').textContent = safeFixed(data.conversion_funnel?.conversion_rate) + '%';
             document.getElementById('avgTimeOnPage').textContent = formatTime(safeValue(data.user_engagement?.avg_time_on_page));
-            document.getElementById('avgScrollDepth').textContent = safeFixed(data.user_engagement?.avg_scroll_depth, 0) + '%';
             document.getElementById('totalInteractions').textContent = safeValue(data.user_engagement?.total_interactions).toLocaleString('pt-BR');
             document.getElementById('peakHour').textContent = safeValue(data.time_analytics?.peak_hour, 0) + 'h';
             
@@ -506,7 +474,6 @@
             document.getElementById('conversions').textContent = safeValue(data.conversion_funnel?.report_generations) + ' relatórios';
             document.getElementById('activeNow').textContent = '0 ativos agora'; // Placeholder
             document.getElementById('viewsGrowth').textContent = '+0%'; // Placeholder
-            document.getElementById('bounceRateChange').textContent = 'vs período anterior'; // Placeholder
         }
 
         // Atualizar métricas adicionais
@@ -555,13 +522,14 @@
             // Se não há dados, criar dados vazios para evitar erros
             const chartData = data && Array.isArray(data) && data.length > 0 ? data : [
                 { date: new Date().toISOString().split('T')[0], count: 0 }
-            ];
-            
-            charts.dailyViews = new Chart(ctx, {
+            ];                charts.dailyViews = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: chartData.map(item => {
-                        const date = new Date(item.date || new Date());
+                        // Processar data como local para evitar problemas de fuso horário
+                        const dateStr = item.date || new Date().toISOString().split('T')[0];
+                        const [year, month, day] = dateStr.split('-');
+                        const date = new Date(year, month - 1, day); // Criar data local
                         return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
                     }),
                     datasets: [{

@@ -5,13 +5,10 @@ class CorteuAnalyticsLite {
         this.sessionId = this.generateSessionId();
         this.userId = this.getUserId();
         this.startTime = Date.now();
-        this.maxScroll = 0;
         this.interactions = 0;
         this.lastActivity = Date.now();
         
         // Throttles para evitar spam de eventos
-        this.scrollThrottle = null;
-        this.lastScrollEvent = 0;
         this.lastInteractionEvent = 0;
         
         // Buffer para agrupar eventos
@@ -22,7 +19,13 @@ class CorteuAnalyticsLite {
     }
 
     generateSessionId() {
-        return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        // Usar sessionStorage para manter a sessão durante a aba do navegador
+        let sessionId = sessionStorage.getItem('corteus_analytics_session_id');
+        if (!sessionId) {
+            sessionId = 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+            sessionStorage.setItem('corteus_analytics_session_id', sessionId);
+        }
+        return sessionId;
     }
 
     getUserId() {
@@ -92,16 +95,6 @@ class CorteuAnalyticsLite {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
 
-        // Scroll tracking - throttled
-        let scrollTimer = null;
-        window.addEventListener('scroll', () => {
-            if (scrollTimer) return;
-            scrollTimer = setTimeout(() => {
-                this.handleScroll();
-                scrollTimer = null;
-            }, 1000); // Só 1 evento de scroll por segundo
-        });
-
         // Click tracking - apenas cliques importantes
         document.addEventListener('click', (e) => {
             // Só trackear cliques em botões, links ou elementos com id/class importantes
@@ -118,7 +111,6 @@ class CorteuAnalyticsLite {
             if (document.hidden) {
                 this.track('page_exit', {
                     time_on_page: Date.now() - this.startTime,
-                    max_scroll: this.maxScroll,
                     total_interactions: this.interactions
                 });
                 this.flushBuffer(); // Enviar imediatamente ao sair
@@ -136,22 +128,6 @@ class CorteuAnalyticsLite {
                 this.trackPerformance();
             }, 1000);
         });
-    }
-
-    handleScroll() {
-        const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-        
-        if (scrollPercent > this.maxScroll) {
-            this.maxScroll = scrollPercent;
-            
-            // Só trackear marcos importantes de scroll
-            if (scrollPercent >= 25 && scrollPercent % 25 === 0) {
-                this.track('scroll_milestone', {
-                    depth: scrollPercent,
-                    time_to_reach: Date.now() - this.startTime
-                });
-            }
-        }
     }
 
     handleClick(event) {
