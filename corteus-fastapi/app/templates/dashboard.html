@@ -418,6 +418,8 @@
                 const startDate = document.getElementById('startDate').value;
                 const endDate = document.getElementById('endDate').value;
                 
+                console.log('Carregando dados para o período:', startDate, 'até', endDate);
+                
                 let url = '/analytics-data';
                 
                 if (startDate || endDate) {
@@ -427,23 +429,45 @@
                     url += '?' + params.toString();
                 }
                 
+                console.log('URL da requisição:', url);
+                
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error('Erro HTTP: ' + response.status);
                 }
                 
                 const data = await response.json();
-                currentData = data;
+                
+                // Verificar se os dados têm a estrutura esperada
+                if (!data || typeof data !== 'object') {
+                    throw new Error('Dados inválidos recebidos da API');
+                }
+                
+                // Garantir estrutura mínima dos dados
+                const safeData = {
+                    total_views: data.total_views || 0,
+                    unique_users: data.unique_users || 0,
+                    top_pages: data.top_pages || [],
+                    daily_views: data.daily_views || [],
+                    user_engagement: data.user_engagement || {},
+                    performance_metrics: data.performance_metrics || {},
+                    conversion_funnel: data.conversion_funnel || {},
+                    device_analytics: data.device_analytics || {},
+                    time_analytics: data.time_analytics || {},
+                    interaction_analytics: data.interaction_analytics || {}
+                };
+                
+                currentData = safeData;
                 
                 // Atualizar último update
                 document.getElementById('lastUpdate').textContent = new Date().toLocaleString('pt-BR');
                 
                 // Atualizar dashboard com tratamento de erro
                 try {
-                    updateKPIs(data);
-                    updateCharts(data);
-                    updateTables(data);
-                    updateMetrics(data);
+                    updateKPIs(safeData);
+                    updateCharts(safeData);
+                    updateTables(safeData);
+                    updateMetrics(safeData);
                 } catch (updateError) {
                     console.error('Erro ao atualizar dashboard:', updateError);
                     showError('Erro ao processar dados: ' + updateError.message);
@@ -462,17 +486,24 @@
 
         // Atualizar KPIs
         function updateKPIs(data) {
-            document.getElementById('totalViews').textContent = data.total_views.toLocaleString('pt-BR');
-            document.getElementById('uniqueUsers').textContent = data.unique_users.toLocaleString('pt-BR');
-            document.getElementById('bounceRate').textContent = data.user_engagement.bounce_rate.toFixed(1) + '%';
-            document.getElementById('conversionRate').textContent = data.conversion_funnel.conversion_rate.toFixed(1) + '%';
-            document.getElementById('avgTimeOnPage').textContent = formatTime(data.user_engagement.avg_time_on_page);
-            document.getElementById('avgScrollDepth').textContent = data.user_engagement.avg_scroll_depth.toFixed(0) + '%';
-            document.getElementById('totalInteractions').textContent = data.user_engagement.total_interactions.toLocaleString('pt-BR');
-            document.getElementById('peakHour').textContent = data.time_analytics.peak_hour + 'h';
+            // Função auxiliar para verificar e formatar valores
+            const safeValue = (value, defaultValue = 0) => value !== undefined && value !== null ? value : defaultValue;
+            const safeFixed = (value, decimals = 1, defaultValue = 0) => {
+                const val = safeValue(value, defaultValue);
+                return typeof val === 'number' ? val.toFixed(decimals) : defaultValue.toFixed(decimals);
+            };
+            
+            document.getElementById('totalViews').textContent = safeValue(data.total_views).toLocaleString('pt-BR');
+            document.getElementById('uniqueUsers').textContent = safeValue(data.unique_users).toLocaleString('pt-BR');
+            document.getElementById('bounceRate').textContent = safeFixed(data.user_engagement?.bounce_rate) + '%';
+            document.getElementById('conversionRate').textContent = safeFixed(data.conversion_funnel?.conversion_rate) + '%';
+            document.getElementById('avgTimeOnPage').textContent = formatTime(safeValue(data.user_engagement?.avg_time_on_page));
+            document.getElementById('avgScrollDepth').textContent = safeFixed(data.user_engagement?.avg_scroll_depth, 0) + '%';
+            document.getElementById('totalInteractions').textContent = safeValue(data.user_engagement?.total_interactions).toLocaleString('pt-BR');
+            document.getElementById('peakHour').textContent = safeValue(data.time_analytics?.peak_hour, 0) + 'h';
             
             // Dados complementares
-            document.getElementById('conversions').textContent = data.conversion_funnel.report_generations + ' relatórios';
+            document.getElementById('conversions').textContent = safeValue(data.conversion_funnel?.report_generations) + ' relatórios';
             document.getElementById('activeNow').textContent = '0 ativos agora'; // Placeholder
             document.getElementById('viewsGrowth').textContent = '+0%'; // Placeholder
             document.getElementById('bounceRateChange').textContent = 'vs período anterior'; // Placeholder
@@ -480,20 +511,27 @@
 
         // Atualizar métricas adicionais
         function updateMetrics(data) {
-            document.getElementById('totalEvents').textContent = data.performance_metrics.total_events.toLocaleString('pt-BR');
-            document.getElementById('eventsPerUser').textContent = data.performance_metrics.events_per_user.toFixed(1);
-            document.getElementById('activeSessions').textContent = data.performance_metrics.active_sessions.toLocaleString('pt-BR');
-            document.getElementById('sessionsPerUser').textContent = data.performance_metrics.avg_sessions_per_user.toFixed(1);
-            document.getElementById('formSubmissions').textContent = data.interaction_analytics.form_completions.toLocaleString('pt-BR');
-            document.getElementById('helpClicks').textContent = data.interaction_analytics.help_clicks.toLocaleString('pt-BR');
+            // Função auxiliar para verificar e formatar valores
+            const safeValue = (value, defaultValue = 0) => value !== undefined && value !== null ? value : defaultValue;
+            const safeFixed = (value, decimals = 1, defaultValue = 0) => {
+                const val = safeValue(value, defaultValue);
+                return typeof val === 'number' ? val.toFixed(decimals) : defaultValue.toFixed(decimals);
+            };
+            
+            document.getElementById('totalEvents').textContent = safeValue(data.performance_metrics?.total_events).toLocaleString('pt-BR');
+            document.getElementById('eventsPerUser').textContent = safeFixed(data.performance_metrics?.events_per_user);
+            document.getElementById('activeSessions').textContent = safeValue(data.performance_metrics?.active_sessions).toLocaleString('pt-BR');
+            document.getElementById('sessionsPerUser').textContent = safeFixed(data.performance_metrics?.avg_sessions_per_user);
+            document.getElementById('formSubmissions').textContent = safeValue(data.interaction_analytics?.form_completions).toLocaleString('pt-BR');
+            document.getElementById('helpClicks').textContent = safeValue(data.interaction_analytics?.help_clicks).toLocaleString('pt-BR');
         }
 
         // Atualizar gráficos
         function updateCharts(data) {
             updateDailyViewsChart(data.daily_views || []);
-            updateHourlyActivityChart(data.time_analytics.hourly_activity || []);
-            updateDeviceChart(data.device_analytics.devices || []);
-            updateBrowserChart(data.device_analytics.browsers || []);
+            updateHourlyActivityChart(data.time_analytics?.hourly_activity || []);
+            updateDeviceChart(data.device_analytics?.devices || []);
+            updateBrowserChart(data.device_analytics?.browsers || []);
         }
 
         // Atualizar tabelas com validação
@@ -514,16 +552,21 @@
                 charts.dailyViews.destroy();
             }
             
+            // Se não há dados, criar dados vazios para evitar erros
+            const chartData = data && Array.isArray(data) && data.length > 0 ? data : [
+                { date: new Date().toISOString().split('T')[0], count: 0 }
+            ];
+            
             charts.dailyViews = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: data.map(item => {
-                        const date = new Date(item.date);
+                    labels: chartData.map(item => {
+                        const date = new Date(item.date || new Date());
                         return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
                     }),
                     datasets: [{
                         label: 'Visualizações',
-                        data: data.map(item => item.count),
+                        data: chartData.map(item => item.count || 0),
                         borderColor: '#ff4b4b',
                         backgroundColor: 'rgba(255, 75, 75, 0.1)',
                         borderWidth: 3,
@@ -570,9 +613,10 @@
             }
             
             // Criar array com todas as horas (0-23)
+            const safeData = data && Array.isArray(data) ? data : [];
             const hourlyData = Array.from({ length: 24 }, (_, i) => {
-                const hourData = data.find(item => item.hour === i);
-                return hourData ? hourData.activity : 0;
+                const hourData = safeData.find(item => item.hour === i);
+                return hourData ? (hourData.activity || 0) : 0;
             });
             
             charts.hourlyActivity = new Chart(ctx, {
@@ -614,13 +658,16 @@
             }
             
             const colors = ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+            const safeData = data && Array.isArray(data) && data.length > 0 ? data : [
+                { type: 'Sem dados', count: 1 }
+            ];
             
             charts.device = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: data.map(item => item.type),
+                    labels: safeData.map(item => item.type || 'Sem dados'),
                     datasets: [{
-                        data: data.map(item => item.count),
+                        data: safeData.map(item => item.count || 0),
                         backgroundColor: colors,
                         borderWidth: 0
                     }]
@@ -646,13 +693,16 @@
             }
             
             const colors = ['#8b5cf6', '#ec4899', '#06b6d4', '#84cc16', '#f97316'];
+            const safeData = data && Array.isArray(data) && data.length > 0 ? data : [
+                { browser: 'Sem dados', count: 1 }
+            ];
             
             charts.browser = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: data.map(item => item.browser),
+                    labels: safeData.map(item => item.browser || 'Sem dados'),
                     datasets: [{
-                        data: data.map(item => item.count),
+                        data: safeData.map(item => item.count || 0),
                         backgroundColor: colors,
                         borderWidth: 0
                     }]
@@ -683,24 +733,25 @@
             container.innerHTML = steps.map((step, index) => {
                 const percentage = maxValue > 0 ? (step.value / maxValue) * 100 : 0;
                 
-                // Corrigir cálculo de dropoff com validações robustas
+                // Calcular dropoff/crescimento de forma mais precisa
                 let dropoffHtml = '';
                 
                 if (index > 0) {
                     const previousValue = steps[index-1]?.value || 0;
                     const currentValue = step.value || 0;
                     
-                    if (previousValue > 0 && currentValue < previousValue) {
+                    if (previousValue === 0 && currentValue === 0) {
+                        dropoffHtml = '<div class="text-gray-400 text-sm">sem dados</div>';
+                    } else if (previousValue === 0) {
+                        dropoffHtml = '<div class="text-blue-400 text-sm">novos usuários</div>';
+                    } else if (currentValue === 0) {
+                        dropoffHtml = '<div class="text-red-400 text-sm">-100% dropoff</div>';
+                    } else if (currentValue < previousValue) {
                         const dropoff = ((previousValue - currentValue) / previousValue * 100);
-                        if (!isNaN(dropoff) && isFinite(dropoff)) {
-                            dropoffHtml = '<div class="text-red-400 text-sm">-' + dropoff.toFixed(1) + '% dropoff</div>';
-                        }
-                    } else if (currentValue > previousValue && previousValue > 0) {
-                        // Se o valor atual é maior que o anterior, mostrar crescimento
+                        dropoffHtml = '<div class="text-red-400 text-sm">-' + dropoff.toFixed(1) + '% dropoff</div>';
+                    } else if (currentValue > previousValue) {
                         const growth = ((currentValue - previousValue) / previousValue * 100);
-                        if (!isNaN(growth) && isFinite(growth)) {
-                            dropoffHtml = '<div class="text-green-400 text-sm">+' + growth.toFixed(1) + '% crescimento</div>';
-                        }
+                        dropoffHtml = '<div class="text-green-400 text-sm">+' + growth.toFixed(1) + '% crescimento</div>';
                     } else if (currentValue === previousValue) {
                         dropoffHtml = '<div class="text-gray-400 text-sm">sem variação</div>';
                     }
@@ -746,7 +797,7 @@
                             (index + 1) +
                         '</div>' +
                         '<span class="text-white font-medium">' + button.button + '</span>' +
-                    </div>' +
+                    '</div>' +
                     '<div class="text-right">' +
                         '<div class="text-white font-bold">' + button.clicks.toLocaleString('pt-BR') + '</div>' +
                         '<div class="text-gray-400 text-sm">cliques</div>' +
@@ -822,23 +873,50 @@
         }
 
         function setToday() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('startDate').value = today;
-            document.getElementById('endDate').value = today;
+            const today = new Date();
+            console.log('Data atual:', today);
+            // Usar data local em vez de UTC para evitar problemas de fuso horário
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayString = `${year}-${month}-${day}`;
+            
+            console.log('Data formatada para hoje:', todayString);
+            
+            document.getElementById('startDate').value = todayString;
+            document.getElementById('endDate').value = todayString;
         }
 
         function setWeek() {
             const today = new Date();
             const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-            document.getElementById('startDate').value = weekAgo.toISOString().split('T')[0];
-            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+            
+            // Função auxiliar para formatar data local
+            const formatLocalDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            document.getElementById('startDate').value = formatLocalDate(weekAgo);
+            document.getElementById('endDate').value = formatLocalDate(today);
         }
 
         function setMonth() {
             const today = new Date();
             const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-            document.getElementById('startDate').value = monthAgo.toISOString().split('T')[0];
-            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+            
+            // Função auxiliar para formatar data local
+            const formatLocalDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            document.getElementById('startDate').value = formatLocalDate(monthAgo);
+            document.getElementById('endDate').value = formatLocalDate(today);
         }
 
         function showLoading() {
@@ -863,11 +941,9 @@
             document.getElementById('error-message').classList.add('hidden');
         }
 
-        }
-
         // Carregar dados iniciais
         window.addEventListener('load', function() {
-            setWeek(); // Definir período padrão
+            setToday(); // Definir período padrão para hoje
             loadData();
             
             // Auto-refresh a cada 5 minutos

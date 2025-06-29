@@ -1,8 +1,11 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 import json
 import os
+
+# Definir fuso horário do Brasil (UTC-3)
+BRAZIL_TZ = timezone(timedelta(hours=-3))
 
 class AnalyticsEvent(BaseModel):
     event: str
@@ -18,15 +21,19 @@ class AnalyticsEvent(BaseModel):
     
     def __init__(self, **data):
         if 'timestamp' not in data or data['timestamp'] is None:
-            data['timestamp'] = datetime.now()
+            # Usar horário do Brasil (UTC-3) em vez de UTC
+            data['timestamp'] = datetime.now(BRAZIL_TZ).replace(tzinfo=None)
         super().__init__(**data)
 
 class AnalyticsStorage:
-    """Sistema simples de armazenamento em arquivo JSON"""
+    """Sistema otimizado de armazenamento com rate limiting"""
     
     def __init__(self, file_path: str = "analytics_data.json"):
         self.file_path = file_path
         self.ensure_file_exists()
+        # Cache para rate limiting
+        self.session_event_count = {}
+        self.last_cleanup = datetime.now()
     
     def ensure_file_exists(self):
         """Garante que o arquivo existe"""
@@ -34,9 +41,32 @@ class AnalyticsStorage:
             with open(self.file_path, 'w') as f:
                 json.dump([], f)
     
+    def should_accept_event(self, event: AnalyticsEvent) -> bool:
+        """Rate limiting - limitar eventos por sessão"""
+        session_id = event.session_id
+        
+        # Limpeza periódica do cache (a cada hora)
+        if (datetime.now() - self.last_cleanup).seconds > 3600:
+            self.session_event_count.clear()
+            self.last_cleanup = datetime.now()
+        
+        # Contar eventos da sessão
+        current_count = self.session_event_count.get(session_id, 0)
+        
+        # Limite de 50 eventos por sessão (muito mais razoável)
+        if current_count >= 50:
+            print(f"Rate limit atingido para sessão {session_id}: {current_count} eventos")
+            return False
+        
+        return True
+    
     def save_event(self, event: AnalyticsEvent):
-        """Salva um evento no arquivo"""
+        """Salva um evento com rate limiting"""
         try:
+            # Verificar rate limiting
+            if not self.should_accept_event(event):
+                return False
+            
             # Ler dados existentes
             with open(self.file_path, 'r') as f:
                 data = json.load(f)
@@ -46,13 +76,23 @@ class AnalyticsStorage:
             event_dict['timestamp'] = event.timestamp.isoformat()
             data.append(event_dict)
             
-            # Manter apenas os últimos 10000 eventos para evitar arquivo muito grande
-            if len(data) > 10000:
-                data = data[-10000:]
+            # Manter apenas os últimos 1000 eventos para evitar arquivo muito grande
+            if len(data) > 1000:
+                data = data[-1000:]
             
-            # Salvar de volta
+            # Salvar dados
             with open(self.file_path, 'w') as f:
                 json.dump(data, f, indent=2)
+            
+            # Atualizar contador da sessão
+            session_id = event.session_id
+            self.session_event_count[session_id] = self.session_event_count.get(session_id, 0) + 1
+            
+            return True
+            
+        except Exception as e:
+            print(f"Erro ao salvar evento de analytics: {e}")
+            return False
                 
         except Exception as e:
             print(f"Erro ao salvar evento de analytics: {e}")
@@ -107,29 +147,58 @@ class AnalyticsStorage:
         events = self.get_events(start_date, end_date)
         
         if not events:
+            # Retornar estrutura completa com valores padrão quando não há dados
             return {
                 "total_views": 0,
                 "unique_users": 0,
                 "top_pages": [],
                 "daily_views": [],
-                "user_engagement": {},
-                "performance_metrics": {},
-                "conversion_funnel": {},
-                "device_analytics": {},
-                "time_analytics": {}
+                "user_engagement": {
+                    "avg_time_on_page": 0,
+                    "bounce_rate": 0,
+                    "avg_scroll_depth": 0,
+                    "total_interactions": 0
+                },
+                "performance_metrics": {
+                    "total_events": 0,
+                    "events_per_user": 0,
+                    "active_sessions": 0,
+                    "avg_sessions_per_user": 0
+                },
+                "conversion_funnel": {
+                    "visitors": 0,
+                    "form_interactions": 0,
+                    "report_generations": 0,
+                    "conversion_rate": 0
+                },
+                "device_analytics": {
+                    "devices": [],
+                    "browsers": [],
+                    "top_resolutions": []
+                },
+                "time_analytics": {
+                    "hourly_activity": [],
+                    "peak_hour": 0
+                },
+                "interaction_analytics": {
+                    "top_buttons": [],
+                    "form_completions": 0,
+                    "help_clicks": 0
+                }
             }
         
         # Separar tipos de eventos
         page_views = [e for e in events if e.get('event') == 'page_view']
         button_clicks = [e for e in events if e.get('event') == 'button_click']
         form_submissions = [e for e in events if e.get('event') == 'form_submit']
-        time_events = [e for e in events if e.get('event') == 'time_on_page']
-        scroll_events = [e for e in events if e.get('event') == 'scroll_depth']
+        scroll_events = [e for e in events if e.get('event') == 'scroll_milestone']
+        visibility_changes = [e for e in events if e.get('event') == 'visibility_change']
+        help_clicks = [e for e in events if e.get('event') == 'help_clicked']
         
-        # ✅ CORRIGIDO: Usuários únicos baseados em user_id (persistente)
-        unique_users = set(e.get('user_id', '') for e in events if e.get('user_id'))
-        # Sessões únicas para análise de bounce rate
-        unique_sessions = set(e.get('session_id', '') for e in events if e.get('session_id'))
+        # ✅ CORRIGIDO: Usuários únicos baseados em user_id (persistente) - APENAS com user_id válido
+        unique_users = set(e.get('user_id', '') for e in events if e.get('user_id') and e.get('user_id').strip())
+        # Sessões únicas para análise de bounce rate - APENAS com session_id válido
+        unique_sessions = set(e.get('session_id', '') for e in events if e.get('session_id') and e.get('session_id').strip())
         
         # 1. Páginas mais visitadas
         page_counts = {}
@@ -151,15 +220,31 @@ class AnalyticsStorage:
         
         # 3. Análise de Engajamento
         avg_time_on_page = 0
-        # Buscar por eventos de saída de página que contêm tempo na página
-        page_exit_events = [e for e in events if e.get('event') == 'page_exit']
-        if page_exit_events:
-            total_time = sum(e.get('data', {}).get('time_on_page', 0) for e in page_exit_events)
-            avg_time_on_page = total_time / len(page_exit_events) / 1000  # converter para segundos
-        elif time_events:
-            # Fallback para outros eventos de tempo
-            total_time = sum(e.get('data', {}).get('duration', 0) for e in time_events)
-            avg_time_on_page = total_time / len(time_events) / 1000  # converter para segundos
+        # Calcular tempo médio usando visibility_change events (quando o usuário sai da página)
+        if visibility_changes:
+            valid_times = []
+            for event in visibility_changes:
+                if not event.get('data', {}).get('visible', True):  # Quando fica invisível (usuário saiu)
+                    time_on_page = event.get('data', {}).get('time_since_load', 0)
+                    if time_on_page > 0:
+                        valid_times.append(time_on_page)
+            
+            if valid_times:
+                avg_time_on_page = sum(valid_times) / len(valid_times) / 1000  # converter para segundos
+        
+        # Se não há visibility_change, usar uma estimativa baseada no último evento de cada sessão
+        if avg_time_on_page == 0:
+            session_times = {}
+            for event in events:
+                session_id = event.get('session_id')
+                if session_id:
+                    time_since_load = event.get('data', {}).get('time_since_load', 0)
+                    if time_since_load > 0:
+                        if session_id not in session_times or time_since_load > session_times[session_id]:
+                            session_times[session_id] = time_since_load
+            
+            if session_times:
+                avg_time_on_page = sum(session_times.values()) / len(session_times) / 1000
         
         bounce_rate = 0
         if unique_sessions:
@@ -170,16 +255,40 @@ class AnalyticsStorage:
                     single_page_sessions += 1
             bounce_rate = (single_page_sessions / len(unique_sessions)) * 100
         
-        # 4. Análise de Conversão (Funil)
+        # 4. Análise de Conversão (Funil) - Adaptado para eventos disponíveis
         total_visitors = len(unique_users)  # ✅ Usuários únicos reais
-        form_interactions = len(set(e.get('user_id') for e in events if e.get('event') == 'form_field_change' and e.get('user_id')))  # ✅ Usuários únicos que interagiram
-        report_generations = len(set(e.get('user_id') for e in events if e.get('event') == 'report_generation' and e.get('user_id')))  # ✅ Usuários únicos que geraram relatórios
+        
+        # Interações: usuários que clicaram em botões ou fizeram scroll (engajaram com a página)
+        engaged_users = set()
+        for event in events:
+            user_id = event.get('user_id')
+            if user_id and event.get('event') in ['button_click', 'element_click', 'scroll_milestone', 'help_clicked']:
+                engaged_users.add(user_id)
+        
+        # "Relatórios": usuários que clicaram no botão de ajuda ou realizaram ações específicas
+        # Como proxy para conversão, vamos usar usuários que clicaram em ajuda (interesse em usar o sistema)
+        conversion_users = set()
+        for event in help_clicks:
+            user_id = event.get('user_id')
+            if user_id:
+                conversion_users.add(user_id)
+        
+        # Se não há help_clicks, usar usuários que tiveram alta interação (mais de 3 eventos)
+        if not conversion_users:
+            user_interaction_count = {}
+            for event in events:
+                user_id = event.get('user_id')
+                if user_id:
+                    user_interaction_count[user_id] = user_interaction_count.get(user_id, 0) + 1
+            
+            # Usuários com mais de 3 interações são considerados "convertidos"
+            conversion_users = set(user for user, count in user_interaction_count.items() if count > 3)
         
         conversion_funnel = {
             "visitors": total_visitors,
-            "form_interactions": form_interactions,
-            "report_generations": report_generations,
-            "conversion_rate": (report_generations / total_visitors * 100) if total_visitors > 0 else 0
+            "form_interactions": len(engaged_users),
+            "report_generations": len(conversion_users),
+            "conversion_rate": (len(conversion_users) / total_visitors * 100) if total_visitors > 0 else 0
         }
         
         # 5. Análise de Dispositivos e Navegadores (por usuários únicos)
@@ -246,17 +355,30 @@ class AnalyticsStorage:
         top_buttons = [{"button": btn, "clicks": count} for btn, count in 
                       sorted(button_clicks_count.items(), key=lambda x: x[1], reverse=True)[:5]]
         
-        # 8. Scroll depth médio
+        # 8. Scroll depth médio - Usar eventos scroll_milestone
         avg_scroll_depth = 0
         if scroll_events:
-            total_scroll = sum(e.get('data', {}).get('depth', 0) for e in scroll_events)
-            avg_scroll_depth = total_scroll / len(scroll_events)
+            # Obter o máximo scroll depth por usuário para evitar múltiplos scrolls do mesmo usuário
+            user_max_scroll = {}
+            for event in scroll_events:
+                user_id = event.get('user_id', '')
+                scroll_depth = event.get('data', {}).get('depth', 0)
+                if user_id and scroll_depth > 0:
+                    if user_id not in user_max_scroll or scroll_depth > user_max_scroll[user_id]:
+                        user_max_scroll[user_id] = scroll_depth
+            
+            if user_max_scroll:
+                avg_scroll_depth = sum(user_max_scroll.values()) / len(user_max_scroll)
         else:
-            # Tentar obter scroll depth de eventos page_exit
-            exit_events_with_scroll = [e for e in events if e.get('event') == 'page_exit' and e.get('data', {}).get('max_scroll', 0) > 0]
-            if exit_events_with_scroll:
-                total_scroll = sum(e.get('data', {}).get('max_scroll', 0) for e in exit_events_with_scroll)
-                avg_scroll_depth = total_scroll / len(exit_events_with_scroll)
+            # Fallback: usar scroll depth de outros eventos se disponível
+            scroll_depths = []
+            for event in events:
+                depth = event.get('data', {}).get('scroll_depth', 0)
+                if depth > 0:
+                    scroll_depths.append(depth)
+            
+            if scroll_depths:
+                avg_scroll_depth = sum(scroll_depths) / len(scroll_depths)
         
         return {
             "total_views": len(page_views),
@@ -290,7 +412,7 @@ class AnalyticsStorage:
             "interaction_analytics": {
                 "top_buttons": top_buttons,
                 "form_completions": len(form_submissions),
-                "help_clicks": len([e for e in events if e.get('event') == 'help_clicked'])
+                "help_clicks": len(help_clicks)
             }
         }
     

@@ -4,6 +4,8 @@ from fastapi.templating import Jinja2Templates
 from datetime import datetime, timedelta
 from typing import Optional
 from pydantic import BaseModel
+import os
+import json
 
 from app.models.analytics import AnalyticsEvent, analytics_storage
 
@@ -45,6 +47,46 @@ async def track_event(track_data: TrackRequest, request: Request):
         print(f"Erro ao processar evento de analytics: {e}")
         raise HTTPException(status_code=500, detail="Erro interno do servidor")
 
+@router.post("/track-batch")
+async def track_batch_events(request: Request):
+    """Endpoint para receber múltiplos eventos de analytics em lote"""
+    try:
+        body = await request.json()
+        events = body.get('events', [])
+        
+        if not events:
+            return {"success": True, "processed": 0}
+        
+        processed = 0
+        for event_data in events:
+            try:
+                # Criar evento de analytics
+                event = AnalyticsEvent(
+                    event=event_data.get('event', ''),
+                    page=event_data.get('page', ''),
+                    user_agent=request.headers.get("user-agent", ""),
+                    ip=request.client.host if request.client else "",
+                    session_id=event_data.get('session_id', ''),
+                    user_id=event_data.get('user_id', ''),
+                    referrer=event_data.get('referrer', ''),
+                    screen_resolution=event_data.get('screen_resolution', ''),
+                    data=event_data.get('data', {})
+                )
+                
+                # Salvar evento
+                analytics_storage.save_event(event)
+                processed += 1
+                
+            except Exception as e:
+                print(f"Erro ao processar evento individual: {e}")
+                continue
+        
+        return {"success": True, "processed": processed}
+        
+    except Exception as e:
+        print(f"Erro ao processar lote de eventos de analytics: {e}")
+        raise HTTPException(status_code=500, detail="Erro interno do servidor")
+
 @router.get("/analytics-data")
 async def get_analytics_data(
     start_date: Optional[str] = None,
@@ -57,8 +99,10 @@ async def get_analytics_data(
         end_dt = None
         
         if start_date:
-            start_dt = datetime.fromisoformat(start_date)
+            # Interpretar a data como início do dia no fuso horário local
+            start_dt = datetime.fromisoformat(start_date + "T00:00:00")
         if end_date:
+            # Interpretar a data como final do dia no fuso horário local
             end_dt = datetime.fromisoformat(end_date + "T23:59:59")
         
         # Obter estatísticas
@@ -77,6 +121,38 @@ async def analytics_dashboard(request: Request):
         "request": request,
         "title": "Analytics Dashboard - Corteus"
     })
+
+@router.get("/analytics-stats")
+async def get_analytics_stats():
+    """Endpoint para monitorar performance do sistema de analytics"""
+    try:
+        # Estatísticas do arquivo
+        file_size = 0
+        event_count = 0
+        
+        if os.path.exists("analytics_data.json"):
+            file_size = os.path.getsize("analytics_data.json")
+            with open("analytics_data.json", 'r') as f:
+                data = json.load(f)
+                event_count = len(data)
+        
+        # Estatísticas do rate limiting
+        session_stats = {
+            "active_sessions": len(analytics_storage.session_event_count),
+            "events_per_session": dict(analytics_storage.session_event_count)
+        }
+        
+        return {
+            "file_size_bytes": file_size,
+            "file_size_mb": round(file_size / (1024 * 1024), 2),
+            "total_events": event_count,
+            "rate_limiting": session_stats,
+            "last_cleanup": analytics_storage.last_cleanup.isoformat()
+        }
+        
+    except Exception as e:
+        print(f"Erro ao obter estatísticas de analytics: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao obter estatísticas")
 
 @router.post("/clear-data")
 async def clear_analytics_data():
