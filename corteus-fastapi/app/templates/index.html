@@ -45,6 +45,17 @@
     </script>
 </head>
 <body class="bg-gray-900 text-white font-inter min-h-screen">
+    <!-- Mensagem de Acesso Negado -->
+    {% if access_denied %}
+    <div class="bg-red-500/90 text-white p-4 text-center border-b border-red-600">
+        <div class="max-w-4xl mx-auto">
+            <i class="fas fa-shield-alt mr-2"></i>
+            <span class="font-medium">{{ access_denied_message }}</span>
+            <p class="text-sm mt-1 opacity-90">Clique 3 vezes no logo para acessar o modo administrador.</p>
+        </div>
+    </div>
+    {% endif %}
+    
     <!-- Navigation -->
     <nav class="bg-corteus-gray border-b border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -363,6 +374,8 @@
         function checkAdminAccess() {
             // Verificar se já está no modo admin (localStorage)
             if (localStorage.getItem('corteus_admin_mode') === 'true') {
+                // Definir cookie para sincronizar com o backend
+                document.cookie = 'corteus_admin_mode=true; path=/; max-age=86400'; // 24 horas
                 activateAdminMode();
             }
         }
@@ -449,6 +462,8 @@
         
         function activateAdminMode() {
             localStorage.setItem('corteus_admin_mode', 'true');
+            // Definir cookie para o backend também verificar
+            document.cookie = 'corteus_admin_mode=true; path=/; max-age=86400'; // 24 horas
             document.getElementById('admin-access').classList.remove('hidden');
             
             // Mostrar notificação sutil
@@ -457,6 +472,8 @@
         
         function deactivateAdminMode() {
             localStorage.removeItem('corteus_admin_mode');
+            // Remover cookie também
+            document.cookie = 'corteus_admin_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
             document.getElementById('admin-access').classList.add('hidden');
             
             // Mostrar notificação de saída

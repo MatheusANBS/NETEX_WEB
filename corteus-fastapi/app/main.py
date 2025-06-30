@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 import os
 import base64
 from decouple import config
@@ -68,7 +68,26 @@ async def debug_page(request: Request):
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def analytics_dashboard(request: Request):
-    """Dashboard de Analytics"""
+    """Dashboard de Analytics - Requer autenticação de admin"""
+    
+    # Verificar se o usuário está autenticado como admin
+    # O frontend define 'corteus_admin_mode=true' quando autenticado
+    admin_auth = request.cookies.get('corteus_admin_mode')
+    
+    # Se não estiver autenticado, retornar página de acesso negado
+    if admin_auth != 'true':
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "logo_base64": get_base64_image("app/static/images/IconeLogo.png"),
+            "admin_password": config("ADMIN_PASSWORD", default="admin123"),
+            "projetos": [
+                "P31-CAM", "P51-CAM", "P51-PAR", "P52-ACO", "P52-CAM", "P53-CAM",
+                "P54-CAM", "P54-PAR", "P55-ACO", "P62-ACO", "P62-CAM", "P62-PAR", "PRA-1"
+            ],
+            "access_denied": True,
+            "access_denied_message": "⚠️ Acesso negado ao Dashboard. Autenticação de administrador necessária."
+        })
+    
     return templates.TemplateResponse("dashboard.html", {
         "request": request,
         "title": "Analytics Dashboard - Corteus"
