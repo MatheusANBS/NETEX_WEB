@@ -45,6 +45,9 @@ async def read_root(request: Request):
     logo_base64 = get_base64_image("app/static/images/IconeLogo.png")
     admin_password = config("ADMIN_PASSWORD", default="admin123")  # Senha padrão se não estiver definida
     
+    # Verificar se há parâmetro de acesso negado
+    access_denied = request.query_params.get('access_denied') == 'true'
+    
     return templates.TemplateResponse("index.html", {
         "request": request,
         "logo_base64": logo_base64,
@@ -52,7 +55,9 @@ async def read_root(request: Request):
         "projetos": [
             "P31-CAM", "P51-CAM", "P51-PAR", "P52-ACO", "P52-CAM", "P53-CAM",
             "P54-CAM", "P54-PAR", "P55-ACO", "P62-ACO", "P62-CAM", "P62-PAR", "PRA-1"
-        ]
+        ],
+        "access_denied": access_denied,
+        "access_denied_message": "⚠️ Acesso negado ao Dashboard. Faça login como administrador primeiro." if access_denied else None
     })
 
 @app.get("/health")
@@ -74,19 +79,10 @@ async def analytics_dashboard(request: Request):
     # O frontend define 'corteus_admin_mode=true' quando autenticado
     admin_auth = request.cookies.get('corteus_admin_mode')
     
-    # Se não estiver autenticado, retornar página de acesso negado
+    # Se não estiver autenticado, redirecionar para a página principal com mensagem de erro
     if admin_auth != 'true':
-        return templates.TemplateResponse("index.html", {
-            "request": request,
-            "logo_base64": get_base64_image("app/static/images/IconeLogo.png"),
-            "admin_password": config("ADMIN_PASSWORD", default="admin123"),
-            "projetos": [
-                "P31-CAM", "P51-CAM", "P51-PAR", "P52-ACO", "P52-CAM", "P53-CAM",
-                "P54-CAM", "P54-PAR", "P55-ACO", "P62-ACO", "P62-CAM", "P62-PAR", "PRA-1"
-            ],
-            "access_denied": True,
-            "access_denied_message": "⚠️ Acesso negado ao Dashboard. Autenticação de administrador necessária."
-        })
+        # Retornar erro HTTP 403 ou redirecionar para página principal
+        return RedirectResponse(url="/?access_denied=true", status_code=302)
     
     return templates.TemplateResponse("dashboard.html", {
         "request": request,

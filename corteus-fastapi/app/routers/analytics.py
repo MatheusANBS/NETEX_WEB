@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from datetime import datetime, timedelta
@@ -11,6 +11,13 @@ from app.models.analytics import AnalyticsEvent, analytics_storage, active_users
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
+
+def verify_admin_auth(request: Request) -> bool:
+    """Verificar se o usuário está autenticado como admin"""
+    admin_auth = request.cookies.get('corteus_admin_mode')
+    if admin_auth != 'true':
+        raise HTTPException(status_code=403, detail="Acesso negado. Autenticação de admin necessária.")
+    return True
 
 class TrackRequest(BaseModel):
     event: str
@@ -94,10 +101,12 @@ async def track_batch_events(request: Request):
 
 @router.get("/analytics-data")
 async def get_analytics_data(
+    request: Request,
     start_date: Optional[str] = None,
-    end_date: Optional[str] = None
+    end_date: Optional[str] = None,
+    admin_auth: bool = Depends(verify_admin_auth)
 ):
-    """Endpoint para obter dados do dashboard"""
+    """Endpoint para obter dados do dashboard - Requer autenticação admin"""
     try:
         # Converter strings de data para datetime
         start_dt = None
@@ -119,17 +128,9 @@ async def get_analytics_data(
         print(f"Erro ao obter dados de analytics: {e}")
         raise HTTPException(status_code=500, detail="Erro ao obter dados")
 
-@router.get("/dashboard", response_class=HTMLResponse)
-async def analytics_dashboard(request: Request):
-    """Página do dashboard de analytics"""
-    return templates.TemplateResponse("dashboard.html", {
-        "request": request,
-        "title": "Analytics Dashboard - Corteus"
-    })
-
 @router.get("/analytics-stats")
-async def get_analytics_stats():
-    """Endpoint para monitorar performance do sistema de analytics"""
+async def get_analytics_stats(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para monitorar performance do sistema de analytics - Requer autenticação admin"""
     try:
         # Estatísticas do arquivo
         file_size = 0
@@ -160,8 +161,8 @@ async def get_analytics_stats():
         raise HTTPException(status_code=500, detail="Erro ao obter estatísticas")
 
 @router.post("/clear-data")
-async def clear_analytics_data():
-    """Endpoint para limpar todos os dados de analytics (cuidado!)"""
+async def clear_analytics_data(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para limpar todos os dados de analytics - Requer autenticação admin"""
     try:
         analytics_storage.clear_all_data()
         return {"success": True, "message": "Dados de analytics limpos com sucesso"}
@@ -201,8 +202,8 @@ async def get_active_users():
         raise HTTPException(status_code=500, detail="Erro ao obter usuários ativos")
 
 @router.get("/active-users/details")
-async def get_active_users_details():
-    """Endpoint para obter detalhes dos usuários ativos (admin)"""
+async def get_active_users_details(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para obter detalhes dos usuários ativos - Requer autenticação admin"""
     try:
         return active_users_tracker.get_active_users_details()
     except Exception as e:
@@ -210,8 +211,8 @@ async def get_active_users_details():
         raise HTTPException(status_code=500, detail="Erro ao obter detalhes")
 
 @router.post("/compact")
-async def compact_analytics_log():
-    """Endpoint para compactar o log de analytics"""
+async def compact_analytics_log(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para compactar o log de analytics - Requer autenticação admin"""
     try:
         result = analytics_storage.compact_log()
         return result
@@ -219,8 +220,8 @@ async def compact_analytics_log():
         raise HTTPException(status_code=500, detail=f"Erro durante compactação: {str(e)}")
 
 @router.get("/log-info")
-async def get_log_info():
-    """Endpoint para obter informações sobre o log de analytics"""
+async def get_log_info(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para obter informações sobre o log de analytics - Requer autenticação admin"""
     try:
         info = analytics_storage.get_log_info()
         return info
