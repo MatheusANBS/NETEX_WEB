@@ -594,7 +594,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             showNotification(
-                '{{ access_denied_message|escapejs }}',
+                '{{ access_denied_message|e }}',
                 'fas fa-shield-alt',
                 'bg-red-600/90'
             );
