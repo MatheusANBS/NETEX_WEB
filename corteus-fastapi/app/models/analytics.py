@@ -250,8 +250,31 @@ class AnalyticsStorage:
         daily_views = [{"date": str(date), "views": count} for date, count in 
                       sorted(daily_counts.items())]
         
-        # Tempo médio na página (simulado)
-        avg_time_on_page = 45 if page_views else 0
+        # Tempo médio na página (calculado a partir dos eventos page_exit)
+        page_exit_events = [e for e in events if e.get('event') == 'page_exit']
+        total_time = 0
+        valid_sessions = 0
+        
+        for exit_event in page_exit_events:
+            data = exit_event.get('data', {})
+            time_on_page = data.get('time_on_page')
+            
+            if time_on_page and isinstance(time_on_page, (int, float)) and time_on_page > 0:
+                # Converter de milissegundos para segundos
+                time_in_seconds = time_on_page / 1000
+                # Filtrar valores muito altos (mais de 1 hora) que podem ser outliers
+                if time_in_seconds <= 3600:
+                    total_time += time_in_seconds
+                    valid_sessions += 1
+        
+        # Calcular média ou usar fallback baseado em page views
+        if valid_sessions > 0:
+            avg_time_on_page = total_time / valid_sessions
+        elif page_views:
+            # Fallback: estimar baseado no número de page views (usuários que ficaram pouco tempo)
+            avg_time_on_page = min(30, len(page_views) * 2)  # Máximo 30s, mínimo baseado em atividade
+        else:
+            avg_time_on_page = 0
         
         # Análise de dispositivos
         device_users = {}
