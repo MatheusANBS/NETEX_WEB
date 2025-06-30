@@ -53,7 +53,7 @@ async def read_root(request: Request):
         "logo_base64": logo_base64,
         "admin_password": admin_password,
         "projetos": [
-            "P31-CAM", "P51-CAM", "P51-PAR", "P52-ACO", "P52-CAM", "P53-CAM",
+            "P31-CAM", "P40-CAM", "P40-PAR" ,"P51-CAM", "P51-PAR", "P52-ACO", "P52-CAM", "P53-CAM",
             "P54-CAM", "P54-PAR", "P55-ACO", "P62-ACO", "P62-CAM", "P62-PAR", "PRA-1"
         ],
         "access_denied": access_denied,
