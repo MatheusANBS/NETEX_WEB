@@ -99,10 +99,10 @@
                 </div>
                 
                 <div class="ml-auto flex space-x-3">
-                    <button onclick="clearAllData()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-medium transition-colors">
-                        <i class="fas fa-trash mr-2"></i>Limpar Dados
+                    <button onclick="importData()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-upload mr-2"></i>Importar
                     </button>
-                    <button onclick="exportData()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                    <button onclick="exportFullData()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-download mr-2"></i>Exportar
                     </button>
                 </div>
@@ -842,63 +842,71 @@
             return minutes + 'm ' + remainingSeconds + 's';
         }
 
-        function exportData() {
-            if (!currentData) {
-                alert('Nenhum dado para exportar. Carregue os dados primeiro.');
-                return;
-            }
-            
-            const dataStr = JSON.stringify(currentData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
+        function exportFullData() {
+            // Exportar dados completos diretamente do servidor
             const link = document.createElement('a');
-            link.href = url;
-            link.download = 'corteus-analytics-' + new Date().toISOString().split('T')[0] + '.json';
+            link.href = '/export-full-data';
+            link.download = ''; // O servidor define o nome do arquivo
             link.click();
-            URL.revokeObjectURL(url);
         }
 
-        function clearAllData() {
-            if (!confirm('⚠️ ATENÇÃO: Esta ação irá apagar TODOS os dados de analytics permanentemente.\\n\\nTem certeza que deseja continuar?')) {
-                return;
-            }
+        function importData() {
+            // Criar input de arquivo temporário
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.json';
+            fileInput.style.display = 'none';
             
-            if (!confirm('🚨 CONFIRMAÇÃO FINAL: Todos os dados serão perdidos para sempre.\\n\\nClique OK para confirmar:')) {
-                return;
-            }
-            
-            // Mostrar loading
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('dashboard-content').style.display = 'none';
-            
-            fetch('/clear-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('✅ Dados limpos com sucesso!\\n\\nO dashboard será recarregado com dados zerados.');
-                    
-                    // Limpar dados locais
-                    currentData = null;
-                    
-                    // Recarregar dados (agora vazios)
-                    loadData();
-                } else {
-                    throw new Error(data.message || 'Erro ao limpar dados');
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao limpar dados:', error);
-                alert('❌ Erro ao limpar dados: ' + error.message);
+            fileInput.onchange = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
                 
-                // Esconder loading
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('dashboard-content').style.display = 'block';
-            });
+                if (!confirm('⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais pelos dados do arquivo.\\n\\nTem certeza que deseja continuar?')) {
+                    return;
+                }
+                
+                // Mostrar loading
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('dashboard-content').style.display = 'none';
+                
+                // Criar FormData para envio
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                fetch('/import-full-data', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`✅ Dados importados com sucesso!\\n\\n${data.events_imported} eventos carregados.\\n\\nO dashboard será recarregado.`);
+                        
+                        // Limpar dados locais para forçar reload
+                        currentData = null;
+                        
+                        // Recarregar dados
+                        loadData();
+                    } else {
+                        throw new Error(data.detail || 'Erro ao importar dados');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao importar dados:', error);
+                    alert('❌ Erro ao importar dados: ' + error.message);
+                    
+                    // Esconder loading
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('dashboard-content').style.display = 'block';
+                });
+                
+                // Remover input temporário
+                document.body.removeChild(fileInput);
+            };
+            
+            // Adicionar ao DOM e clicar
+            document.body.appendChild(fileInput);
+            fileInput.click();
         }
 
         function setToday() {

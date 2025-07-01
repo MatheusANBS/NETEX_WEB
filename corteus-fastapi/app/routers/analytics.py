@@ -227,3 +227,80 @@ async def get_log_info(request: Request, admin_auth: bool = Depends(verify_admin
         return info
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao obter informações do log: {str(e)}")
+
+@router.get("/export-full-data")
+async def export_full_data(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para exportar TODOS os dados do analytics_data.json - Requer autenticação admin"""
+    try:
+        from fastapi.responses import FileResponse
+        import os
+        from datetime import datetime
+        
+        # Verificar se arquivo existe
+        if not os.path.exists("analytics_data.json"):
+            raise HTTPException(status_code=404, detail="Arquivo de dados não encontrado")
+        
+        # Gerar nome do arquivo com timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"corteus_analytics_backup_{timestamp}.json"
+        
+        # Retornar arquivo para download
+        return FileResponse(
+            path="analytics_data.json",
+            filename=filename,
+            media_type="application/json",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+        
+    except Exception as e:
+        print(f"Erro ao exportar dados completos: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao exportar dados")
+
+@router.post("/import-full-data")
+async def import_full_data(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para importar dados completos substituindo o arquivo atual - Requer autenticação admin"""
+    try:
+        import json
+        import shutil
+        from datetime import datetime
+        
+        # Receber arquivo
+        form = await request.form()
+        file = form.get("file")
+        
+        if not file:
+            raise HTTPException(status_code=400, detail="Nenhum arquivo enviado")
+        
+        # Verificar se é JSON válido
+        try:
+            file_content = await file.read()
+            imported_data = json.loads(file_content.decode('utf-8'))
+            
+            # Verificar se é uma lista (formato esperado)
+            if not isinstance(imported_data, list):
+                raise HTTPException(status_code=400, detail="Arquivo deve conter uma lista JSON")
+                
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=400, detail="Arquivo não é um JSON válido")
+        
+        # Fazer backup do arquivo atual
+        if os.path.exists("analytics_data.json"):
+            backup_name = f"analytics_data_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            shutil.copy2("analytics_data.json", backup_name)
+            print(f"✅ Backup criado: {backup_name}")
+        
+        # Substituir arquivo atual
+        with open("analytics_data.json", 'w', encoding='utf-8') as f:
+            json.dump(imported_data, f, indent=2, ensure_ascii=False)
+        
+        print(f"✅ Importados {len(imported_data)} eventos")
+        
+        return {
+            "success": True, 
+            "message": f"Dados importados com sucesso! {len(imported_data)} eventos carregados.",
+            "events_imported": len(imported_data)
+        }
+        
+    except Exception as e:
+        print(f"Erro ao importar dados: {e}")
+        raise HTTPException(status_code=500, detail=f"Erro ao importar dados: {str(e)}")
