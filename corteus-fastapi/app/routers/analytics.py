@@ -219,6 +219,46 @@ async def compact_analytics_log(request: Request, admin_auth: bool = Depends(ver
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro durante compactação: {str(e)}")
 
+@router.post("/auto-compact")
+async def auto_compact(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para executar compactação automática inteligente - Requer autenticação admin"""
+    try:
+        result = analytics_storage.auto_compact_if_needed()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro durante auto-compactação: {str(e)}")
+
+@router.get("/compaction-analysis")
+async def get_compaction_analysis(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+    """Endpoint para obter análise detalhada de compactação - Requer autenticação admin"""
+    try:
+        info = analytics_storage.get_log_info()
+        
+        # Extrair apenas os dados de análise
+        analysis = {
+            "compaction_score": info.get("compaction_score", 0),
+            "needs_compaction": info.get("needs_compaction", False),
+            "estimated_reduction": info.get("estimated_reduction", "0%"),
+            "compaction_reasons": info.get("compaction_reasons", []),
+            "analysis_details": info.get("analysis_details", {}),
+            "recommendation": "none"
+        }
+        
+        # Gerar recomendação baseada no score
+        score = analysis["compaction_score"]
+        if score > 80:
+            analysis["recommendation"] = "urgent"
+        elif score > 50:
+            analysis["recommendation"] = "moderate"
+        elif score > 25:
+            analysis["recommendation"] = "optional"
+        else:
+            analysis["recommendation"] = "none"
+        
+        return analysis
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao obter análise de compactação: {str(e)}")
+
 @router.get("/log-info")
 async def get_log_info(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
     """Endpoint para obter informações sobre o log de analytics - Requer autenticação admin"""
@@ -258,7 +298,7 @@ async def export_full_data(request: Request, admin_auth: bool = Depends(verify_a
 
 @router.post("/import-full-data")
 async def import_full_data(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
-    """Endpoint para importar dados completos substituindo o arquivo atual - Requer autenticação admin"""
+    """Endpoint para importar dados completos com validação e análise automática - Requer autenticação admin"""
     try:
         import json
         import shutil
@@ -280,27 +320,96 @@ async def import_full_data(request: Request, admin_auth: bool = Depends(verify_a
             if not isinstance(imported_data, list):
                 raise HTTPException(status_code=400, detail="Arquivo deve conter uma lista JSON")
                 
-        except json.JSONDecodeError:
-            raise HTTPException(status_code=400, detail="Arquivo não é um JSON válido")
+        except json.JSONDecodeError as e:
+            raise HTTPException(status_code=400, detail=f"Arquivo não é um JSON válido: {str(e)}")
+        
+        # Validação dos dados importados
+        valid_events = []
+        invalid_events = 0
+        required_fields = ['event', 'page', 'timestamp']
+        
+        for i, event in enumerate(imported_data):
+            if isinstance(event, dict):
+                # Verificar campos obrigatórios
+                if all(field in event for field in required_fields):
+                    # Validar formato de timestamp
+                    try:
+                        if isinstance(event['timestamp'], str):
+                            # Tentar parsear o timestamp para validar
+                            datetime.fromisoformat(event['timestamp'].replace('Z', '+00:00'))
+                            valid_events.append(event)
+                        else:
+                            invalid_events += 1
+                    except ValueError:
+                        invalid_events += 1
+                else:
+                    invalid_events += 1
+            else:
+                invalid_events += 1
+        
+        if not valid_events:
+            raise HTTPException(status_code=400, detail="Nenhum evento válido encontrado no arquivo")
         
         # Fazer backup do arquivo atual
+        backup_created = False
         if os.path.exists("analytics_data.json"):
             backup_name = f"analytics_data_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             shutil.copy2("analytics_data.json", backup_name)
+            backup_created = True
             print(f"✅ Backup criado: {backup_name}")
         
-        # Substituir arquivo atual
+        # Substituir arquivo atual com dados validados
         with open("analytics_data.json", 'w', encoding='utf-8') as f:
-            json.dump(imported_data, f, indent=2, ensure_ascii=False)
+            json.dump(valid_events, f, indent=2, ensure_ascii=False)
         
-        print(f"✅ Importados {len(imported_data)} eventos")
+        print(f"✅ Importados {len(valid_events)} eventos válidos")
         
-        return {
-            "success": True, 
-            "message": f"Dados importados com sucesso! {len(imported_data)} eventos carregados.",
-            "events_imported": len(imported_data)
+        # Executar análise pós-importação
+        analysis = analytics_storage.get_log_info()
+        
+        # Sugerir compactação se necessário
+        post_import_suggestions = []
+        if analysis.get("needs_compaction", False):
+            score = analysis.get("compaction_score", 0)
+            post_import_suggestions.append(f"⚠️ Recomenda-se compactação (Score: {score})")
+            
+            if score > 70:
+                post_import_suggestions.append("🔴 URGENTE: Execute compactação imediatamente")
+        
+        # Análise de qualidade dos dados importados
+        event_types = analysis.get("event_types", {})
+        total_events = len(valid_events)
+        
+        if event_types:
+            most_common = max(event_types, key=event_types.get)
+            post_import_suggestions.append(f"📊 Tipo mais comum: {most_common} ({event_types[most_common]} eventos)")
+        
+        result = {
+            "success": True,
+            "message": f"Dados importados com sucesso!",
+            "import_summary": {
+                "total_in_file": len(imported_data),
+                "valid_events": len(valid_events),
+                "invalid_events": invalid_events,
+                "backup_created": backup_created,
+                "file_size_kb": round(len(file_content) / 1024, 2)
+            },
+            "post_import_analysis": {
+                "compaction_score": analysis.get("compaction_score", 0),
+                "needs_compaction": analysis.get("needs_compaction", False),
+                "estimated_reduction": analysis.get("estimated_reduction", "0%"),
+                "file_size_after_import": analysis.get("file_size_kb", 0),
+                "event_count": total_events,
+                "oldest_event": analysis.get("oldest_event"),
+                "newest_event": analysis.get("newest_event")
+            },
+            "suggestions": post_import_suggestions
         }
         
+        return result
+        
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Erro ao importar dados: {e}")
         raise HTTPException(status_code=500, detail=f"Erro ao importar dados: {str(e)}")

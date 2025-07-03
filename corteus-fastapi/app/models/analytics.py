@@ -79,7 +79,7 @@ class AnalyticsStorage:
         return True
     
     def save_event(self, event: AnalyticsEvent):
-        """Salva um evento com rate limiting"""
+        """Salva um evento com rate limiting e compactação automática inteligente"""
         try:
             # Verificar rate limiting
             if not self.should_accept_event(event):
@@ -94,9 +94,20 @@ class AnalyticsStorage:
             event_dict['timestamp'] = event.timestamp.isoformat()
             data.append(event_dict)
             
-            # Manter apenas os últimos 500 eventos para evitar arquivo muito grande
-            if len(data) > 500:
-                data = data[-500:]
+            # Verificar se precisa de compactação automática (apenas a cada 50 eventos para não sobrecarregar)
+            if len(data) % 50 == 0:
+                auto_compact_result = self.auto_compact_if_needed()
+                if auto_compact_result.get("performed", False):
+                    print(f"Compactação automática executada: {auto_compact_result}")
+                    # Recarregar dados após compactação
+                    with open(self.file_path, 'r') as f:
+                        data = json.load(f)
+                    # Adicionar o evento atual novamente
+                    data.append(event_dict)
+            
+            # Limite de segurança mais alto para permitir análise antes da compactação automática
+            if len(data) > 800:
+                data = data[-800:]
             
             # Salvar dados
             with open(self.file_path, 'w') as f:
@@ -329,8 +340,8 @@ class AnalyticsStorage:
         
         # Top botões clicados - RESTAURADO: detecção correta de botões
         button_counts = {}
-        pdf_downloads = len(pdf_download_events)  # Contar eventos diretos de PDF
-        report_generations = len(report_generated_events)  # Contar eventos diretos de relatório
+        pdf_downloads = len(pdf_download_events) # Contar eventos diretos de PDF
+        report_generations = len(report_generated_events) # Contar eventos diretos de relatório
         
         for click in button_clicks:
             # Extrair informações do botão de forma mais robusta
@@ -505,8 +516,136 @@ class AnalyticsStorage:
                 "compression_ratio": "0%"
             }
     
+    def _analyze_compaction_needs(self, data: list, file_size: int) -> dict:
+        """Análise inteligente da necessidade de compactação baseada em padrões reais"""
+        if not data:
+            return {
+                "needs_compaction": False,
+                "compaction_score": 0,
+                "reasons": [],
+                "estimated_reduction": "0%"
+            }
+        
+        compaction_score = 0
+        reasons = []
+        
+        # 1. Análise de densidade temporal (eventos muito próximos no tempo)
+        duplicate_groups = 0
+        time_buckets = {}  # Agrupar eventos por minutos
+        
+        for event in data:
+            try:
+                timestamp_str = event['timestamp']
+                if 'Z' in timestamp_str:
+                    timestamp_str = timestamp_str.replace('Z', '+00:00')
+                
+                event_time = datetime.fromisoformat(timestamp_str)
+                minute_key = event_time.replace(second=0, microsecond=0).isoformat()
+                session_id = event.get('session_id', '')
+                event_type = event.get('event', '')
+                
+                bucket_key = f"{minute_key}_{session_id}_{event_type}"
+                time_buckets[bucket_key] = time_buckets.get(bucket_key, 0) + 1
+            except:
+                continue
+        
+        # Contar grupos com muitos eventos no mesmo minuto
+        high_density_buckets = sum(1 for count in time_buckets.values() if count > 3)
+        if high_density_buckets > 0:
+            density_ratio = high_density_buckets / len(time_buckets) if time_buckets else 0
+            if density_ratio > 0.1:  # Mais de 10% dos buckets têm alta densidade
+                compaction_score += 30
+                reasons.append(f"Alta densidade temporal: {high_density_buckets} grupos com eventos repetitivos")
+        
+        # 2. Análise de idade dos dados
+        now = datetime.now()
+        old_events = 0
+        
+        for event in data:
+            try:
+                timestamp_str = event['timestamp']
+                if 'Z' in timestamp_str:
+                    timestamp_str = timestamp_str.replace('Z', '+00:00')
+                
+                event_time = datetime.fromisoformat(timestamp_str)
+                if event_time.tzinfo:
+                    event_time = event_time.replace(tzinfo=None)
+                
+                age_days = (now - event_time).days
+                if age_days > 30:
+                    old_events += 1
+            except:
+                continue
+        
+        if old_events > 0:
+            old_ratio = old_events / len(data)
+            if old_ratio > 0.2:  # Mais de 20% são eventos antigos
+                compaction_score += 25
+                reasons.append(f"Dados antigos: {old_events} eventos com mais de 30 dias ({old_ratio:.1%})")
+        
+        # 3. Análise de eventos redundantes/desnecessários
+        event_types = {}
+        for event in data:
+            event_type = event.get('event', 'unknown')
+            event_types[event_type] = event_types.get(event_type, 0) + 1
+        
+        # Identificar tipos de eventos com muito volume mas baixo valor
+        low_value_events = ['heartbeat', 'mouse_move', 'scroll', 'focus', 'blur']
+        redundant_count = sum(event_types.get(evt_type, 0) for evt_type in low_value_events)
+        
+        if redundant_count > 0:
+            redundant_ratio = redundant_count / len(data)
+            if redundant_ratio > 0.3:  # Mais de 30% são eventos de baixo valor
+                compaction_score += 20
+                reasons.append(f"Eventos redundantes: {redundant_count} eventos de baixo valor ({redundant_ratio:.1%})")
+        
+        # 4. Análise de crescimento do arquivo
+        avg_event_size = file_size / len(data) if len(data) > 0 else 0
+        if file_size > 50000:  # 50KB
+            size_score = min(25, (file_size - 50000) / 2000)  # Gradual até 100KB
+            compaction_score += size_score
+            reasons.append(f"Tamanho do arquivo: {file_size/1024:.1f}KB (média {avg_event_size:.0f} bytes/evento)")
+        
+        # 5. Análise de duplicatas potenciais
+        potential_duplicates = 0
+        seen_patterns = set()
+        
+        for event in data:
+            # Criar padrão baseado em campos-chave
+            pattern = f"{event.get('event', '')}_{event.get('page', '')}_{event.get('session_id', '')}"
+            if pattern in seen_patterns:
+                potential_duplicates += 1
+            seen_patterns.add(pattern)
+        
+        if potential_duplicates > len(data) * 0.1:  # Mais de 10% de possíveis duplicatas
+            compaction_score += 15
+            reasons.append(f"Possíveis duplicatas: {potential_duplicates} eventos similares")
+        
+        # Calcular redução estimada
+        estimated_reduction = min(80, compaction_score)  # Máximo 80% de redução
+        
+        # Determinar se precisa compactar (score > 40 indica necessidade)
+        needs_compaction = compaction_score > 40
+        
+        return {
+            "needs_compaction": needs_compaction,
+            "compaction_score": round(compaction_score, 1),
+            "reasons": reasons,
+            "estimated_reduction": f"{estimated_reduction:.0f}%",
+            "analysis_details": {
+                "total_events": len(data),
+                "file_size_kb": round(file_size / 1024, 2),
+                "avg_event_size": round(avg_event_size, 0),
+                "old_events": old_events,
+                "redundant_events": redundant_count,
+                "potential_duplicates": potential_duplicates,
+                "time_buckets": len(time_buckets),
+                "high_density_buckets": high_density_buckets
+            }
+        }
+
     def get_log_info(self) -> dict:
-        """Retorna informações sobre o estado atual do log"""
+        """Retorna informações sobre o estado atual do log com análise inteligente de compactação"""
         try:
             # Informações do arquivo
             file_size = os.path.getsize(self.file_path) if os.path.exists(self.file_path) else 0
@@ -539,6 +678,9 @@ class AnalyticsStorage:
                 except:
                     continue
             
+            # Análise inteligente de compactação
+            compaction_analysis = self._analyze_compaction_needs(data, file_size)
+            
             return {
                 "file_size_bytes": file_size,
                 "file_size_kb": round(file_size / 1024, 2),
@@ -546,7 +688,11 @@ class AnalyticsStorage:
                 "event_types": event_types,
                 "oldest_event": oldest_event.isoformat() if oldest_event else None,
                 "newest_event": newest_event.isoformat() if newest_event else None,
-                "needs_compaction": event_count > 500 or file_size > 100000  # 100KB
+                "needs_compaction": compaction_analysis["needs_compaction"],
+                "compaction_score": compaction_analysis["compaction_score"],
+                "compaction_reasons": compaction_analysis["reasons"],
+                "estimated_reduction": compaction_analysis["estimated_reduction"],
+                "analysis_details": compaction_analysis["analysis_details"]
             }
             
         except Exception as e:
@@ -576,6 +722,42 @@ class AnalyticsStorage:
             return event_time.date() == today
         except:
             return False
+    
+    def should_auto_compact(self) -> bool:
+        """Determina se deve executar compactação automática baseado em critérios inteligentes"""
+        try:
+            log_info = self.get_log_info()
+            
+            # Auto-compactação apenas se score for muito alto (>80) para evitar operações desnecessárias
+            return log_info.get("compaction_score", 0) > 80
+            
+        except Exception as e:
+            print(f"Erro ao verificar necessidade de auto-compactação: {e}")
+            return False
+    
+    def auto_compact_if_needed(self) -> dict:
+        """Executa compactação automática se necessário"""
+        try:
+            if not self.should_auto_compact():
+                return {
+                    "performed": False,
+                    "reason": "Compactação não necessária",
+                    "score": self.get_log_info().get("compaction_score", 0)
+                }
+            
+            print("Executando compactação automática...")
+            result = self.compact_log()
+            result["performed"] = True
+            result["trigger"] = "auto"
+            
+            return result
+            
+        except Exception as e:
+            return {
+                "performed": False,
+                "error": str(e),
+                "trigger": "auto"
+            }
 
 # Instância global do storage
 analytics_storage = AnalyticsStorage()

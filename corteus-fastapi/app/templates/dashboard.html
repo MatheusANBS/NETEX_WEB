@@ -231,7 +231,7 @@
                     </button>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                     <!-- File Size -->
                     <div class="bg-gray-800/50 rounded-lg p-4">
                         <p class="text-gray-400 text-sm">Tamanho do Arquivo</p>
@@ -249,13 +249,13 @@
                         <p class="text-gray-400 text-sm">Evento Mais Antigo</p>
                         <p class="text-sm font-medium text-white" id="logOldestEvent">-</p>
                     </div>
-                    
-                    <!-- Compaction Status -->
-                    <div class="bg-gray-800/50 rounded-lg p-4">
-                        <p class="text-gray-400 text-sm">Status</p>
-                        <p class="text-sm font-medium" id="logCompactionStatus">
-                            <span class="text-green-400">✓ OK</span>
-                        </p>
+                </div>
+                
+                <!-- Compaction Status - Seção separada para melhor visualização -->
+                <div class="bg-gray-800/50 rounded-lg p-4 mb-6">
+                    <p class="text-gray-400 text-sm mb-2">Status de Compactação</p>
+                    <div id="logCompactionStatus" class="text-sm font-medium">
+                        <span class="text-green-400">✓ OK</span>
                     </div>
                 </div>
                 
@@ -264,8 +264,20 @@
                         <i class="fas fa-compress-alt mr-2"></i>Compactar Log
                     </button>
                     
+                    <button onclick="showAnalysisDetails()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-analytics mr-2"></i>Análise Detalhada
+                    </button>
+                    
                     <button onclick="showEventTypes()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm transition-colors">
                         <i class="fas fa-list mr-2"></i>Ver Tipos de Evento
+                    </button>
+                    
+                    <button onclick="exportFullData()" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-download mr-2"></i>Exportar Backup
+                    </button>
+                    
+                    <button onclick="importData()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-upload mr-2"></i>Importar Backup
                     </button>
                     
                     <button onclick="clearAllData()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm transition-colors">
@@ -861,7 +873,7 @@
                 const file = event.target.files[0];
                 if (!file) return;
                 
-                if (!confirm('⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais pelos dados do arquivo.\\n\\nTem certeza que deseja continuar?')) {
+                if (!confirm('⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais pelos dados do arquivo.\n\nTem certeza que deseja continuar?')) {
                     return;
                 }
                 
@@ -880,7 +892,48 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert(`✅ Dados importados com sucesso!\\n\\n${data.events_imported} eventos carregados.\\n\\nO dashboard será recarregado.`);
+                        let message = `✅ Dados importados com sucesso!\n\n`;
+                        
+                        // Resumo da importação
+                        if (data.import_summary) {
+                            const summary = data.import_summary;
+                            message += `📊 RESUMO DA IMPORTAÇÃO:\n`;
+                            message += `• Total no arquivo: ${summary.total_in_file}\n`;
+                            message += `• Eventos válidos: ${summary.valid_events}\n`;
+                            message += `• Eventos inválidos: ${summary.invalid_events}\n`;
+                            message += `• Tamanho do arquivo: ${summary.file_size_kb}KB\n`;
+                            if (summary.backup_created) {
+                                message += `• ✅ Backup automático criado\n`;
+                            }
+                            message += `\n`;
+                        }
+                        
+                        // Análise pós-importação
+                        if (data.post_import_analysis) {
+                            const analysis = data.post_import_analysis;
+                            message += `🔍 ANÁLISE PÓS-IMPORTAÇÃO:\n`;
+                            message += `• Score de compactação: ${analysis.compaction_score}\n`;
+                            message += `• Tamanho do arquivo: ${analysis.file_size_after_import}KB\n`;
+                            if (analysis.needs_compaction) {
+                                message += `• ⚠️ Compactação recomendada (${analysis.estimated_reduction} redução)\n`;
+                            } else {
+                                message += `• ✅ Log está otimizado\n`;
+                            }
+                            message += `\n`;
+                        }
+                        
+                        // Sugestões
+                        if (data.suggestions && data.suggestions.length > 0) {
+                            message += `💡 SUGESTÕES:\n`;
+                            data.suggestions.forEach(suggestion => {
+                                message += `• ${suggestion}\n`;
+                            });
+                            message += `\n`;
+                        }
+                        
+                        message += `O dashboard será recarregado.`;
+                        
+                        alert(message);
                         
                         // Limpar dados locais para forçar reload
                         currentData = null;
@@ -998,12 +1051,63 @@
                         document.getElementById('logOldestEvent').textContent = 'Nenhum';
                     }
                     
-                    // Status de compactação
+                    // Status de compactação com análise inteligente
                     const statusElement = document.getElementById('logCompactionStatus');
                     if (data.needs_compaction) {
-                        statusElement.innerHTML = '<span class="text-yellow-400">⚠ Precisa compactar</span>';
+                        const score = data.compaction_score || 0;
+                        const reduction = data.estimated_reduction || '0%';
+                        
+                        let urgencyLevel = 'yellow';
+                        let urgencyIcon = '⚠';
+                        
+                        if (score > 70) {
+                            urgencyLevel = 'red';
+                            urgencyIcon = '🔴';
+                        } else if (score > 50) {
+                            urgencyLevel = 'orange';
+                            urgencyIcon = '🟠';
+                        }
+                        
+                        statusElement.innerHTML = `
+                            <span class="text-${urgencyLevel}-400">
+                                ${urgencyIcon} Precisa compactar (Score: ${score})
+                            </span>
+                            <div class="text-xs text-gray-400 mt-1">
+                                Redução estimada: ${reduction}
+                            </div>
+                        `;
+                        
+                        // Mostrar razões detalhadas
+                        if (data.compaction_reasons && data.compaction_reasons.length > 0) {
+                            let reasonsText = `ANÁLISE DE COMPACTAÇÃO (Score: ${score})\n\n`;
+                            reasonsText += `Redução estimada: ${reduction}\n\n`;
+                            reasonsText += 'Motivos identificados:\n';
+                            data.compaction_reasons.forEach((reason, index) => {
+                                reasonsText += `${index + 1}. ${reason}\n`;
+                            });
+                            
+                            if (data.analysis_details) {
+                                const details = data.analysis_details;
+                                reasonsText += `\nDetalhes técnicos:\n`;
+                                reasonsText += `- Total de eventos: ${details.total_events}\n`;
+                                reasonsText += `- Tamanho do arquivo: ${details.file_size_kb}KB\n`;
+                                reasonsText += `- Tamanho médio por evento: ${details.avg_event_size} bytes\n`;
+                                reasonsText += `- Eventos antigos (>30 dias): ${details.old_events}\n`;
+                                reasonsText += `- Eventos redundantes: ${details.redundant_events}\n`;
+                                reasonsText += `- Possíveis duplicatas: ${details.potential_duplicates}\n`;
+                                reasonsText += `- Grupos de alta densidade: ${details.high_density_buckets}/${details.time_buckets}\n`;
+                            }
+                            
+                            showLogResult(reasonsText, 'warning');
+                        }
                     } else {
-                        statusElement.innerHTML = '<span class="text-green-400">✓ OK</span>';
+                        const score = data.compaction_score || 0;
+                        statusElement.innerHTML = `
+                            <span class="text-green-400">✓ OK (Score: ${score})</span>
+                            <div class="text-xs text-gray-400 mt-1">
+                                Log otimizado
+                            </div>
+                        `;
                     }
                     
                     // Mostrar tipos de evento se disponível
@@ -1112,35 +1216,62 @@ Taxa de compressão: ${result.compression_ratio}`;
             }
         }
         
-        function showLogResult(message, type = 'info') {
-            const resultsDiv = document.getElementById('logManagementResults');
-            const outputPre = document.getElementById('logManagementOutput');
-            
-            // Mostrar resultado
-            resultsDiv.classList.remove('hidden');
-            outputPre.textContent = message;
-            
-            // Aplicar cor baseada no tipo
-            outputPre.className = 'text-sm whitespace-pre-wrap ';
-            switch (type) {
-                case 'success':
-                    outputPre.className += 'text-green-400';
-                    break;
-                case 'error':
-                    outputPre.className += 'text-red-400';
-                    break;
-                case 'warning':
-                    outputPre.className += 'text-yellow-400';
-                    break;
-                default:
-                    outputPre.className += 'text-gray-300';
-            }
-            
-            // Auto-hide após 10 segundos para mensagens de sucesso
-            if (type === 'success') {
-                setTimeout(() => {
-                    resultsDiv.classList.add('hidden');
-                }, 10000);
+        async function showAnalysisDetails() {
+            try {
+                const response = await fetch('/log-info');
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.analysis_details) {
+                        const details = data.analysis_details;
+                        const score = data.compaction_score || 0;
+                        
+                        let analysisText = `📊 ANÁLISE INTELIGENTE DE COMPACTAÇÃO\n\n`;
+                        analysisText += `Score de Compactação: ${score}/100\n`;
+                        analysisText += `Status: ${data.needs_compaction ? '⚠️ PRECISA COMPACTAR' : '✅ OK'}\n`;
+                        analysisText += `Redução Estimada: ${data.estimated_reduction || '0%'}\n\n`;
+                        
+                        analysisText += `📈 MÉTRICAS PRINCIPAIS:\n`;
+                        analysisText += `• Total de eventos: ${details.total_events}\n`;
+                        analysisText += `• Tamanho do arquivo: ${details.file_size_kb}KB\n`;
+                        analysisText += `• Tamanho médio por evento: ${details.avg_event_size} bytes\n\n`;
+                        
+                        analysisText += `🔍 ANÁLISE DE QUALIDADE DOS DADOS:\n`;
+                        analysisText += `• Eventos antigos (>30 dias): ${details.old_events}\n`;
+                        analysisText += `• Eventos redundantes: ${details.redundant_events}\n`;
+                        analysisText += `• Possíveis duplicatas: ${details.potential_duplicates}\n`;
+                        analysisText += `• Grupos temporais: ${details.time_buckets}\n`;
+                        analysisText += `• Grupos de alta densidade: ${details.high_density_buckets}\n\n`;
+                        
+                        if (data.compaction_reasons && data.compaction_reasons.length > 0) {
+                            analysisText += `⚠️ PROBLEMAS IDENTIFICADOS:\n`;
+                            data.compaction_reasons.forEach((reason, index) => {
+                                analysisText += `${index + 1}. ${reason}\n`;
+                            });
+                            analysisText += `\n`;
+                        }
+                        
+                        analysisText += `💡 RECOMENDAÇÕES:\n`;
+                        if (score > 70) {
+                            analysisText += `• 🔴 URGENTE: Execute compactação imediatamente\n`;
+                            analysisText += `• O log está muito fragmentado/obsoleto\n`;
+                        } else if (score > 40) {
+                            analysisText += `• 🟠 MODERADO: Compactação recomendada\n`;
+                            analysisText += `• Performance pode estar comprometida\n`;
+                        } else {
+                            analysisText += `• ✅ ÓTIMO: Log está bem otimizado\n`;
+                            analysisText += `• Não é necessária compactação no momento\n`;
+                        }
+                        
+                        showLogResult(analysisText, data.needs_compaction ? 'warning' : 'info');
+                    } else {
+                        showLogResult('Dados de análise não disponíveis', 'info');
+                    }
+                } else {
+                    showLogResult('Erro ao carregar análise detalhada', 'error');
+                }
+            } catch (error) {
+                showLogResult('Erro: ' + error.message, 'error');
             }
         }
 
