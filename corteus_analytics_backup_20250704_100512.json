@@ -1,0 +1,3246 @@
+[
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T16:21:19.296317",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1477,
+      "dns_lookup": 0,
+      "server_response": 1186,
+      "dom_processing": 268,
+      "interactions_count": 0,
+      "time_since_load": 1068
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T16:21:19.281531",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T15:27:12.934815",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 832,
+      "dns_lookup": 0,
+      "server_response": 622,
+      "dom_processing": 194,
+      "interactions_count": 0,
+      "time_since_load": 1054
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T15:27:12.930738",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T15:19:43.390691",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/?projeto=P31-CAM&ss=0732%2F2025&sk=TU-317&cod_material=1501002029&modo=Manual",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1075,
+      "dns_lookup": 0,
+      "server_response": 714,
+      "dom_processing": 346,
+      "interactions_count": 0,
+      "time_since_load": 1054
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T15:19:43.385435",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/?projeto=P31-CAM&ss=0732%2F2025&sk=TU-317&cod_material=1501002029&modo=Manual",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P62-PAR&ss=0732%2F2025&sk=TU-317&cod_material=1501002029&modo=Manual",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 2
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T15:19:39.292447",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Corte",
+      "button_id": "gerar-corte",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 137875
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T15:17:23.255012",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1434,
+      "dns_lookup": 0,
+      "server_response": 1149,
+      "dom_processing": 266,
+      "interactions_count": 0,
+      "time_since_load": 1067
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T15:17:23.251280",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P31-CAM&ss=0732%2F2025&sk=TU-317&cod_material=1501002029&modo=Manual",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 3
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T15:17:18.804136",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Corte",
+      "button_id": "gerar-corte",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 40925
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T15:16:39.442571",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 842,
+      "dns_lookup": 0,
+      "server_response": 596,
+      "dom_processing": 224,
+      "interactions_count": 0,
+      "time_since_load": 1051
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T15:16:39.437366",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T15:13:03.149355",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Corte",
+      "button_id": "gerar-corte",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 13683
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T15:12:50.540025",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1070,
+      "dns_lookup": 0,
+      "server_response": 799,
+      "dom_processing": 254,
+      "interactions_count": 0,
+      "time_since_load": 1051
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T15:12:50.536617",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T14:58:25.162499",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 960,
+      "dns_lookup": 0,
+      "server_response": 622,
+      "dom_processing": 283,
+      "interactions_count": 0,
+      "time_since_load": 1088
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T14:58:25.158357",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_4cx2oap88_1751565565979",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 8
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T14:54:17.338891",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/?projeto=P62-PAR&ss=0340%2F2024&sk=EST-239&cod_material=1501002034&modo=Autom%C3%A1tico",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 949,
+      "dns_lookup": 0,
+      "server_response": 533,
+      "dom_processing": 403,
+      "interactions_count": 0,
+      "time_since_load": 1573
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T14:54:13.028719",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/?projeto=P62-PAR&ss=0340%2F2024&sk=EST-239&cod_material=1501002034&modo=Autom%C3%A1tico",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P31-CAM&ss=0504%2F2025&sk=TU-260&cod_material=1501002037&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T14:54:12.216687",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Minuta",
+      "button_id": "gerar-minuta",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 197807
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T14:50:56.343596",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1323,
+      "dns_lookup": 0,
+      "server_response": 631,
+      "dom_processing": 668,
+      "interactions_count": 0,
+      "time_since_load": 1454
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T14:50:52.985935",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P62-PAR&ss=0340%2F2024&sk=EST-239&cod_material=1501002034&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T14:50:51.415857",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Minuta",
+      "button_id": "gerar-minuta",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 553668
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T14:41:38.861940",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1523,
+      "dns_lookup": 0,
+      "server_response": 1225,
+      "dom_processing": 282,
+      "interactions_count": 0,
+      "time_since_load": 1088
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T14:41:38.857403",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_z3dr2xwjd_1751564558484",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 12
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T14:33:17.628491",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 382,
+      "dns_lookup": 0,
+      "server_response": 1,
+      "dom_processing": 367,
+      "interactions_count": 0,
+      "time_since_load": 1079
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T14:33:17.624107",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P31-CAM&ss=0504%2F2025&sk=EST-187&cod_material=1501002037&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 10
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T14:32:47.390913",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1066,
+      "dns_lookup": 0,
+      "server_response": 551,
+      "dom_processing": 491,
+      "interactions_count": 0,
+      "time_since_load": 1637
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T14:32:44.346579",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P31-CAM&ss=0504%2F2025&sk=EST-187&cod_material=1501002037&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T14:32:43.078760",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Minuta",
+      "button_id": "gerar-minuta",
+      "button_type": "button",
+      "interactions_count": 2,
+      "time_since_load": 238530
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T14:29:29.948464",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Minuta",
+      "button_id": "gerar-minuta",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 45346
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T14:28:46.329880",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1750,
+      "dns_lookup": 25,
+      "server_response": 1229,
+      "dom_processing": 400,
+      "interactions_count": 0,
+      "time_since_load": 1727
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T14:28:43.387638",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_irvt995b7_1751563785347",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 31
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T11:13:33.166754",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_zbqhag527_1751552072778",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1530,
+      "dns_lookup": 0,
+      "server_response": 1244,
+      "dom_processing": 275,
+      "interactions_count": 0,
+      "time_since_load": 1073
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T11:13:33.162417",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_zbqhag527_1751552072778",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 12
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T10:35:21.448983",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_butdifu9v_1751549467115",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 851,
+      "dns_lookup": 0,
+      "server_response": 637,
+      "dom_processing": 199,
+      "interactions_count": 0,
+      "time_since_load": 1050
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T10:35:21.419024",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_butdifu9v_1751549467115",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T10:33:12.141346",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_butdifu9v_1751549467115",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 964,
+      "dns_lookup": 0,
+      "server_response": 604,
+      "dom_processing": 335,
+      "interactions_count": 0,
+      "time_since_load": 1076
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T10:33:12.134813",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_butdifu9v_1751549467115",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P62-PAR&ss=1421%2F2025&sk=TU-260&cod_material=1212121212&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-03T10:33:05.680342",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_butdifu9v_1751549467115",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Minuta",
+      "button_id": "gerar-minuta",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 174284
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T10:30:05.586023",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_butdifu9v_1751549467115",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 955,
+      "dns_lookup": 0,
+      "server_response": 635,
+      "dom_processing": 271,
+      "interactions_count": 0,
+      "time_since_load": 1115
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T10:30:05.582886",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_butdifu9v_1751549467115",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 8
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T09:33:25.412903",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_f0reft9qb_1751546064311",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 3107,
+      "dns_lookup": 2048,
+      "server_response": 570,
+      "dom_processing": 429,
+      "interactions_count": 0,
+      "time_since_load": 1755
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T09:33:22.493924",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_f0reft9qb_1751546064311",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 22
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T09:15:58.417362",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_wff9n45q3_1751545019444",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 908,
+      "dns_lookup": 0,
+      "server_response": 611,
+      "dom_processing": 259,
+      "interactions_count": 0,
+      "time_since_load": 1124
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T09:15:58.412669",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_wff9n45q3_1751545019444",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 10
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T07:30:33.506478",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_gghps4shx_1751538692778",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1536x865",
+    "data": {
+      "page_load": 1660,
+      "dns_lookup": 0,
+      "server_response": 617,
+      "dom_processing": 938,
+      "interactions_count": 0,
+      "time_since_load": 1298
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T07:30:33.490628",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_gghps4shx_1751538692778",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1536x865",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 31
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T22:00:19.055377",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_vofmfpvx9_1751504417803",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 703,
+      "dns_lookup": 16,
+      "server_response": 230,
+      "dom_processing": 416,
+      "interactions_count": 0,
+      "time_since_load": 1091
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T22:00:19.052229",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_vofmfpvx9_1751504417803",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 10
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T21:09:17.877766",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_jvmmxmxgp_1751501356737",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 808,
+      "dns_lookup": 17,
+      "server_response": 326,
+      "dom_processing": 417,
+      "interactions_count": 1,
+      "time_since_load": 1080
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T21:09:17.630873",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_jvmmxmxgp_1751501356737",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 10
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T20:39:24.036437",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_h2fomt6dv_1751499560843",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 669,
+      "dns_lookup": 0,
+      "server_response": 238,
+      "dom_processing": 395,
+      "interactions_count": 0,
+      "time_since_load": 1096
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T20:39:24.032448",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_h2fomt6dv_1751499560843",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 10
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T20:39:18.349516",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_oiqbibrxb_1751499556919",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1165,
+      "dns_lookup": 0,
+      "server_response": 297,
+      "dom_processing": 797,
+      "interactions_count": 0,
+      "time_since_load": 1101
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T20:39:18.333024",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_oiqbibrxb_1751499556919",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 16
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T16:58:06.125061",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_1xjsl6co7_1751484864797",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 885,
+      "dns_lookup": 0,
+      "server_response": 606,
+      "dom_processing": 253,
+      "interactions_count": 0,
+      "time_since_load": 1051
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T16:58:06.115358",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_1xjsl6co7_1751484864797",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T16:33:26.010427",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_1xjsl6co7_1751484864797",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1536x865",
+    "data": {
+      "page_load": 1564,
+      "dns_lookup": 106,
+      "server_response": 629,
+      "dom_processing": 766,
+      "interactions_count": 0,
+      "time_since_load": 1067
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T16:33:25.990428",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_1xjsl6co7_1751484864797",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1536x865",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 22
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T13:59:22.579256",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_6ps96vhyz_1751475623184",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 897,
+      "dns_lookup": 0,
+      "server_response": 611,
+      "dom_processing": 277,
+      "interactions_count": 0,
+      "time_since_load": 1076
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T13:59:22.575411",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_6ps96vhyz_1751475623184",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 27
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-02T13:09:23.261433",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Minuta",
+      "button_id": "gerar-minuta",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 243918
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T13:05:22.355878",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 916,
+      "dns_lookup": 0,
+      "server_response": 679,
+      "dom_processing": 226,
+      "interactions_count": 0,
+      "time_since_load": 2002
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T13:05:18.117773",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P31-CAM&ss=3213%2F2024&sk=EST-099&cod_material=1002003003&modo=Manual",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-PT",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-02T13:05:16.435376",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Corte",
+      "button_id": "gerar-corte",
+      "button_type": "button",
+      "interactions_count": 4,
+      "time_since_load": 83920
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-02T13:04:06.492106",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Entrar",
+      "button_id": "admin-password-confirm",
+      "button_type": "submit",
+      "interactions_count": 1,
+      "time_since_load": 12318
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T13:03:45.425615",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 803,
+      "dns_lookup": 0,
+      "server_response": 500,
+      "dom_processing": 294,
+      "interactions_count": 0,
+      "time_since_load": 1091
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T13:03:45.422945",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-PT",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T13:02:31.296848",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1963,
+      "dns_lookup": 0,
+      "server_response": 1113,
+      "dom_processing": 749,
+      "interactions_count": 0,
+      "time_since_load": 1092
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T13:02:31.293768",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_0bbmuctm4_1751471784506",
+    "user_id": "user_qvyjsamuf",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-PT",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 16
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T12:52:38.787777",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.50.54.254",
+    "session_id": "session_tc400xgj8_1751471523005",
+    "user_id": "user_7kjkdjtsh",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "384x832",
+    "data": {
+      "page_load": 548,
+      "dns_lookup": 0,
+      "server_response": 324,
+      "dom_processing": 213,
+      "interactions_count": 0,
+      "time_since_load": 1042
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T12:52:38.782368",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.50.54.254",
+    "session_id": "session_tc400xgj8_1751471523005",
+    "user_id": "user_7kjkdjtsh",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "384x832",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "mobile",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": true
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-02T12:52:10.939366",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.50.54.254",
+    "session_id": "session_tc400xgj8_1751471523005",
+    "user_id": "user_7kjkdjtsh",
+    "referrer": "",
+    "screen_resolution": "384x832",
+    "data": {
+      "button_text": "Entrar",
+      "button_id": "admin-password-confirm",
+      "button_type": "submit",
+      "interactions_count": 1,
+      "time_since_load": 6878
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T11:29:28.881380",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_yisin9j4q_1751466629155",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1584,
+      "dns_lookup": 0,
+      "server_response": 1243,
+      "dom_processing": 327,
+      "interactions_count": 0,
+      "time_since_load": 1038
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T11:29:28.866342",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_yisin9j4q_1751466629155",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 8
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T09:09:32.115107",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_uv8uww1kv_1751458232564",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 898,
+      "dns_lookup": 0,
+      "server_response": 618,
+      "dom_processing": 270,
+      "interactions_count": 0,
+      "time_since_load": 1080
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T09:09:32.112856",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_uv8uww1kv_1751458232564",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 9
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T09:09:14.992711",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_8hpvbpuz3_1751458215466",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 3329,
+      "dns_lookup": 2208,
+      "server_response": 738,
+      "dom_processing": 285,
+      "interactions_count": 0,
+      "time_since_load": 1077
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T09:09:14.989265",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_8hpvbpuz3_1751458215466",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 18
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T07:45:39.394415",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_si6kpbyxi_1751453198370",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 996,
+      "dns_lookup": 63,
+      "server_response": 596,
+      "dom_processing": 274,
+      "interactions_count": 0,
+      "time_since_load": 1074
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T07:45:39.380016",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_si6kpbyxi_1751453198370",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 12
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T07:18:13.872201",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_50qbahwmx_1751451084113",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1371,
+      "dns_lookup": 0,
+      "server_response": 1149,
+      "dom_processing": 188,
+      "interactions_count": 0,
+      "time_since_load": 1059
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T07:18:13.869327",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_50qbahwmx_1751451084113",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-02T07:10:25.455128",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_50qbahwmx_1751451084113",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1295,
+      "dns_lookup": 0,
+      "server_response": 968,
+      "dom_processing": 318,
+      "interactions_count": 0,
+      "time_since_load": 1039
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-02T07:10:25.442893",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_50qbahwmx_1751451084113",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 15
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-01T22:43:15.839818",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.12.9.31",
+    "session_id": "session_bequ14dmr_1751420586177",
+    "user_id": "user_zo0n4zg82",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "384x832",
+    "data": {
+      "button_text": "Entrar",
+      "button_id": "admin-password-confirm",
+      "button_type": "submit",
+      "interactions_count": 1,
+      "time_since_load": 7457
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T22:43:09.591140",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.12.9.31",
+    "session_id": "session_bequ14dmr_1751420586177",
+    "user_id": "user_zo0n4zg82",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "384x832",
+    "data": {
+      "page_load": 1590,
+      "dns_lookup": 200,
+      "server_response": 270,
+      "dom_processing": 969,
+      "interactions_count": 0,
+      "time_since_load": 1156
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T22:43:09.588413",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.12.9.31",
+    "session_id": "session_bequ14dmr_1751420586177",
+    "user_id": "user_zo0n4zg82",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "384x832",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "mobile",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": true
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 29
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T21:24:32.105936",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_hlq2cffrw_1751415870594",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1883,
+      "dns_lookup": 725,
+      "server_response": 274,
+      "dom_processing": 831,
+      "interactions_count": 1,
+      "time_since_load": 1081
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T21:24:31.449290",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_hlq2cffrw_1751415870594",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 10
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T20:31:13.146510",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_yqe22f3wt_1751412671658",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 747,
+      "dns_lookup": 0,
+      "server_response": 247,
+      "dom_processing": 458,
+      "interactions_count": 0,
+      "time_since_load": 1098
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T20:31:13.143871",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_yqe22f3wt_1751412671658",
+    "user_id": "user_w0lr86cen",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 11
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T19:42:46.215272",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_eu2v3vw74_1751409730350",
+    "user_id": "user_w0lr86cen",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 416,
+      "dns_lookup": 0,
+      "server_response": 245,
+      "dom_processing": 133,
+      "interactions_count": 0,
+      "time_since_load": 1069
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T19:42:46.213234",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 OPR/119.0.0.0",
+    "ip": "177.12.9.31",
+    "session_id": "session_eu2v3vw74_1751409730350",
+    "user_id": "user_w0lr86cen",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T17:19:18.225873",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1071,
+      "dns_lookup": 0,
+      "server_response": 841,
+      "dom_processing": 217,
+      "interactions_count": 0,
+      "time_since_load": 1044
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T17:19:18.224067",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T16:34:57.596631",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 814,
+      "dns_lookup": 0,
+      "server_response": 625,
+      "dom_processing": 178,
+      "interactions_count": 0,
+      "time_since_load": 1035
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T16:34:57.594099",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T16:33:38.365471",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 878,
+      "dns_lookup": 0,
+      "server_response": 536,
+      "dom_processing": 325,
+      "interactions_count": 0,
+      "time_since_load": 1926
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T16:33:35.469199",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P62-PAR&ss=0263%2F2024&sk=TU-103&cod_material=1501002039&modo=Manual",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 3
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-01T16:33:34.024616",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Corte",
+      "button_id": "gerar-corte",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 59087
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T16:32:36.116686",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1156,
+      "dns_lookup": 0,
+      "server_response": 800,
+      "dom_processing": 343,
+      "interactions_count": 0,
+      "time_since_load": 1040
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T16:32:36.114596",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T15:30:50.396046",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1409,
+      "dns_lookup": 0,
+      "server_response": 1193,
+      "dom_processing": 108,
+      "interactions_count": 0,
+      "time_since_load": 1711
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T15:30:47.599166",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-01T15:30:37.203818",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Entrar",
+      "button_id": "admin-password-confirm",
+      "button_type": "submit",
+      "interactions_count": 1,
+      "time_since_load": 827166
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T15:16:52.249513",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 780,
+      "dns_lookup": 0,
+      "server_response": 579,
+      "dom_processing": 150,
+      "interactions_count": 0,
+      "time_since_load": 1078
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T15:16:52.247613",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T15:06:10.281088",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1536x864",
+    "data": {
+      "page_load": 1304,
+      "dns_lookup": 0,
+      "server_response": 850,
+      "dom_processing": 431,
+      "interactions_count": 0,
+      "time_since_load": 1077
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T15:06:10.278844",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1536x864",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T15:03:44.133921",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1536x864",
+    "data": {
+      "page_load": 1770,
+      "dns_lookup": 74,
+      "server_response": 1255,
+      "dom_processing": 322,
+      "interactions_count": 0,
+      "time_since_load": 1088
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T15:03:44.131023",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_n7oqyi2fo_1751393082306",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1536x864",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 14
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T12:57:36.041898",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_8m9u2yz4o_1751381257231",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1029,
+      "dns_lookup": 0,
+      "server_response": 691,
+      "dom_processing": 331,
+      "interactions_count": 0,
+      "time_since_load": 1027
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T12:57:36.030843",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_8m9u2yz4o_1751381257231",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T12:00:11.313238",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.30.168.0",
+    "session_id": "session_cq5malzd2_1751382007419",
+    "user_id": "user_zo0n4zg82",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "384x832",
+    "data": {
+      "page_load": 972,
+      "dns_lookup": 0,
+      "server_response": 459,
+      "dom_processing": 489,
+      "interactions_count": 0,
+      "time_since_load": 1061
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T12:00:11.310502",
+    "user_agent": "Mozilla/5.0 (Linux; Android 15; SM-A546E Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.7151.115 Mobile Safari/537.36 OPX/2.8",
+    "ip": "177.30.168.0",
+    "session_id": "session_cq5malzd2_1751382007419",
+    "user_id": "user_zo0n4zg82",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "384x832",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "mobile",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": true
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 2
+    }
+  },
+  {
+    "event": "help_clicked",
+    "page": "/",
+    "timestamp": "2025-07-01T11:47:10.472143",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_8m9u2yz4o_1751381257231",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "",
+      "time_since_load": 14200,
+      "interactions_count": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T11:46:39.115985",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_8m9u2yz4o_1751381257231",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 990,
+      "dns_lookup": 0,
+      "server_response": 724,
+      "dom_processing": 242,
+      "interactions_count": 0,
+      "time_since_load": 1059
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T11:46:39.114802",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_8m9u2yz4o_1751381257231",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 12
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T11:13:46.576791",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_8077rwqtv_1751379204595",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 746,
+      "dns_lookup": 0,
+      "server_response": 605,
+      "dom_processing": 128,
+      "interactions_count": 0,
+      "time_since_load": 1039
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T11:13:23.807033",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_8077rwqtv_1751379204595",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 3
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T11:12:26.445655",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_8077rwqtv_1751379204595",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1747,
+      "dns_lookup": 321,
+      "server_response": 641,
+      "dom_processing": 726,
+      "interactions_count": 0,
+      "time_since_load": 1027
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T11:12:26.422816",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_8077rwqtv_1751379204595",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 8
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T10:25:55.205645",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 777,
+      "dns_lookup": 0,
+      "server_response": 592,
+      "dom_processing": 127,
+      "interactions_count": 0,
+      "time_since_load": 1087
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T10:25:55.204172",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T10:23:48.590229",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1071,
+      "dns_lookup": 0,
+      "server_response": 789,
+      "dom_processing": 275,
+      "interactions_count": 0,
+      "time_since_load": 1039
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T10:23:48.589303",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T09:46:47.930648",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 730,
+      "dns_lookup": 0,
+      "server_response": 599,
+      "dom_processing": 117,
+      "interactions_count": 0,
+      "time_since_load": 1035
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T09:46:47.929718",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T09:44:59.742732",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1836,
+      "dns_lookup": 303,
+      "server_response": 1171,
+      "dom_processing": 314,
+      "interactions_count": 0,
+      "time_since_load": 1024
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T09:44:59.729357",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_w33wjp5tf_1751373957879",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 9
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T09:21:46.205305",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_7bb384ifp_1751372516767",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 790,
+      "dns_lookup": 0,
+      "server_response": 579,
+      "dom_processing": 197,
+      "interactions_count": 0,
+      "time_since_load": 1049
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T09:21:46.204271",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_7bb384ifp_1751372516767",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T09:20:58.723587",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_7bb384ifp_1751372516767",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1605,
+      "dns_lookup": 27,
+      "server_response": 1202,
+      "dom_processing": 320,
+      "interactions_count": 0,
+      "time_since_load": 1042
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T09:20:58.634831",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_7bb384ifp_1751372516767",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 9
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T09:13:58.047404",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=1501002087&modo=Autom%C3%A1tico",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 826,
+      "dns_lookup": 0,
+      "server_response": 624,
+      "dom_processing": 197,
+      "interactions_count": 0,
+      "time_since_load": 1024
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T09:13:58.046173",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=1501002087&modo=Autom%C3%A1tico",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=1501002076&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-01T09:13:56.054302",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=2002002019&modo=Autom%C3%A1tico",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Corte",
+      "button_id": "gerar-corte",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 59111
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T09:12:56.379588",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=2002002019&modo=Autom%C3%A1tico",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1352,
+      "dns_lookup": 0,
+      "server_response": 653,
+      "dom_processing": 695,
+      "interactions_count": 0,
+      "time_since_load": 1010
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T09:12:56.378195",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=2002002019&modo=Autom%C3%A1tico",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=1501002087&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "button_click",
+    "page": "/",
+    "timestamp": "2025-07-01T09:12:52.748777",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "button_text": "Gerar Relat\u00f3rio de Corte",
+      "button_id": "gerar-corte",
+      "button_type": "button",
+      "interactions_count": 1,
+      "time_since_load": 337875
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T09:07:15.886474",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1036,
+      "dns_lookup": 0,
+      "server_response": 3,
+      "dom_processing": 1026,
+      "interactions_count": 0,
+      "time_since_load": 1065
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T09:07:15.885646",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0",
+    "ip": "187.16.101.170",
+    "session_id": "session_ktrfm5n04_1751366944548",
+    "user_id": "user_qw6kjdfka",
+    "referrer": "https://corteus.onrender.com/",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/?projeto=P52-ACO&ss=0886%2F2025&sk=EST-066&cod_material=2002002019&modo=Autom%C3%A1tico",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 19
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T08:48:39.458314",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ia8ls62ld_1751370015929",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1536x864",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 1
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T08:44:05.629510",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ia8ls62ld_1751370015929",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1536x864",
+    "data": {
+      "page_load": 8116,
+      "dns_lookup": 2013,
+      "server_response": 1273,
+      "dom_processing": 3556,
+      "interactions_count": 0,
+      "time_since_load": 1872
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T08:44:05.628907",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ia8ls62ld_1751370015929",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1536x864",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 23
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-01T08:39:48.308394",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ia8ls62ld_1751370015929",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1536x865",
+    "data": {
+      "page_load": 899,
+      "dns_lookup": 0,
+      "server_response": 765,
+      "dom_processing": 120,
+      "interactions_count": 0,
+      "time_since_load": 1051
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-01T08:39:48.307876",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ia8ls62ld_1751370015929",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1536x865",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 2
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-03T17:30:59.976246",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_dcavowm8i_1751574686752",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 0
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-03T17:30:59.984832",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "189.51.254.162",
+    "session_id": "session_dcavowm8i_1751574686752",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "https://corteus.onrender.com/dashboard",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 883,
+      "dns_lookup": 0,
+      "server_response": 589,
+      "dom_processing": 270,
+      "interactions_count": 0,
+      "time_since_load": 1019
+    }
+  },
+  {
+    "event": "page_view",
+    "page": "/",
+    "timestamp": "2025-07-04T06:54:50.679967",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ey2x115ji_1751622953564",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "url": "https://corteus.onrender.com/",
+      "title": "Corteus - Gestor de Cortes",
+      "device_type": "desktop",
+      "browser_info": {
+        "name": "chrome",
+        "mobile": false
+      },
+      "language": "pt-BR",
+      "timezone": "America/Sao_Paulo",
+      "interactions_count": 0,
+      "time_since_load": 36
+    }
+  },
+  {
+    "event": "performance_metrics",
+    "page": "/",
+    "timestamp": "2025-07-04T06:54:50.699294",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ey2x115ji_1751622953564",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "page_load": 1922,
+      "dns_lookup": 253,
+      "server_response": 1185,
+      "dom_processing": 394,
+      "interactions_count": 0,
+      "time_since_load": 1104
+    }
+  },
+  {
+    "event": "page_exit",
+    "page": "/",
+    "timestamp": "2025-07-04T06:54:51.297746",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+    "ip": "187.16.101.170",
+    "session_id": "session_ey2x115ji_1751622953564",
+    "user_id": "user_ktxon5a2k",
+    "referrer": "",
+    "screen_resolution": "1920x1080",
+    "data": {
+      "time_on_page": 2166,
+      "total_interactions": 0,
+      "interactions_count": 0,
+      "time_since_load": 2166
+    }
+  }
+]

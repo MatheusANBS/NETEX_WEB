@@ -452,10 +452,11 @@ class AnalyticsStorage:
                     print(f"Erro ao processar timestamp: {e}")
                     continue
             
-            # 2. Remover duplicatas exatas (mantendo apenas a mais recente)
+            # 2. Remover duplicatas em múltiplos níveis
             unique_events = {}
+            
+            # Primeiro passo: remover duplicatas exatas no mesmo minuto
             for event in recent_events:
-                # Criar chave única baseada em evento, página, sessão e tempo aproximado
                 try:
                     timestamp_str = event['timestamp']
                     if 'Z' in timestamp_str:
@@ -463,6 +464,7 @@ class AnalyticsStorage:
                     event_time = datetime.fromisoformat(timestamp_str)
                     minute_key = event_time.replace(second=0, microsecond=0)
                     
+                    # Chave para duplicatas no mesmo minuto
                     key = f"{event.get('event', '')}_{event.get('page', '')}_{event.get('session_id', '')}_{minute_key}"
                     
                     # Manter apenas o evento mais recente para cada chave
@@ -471,7 +473,35 @@ class AnalyticsStorage:
                 except:
                     continue
             
-            deduplicated_events = list(unique_events.values())
+            minute_deduplicated = list(unique_events.values())
+            
+            # Segundo passo: remover duplicatas de eventos frequentes da mesma sessão (relaxar critério temporal)
+            session_events = {}
+            for event in minute_deduplicated:
+                try:
+                    session_id = event.get('session_id', '')
+                    event_type = event.get('event', '')
+                    page = event.get('page', '')
+                    
+                    # Para eventos de performance_metrics, permitir apenas 1 por sessão por página
+                    if event_type == 'performance_metrics':
+                        session_key = f"{event_type}_{page}_{session_id}"
+                        if session_key not in session_events or event['timestamp'] > session_events[session_key]['timestamp']:
+                            session_events[session_key] = event
+                    # Para outros eventos, usar a deduplicação por minuto
+                    else:
+                        timestamp_str = event['timestamp']
+                        if 'Z' in timestamp_str:
+                            timestamp_str = timestamp_str.replace('Z', '+00:00')
+                        event_time = datetime.fromisoformat(timestamp_str)
+                        minute_key = event_time.replace(second=0, microsecond=0)
+                        
+                        session_key = f"{event_type}_{page}_{session_id}_{minute_key}"
+                        session_events[session_key] = event
+                except:
+                    continue
+            
+            deduplicated_events = list(session_events.values())
             
             # 3. Filtrar eventos irrelevantes ou muito frequentes - RESTAURADO: manter eventos do sistema
             filtered_events = []
@@ -606,20 +636,59 @@ class AnalyticsStorage:
             compaction_score += size_score
             reasons.append(f"Tamanho do arquivo: {file_size/1024:.1f}KB (média {avg_event_size:.0f} bytes/evento)")
         
-        # 5. Análise de duplicatas potenciais
-        potential_duplicates = 0
-        seen_patterns = set()
+        # 5. Análise de duplicatas em múltiplos níveis
+        
+        # 5a. Duplicatas temporais (mesmo minuto) - removidas pela compactação
+        temporal_duplicates = 0
+        temporal_patterns = set()
+        
+        # 5b. Duplicatas de sessão (eventos repetitivos da mesma sessão) - parcialmente removidas
+        session_duplicates = 0
+        session_patterns = set()
         
         for event in data:
-            # Criar padrão baseado em campos-chave
-            pattern = f"{event.get('event', '')}_{event.get('page', '')}_{event.get('session_id', '')}"
-            if pattern in seen_patterns:
-                potential_duplicates += 1
-            seen_patterns.add(pattern)
+            try:
+                # Análise temporal (mesmo minuto)
+                timestamp_str = event['timestamp']
+                if 'Z' in timestamp_str:
+                    timestamp_str = timestamp_str.replace('Z', '+00:00')
+                
+                event_time = datetime.fromisoformat(timestamp_str)
+                minute_key = event_time.replace(second=0, microsecond=0).isoformat()
+                
+                temporal_pattern = f"{event.get('event', '')}_{event.get('page', '')}_{event.get('session_id', '')}_{minute_key}"
+                if temporal_pattern in temporal_patterns:
+                    temporal_duplicates += 1
+                temporal_patterns.add(temporal_pattern)
+                
+                # Análise de sessão (eventos repetitivos, especialmente performance_metrics)
+                event_type = event.get('event', '')
+                if event_type == 'performance_metrics':
+                    session_pattern = f"{event_type}_{event.get('page', '')}_{event.get('session_id', '')}"
+                    if session_pattern in session_patterns:
+                        session_duplicates += 1
+                    session_patterns.add(session_pattern)
+                
+            except:
+                # Fallback para padrão sem tempo se houver erro de parsing
+                fallback_pattern = f"{event.get('event', '')}_{event.get('page', '')}_{event.get('session_id', '')}"
+                if fallback_pattern in temporal_patterns:
+                    temporal_duplicates += 1
+                temporal_patterns.add(fallback_pattern)
         
-        if potential_duplicates > len(data) * 0.1:  # Mais de 10% de possíveis duplicatas
-            compaction_score += 15
-            reasons.append(f"Possíveis duplicatas: {potential_duplicates} eventos similares")
+        # Calcular total de duplicatas removíveis
+        total_duplicates = temporal_duplicates + session_duplicates
+        
+        if temporal_duplicates > 0:
+            compaction_score += min(15, temporal_duplicates * 0.3)
+            reasons.append(f"Duplicatas temporais: {temporal_duplicates} eventos no mesmo minuto")
+        
+        if session_duplicates > len(data) * 0.1:  # Mais de 10% de duplicatas de performance
+            compaction_score += min(10, session_duplicates * 0.2)
+            reasons.append(f"Eventos de performance repetitivos: {session_duplicates} na mesma sessão")
+        
+        # Usar total de duplicatas para estimativa
+        potential_duplicates = total_duplicates
         
         # Calcular redução estimada
         estimated_reduction = min(80, compaction_score)  # Máximo 80% de redução
@@ -638,7 +707,9 @@ class AnalyticsStorage:
                 "avg_event_size": round(avg_event_size, 0),
                 "old_events": old_events,
                 "redundant_events": redundant_count,
-                "potential_duplicates": potential_duplicates,
+                "temporal_duplicates": temporal_duplicates,
+                "session_duplicates": session_duplicates,
+                "total_duplicates": potential_duplicates,
                 "time_buckets": len(time_buckets),
                 "high_density_buckets": high_density_buckets
             }

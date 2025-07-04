@@ -1094,7 +1094,9 @@
                                 reasonsText += `- Tamanho médio por evento: ${details.avg_event_size} bytes\n`;
                                 reasonsText += `- Eventos antigos (>30 dias): ${details.old_events}\n`;
                                 reasonsText += `- Eventos redundantes: ${details.redundant_events}\n`;
-                                reasonsText += `- Possíveis duplicatas: ${details.potential_duplicates}\n`;
+                                reasonsText += `- Duplicatas temporais: ${details.temporal_duplicates || 0}\n`;
+                                reasonsText += `- Duplicatas de sessão: ${details.session_duplicates || 0}\n`;
+                                reasonsText += `- Total removível: ${details.total_duplicates || details.potential_duplicates || 0}\n`;
                                 reasonsText += `- Grupos de alta densidade: ${details.high_density_buckets}/${details.time_buckets}\n`;
                             }
                             
@@ -1239,7 +1241,9 @@ Taxa de compressão: ${result.compression_ratio}`;
                         analysisText += `🔍 ANÁLISE DE QUALIDADE DOS DADOS:\n`;
                         analysisText += `• Eventos antigos (>30 dias): ${details.old_events}\n`;
                         analysisText += `• Eventos redundantes: ${details.redundant_events}\n`;
-                        analysisText += `• Possíveis duplicatas: ${details.potential_duplicates}\n`;
+                        analysisText += `• Duplicatas temporais (mesmo minuto): ${details.temporal_duplicates || 0}\n`;
+                        analysisText += `• Duplicatas de sessão (performance): ${details.session_duplicates || 0}\n`;
+                        analysisText += `• Total de duplicatas removíveis: ${details.total_duplicates || details.potential_duplicates || 0}\n`;
                         analysisText += `• Grupos temporais: ${details.time_buckets}\n`;
                         analysisText += `• Grupos de alta densidade: ${details.high_density_buckets}\n\n`;
                         
