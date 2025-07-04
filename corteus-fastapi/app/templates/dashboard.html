@@ -1275,6 +1275,57 @@ Taxa de compressão: ${result.compression_ratio}`;
             }
         }
 
+        function showLogResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('logManagementResults');
+            const outputPre = document.getElementById('logManagementOutput');
+            
+            if (!resultsDiv || !outputPre) {
+                console.error('Elementos de resultado não encontrados');
+                return;
+            }
+            
+            // Mostrar a área de resultados
+            resultsDiv.classList.remove('hidden');
+            
+            // Definir cores baseadas no tipo
+            let bgColor = 'bg-gray-800/50';
+            let textColor = 'text-gray-300';
+            let borderColor = 'border-gray-600';
+            
+            switch(type) {
+                case 'success':
+                    bgColor = 'bg-green-900/30';
+                    textColor = 'text-green-300';
+                    borderColor = 'border-green-600';
+                    break;
+                case 'error':
+                    bgColor = 'bg-red-900/30';
+                    textColor = 'text-red-300';
+                    borderColor = 'border-red-600';
+                    break;
+                case 'warning':
+                    bgColor = 'bg-yellow-900/30';
+                    textColor = 'text-yellow-300';
+                    borderColor = 'border-yellow-600';
+                    break;
+                case 'info':
+                default:
+                    bgColor = 'bg-blue-900/30';
+                    textColor = 'text-blue-300';
+                    borderColor = 'border-blue-600';
+                    break;
+            }
+            
+            // Aplicar estilos
+            const container = outputPre.parentElement;
+            container.className = `${bgColor} rounded-lg p-4 border ${borderColor}`;
+            outputPre.className = `text-sm ${textColor} whitespace-pre-wrap`;
+            outputPre.textContent = message;
+            
+            // Auto-scroll para a área de resultados
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
         // Carregar dados iniciais
         window.addEventListener('load', function() {
             setToday(); // Definir período padrão para hoje
