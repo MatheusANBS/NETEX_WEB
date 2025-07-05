@@ -436,21 +436,33 @@
         function validateAdminPassword() {
             const senha = document.getElementById('admin-password-input').value;
             
-            // Criar formulário para enviar dados via POST
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/admin/login';
-            
-            const passwordField = document.createElement('input');
-            passwordField.type = 'hidden';
-            passwordField.name = 'password';
-            passwordField.value = senha;
-            
-            form.appendChild(passwordField);
-            document.body.appendChild(form);
-            
-            // Submeter formulário
-            form.submit();
+            // Hash da senha no frontend antes de enviar (SHA-256)
+            crypto.subtle.digest('SHA-256', new TextEncoder().encode(senha)).then(hashBuffer => {
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                
+                // Criar formulário para enviar hash (não a senha)
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/login';
+                
+                const passwordField = document.createElement('input');
+                passwordField.type = 'hidden';
+                passwordField.name = 'password_hash';
+                passwordField.value = hashHex;
+                
+                form.appendChild(passwordField);
+                document.body.appendChild(form);
+                
+                // Limpar senha da memória
+                document.getElementById('admin-password-input').value = '';
+                
+                // Submeter formulário com hash
+                form.submit();
+            }).catch(error => {
+                console.error('Erro ao processar autenticação:', error);
+                showNotification('Erro de segurança', 'fas fa-shield-alt', 'bg-red-600/90');
+            });
         }
         
         function activateAdminMode() {

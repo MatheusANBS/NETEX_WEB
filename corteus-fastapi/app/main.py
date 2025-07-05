@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 import os
 import base64
+import hashlib
 from decouple import config
 
 from app.routers import cortes, relatorios, analytics
@@ -84,13 +85,22 @@ async def admin_login(request: Request):
     try:
         # Obter dados do formulário
         form_data = await request.form()
-        provided_password = form_data.get("password", "")
+        provided_password_hash = form_data.get("password_hash", "")
         
-        # Obter senha do admin das configurações
+        # Obter senha do admin das configurações e fazer hash
         admin_password = config("ADMIN_PASSWORD", default="admin123")
+        import hashlib
+        expected_hash = hashlib.sha256(admin_password.encode()).hexdigest()
         
-        # Criar token JWT
-        token = auth_manager.create_admin_token(admin_password, provided_password)
+        # Comparar hashes (proteção contra senha em logs)
+        if provided_password_hash != expected_hash:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Credenciais inválidas"
+            )
+        
+        # Criar token JWT usando senha original (só para criação do token)
+        token = auth_manager.create_admin_token(admin_password, admin_password)
         
         # Criar resposta de redirecionamento para o dashboard
         response = RedirectResponse(url="/dashboard", status_code=302)
