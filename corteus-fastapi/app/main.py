@@ -1,12 +1,13 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 import os
 import base64
 from decouple import config
 
 from app.routers import cortes, relatorios, analytics
+from app.auth import auth_manager
 
 app = FastAPI(
     title="Corteus - Gestor de Cortes",
@@ -48,6 +49,10 @@ async def read_root(request: Request):
     # Verificar se há parâmetro de acesso negado
     access_denied = request.query_params.get('access_denied') == 'true'
     
+    # Verificar se há erro de login
+    login_error = request.query_params.get('login_error') == 'true'
+    error_message = request.query_params.get('message', 'Erro de autenticação')
+    
     return templates.TemplateResponse("index.html", {
         "request": request,
         "logo_base64": logo_base64,
@@ -57,7 +62,9 @@ async def read_root(request: Request):
             "P54-CAM", "P54-PAR", "P55-ACO", "P62-ACO", "P62-CAM", "P62-PAR", "PRA-1"
         ],
         "access_denied": access_denied,
-        "access_denied_message": "⚠️ Acesso negado ao Dashboard. Faça login como administrador primeiro." if access_denied else None
+        "access_denied_message": "⚠️ Acesso negado ao Dashboard. Faça login como administrador primeiro." if access_denied else None,
+        "login_error": login_error,
+        "login_error_message": f"❌ {error_message}" if login_error else None
     })
 
 @app.get("/health")
@@ -71,18 +78,86 @@ async def debug_page(request: Request):
     """Página de debug"""
     return templates.TemplateResponse("debug.html", {"request": request})
 
+@app.post("/admin/login")
+async def admin_login(request: Request):
+    """Endpoint para login do administrador"""
+    try:
+        # Obter dados do formulário
+        form_data = await request.form()
+        provided_password = form_data.get("password", "")
+        
+        # Obter senha do admin das configurações
+        admin_password = config("ADMIN_PASSWORD", default="admin123")
+        
+        # Criar token JWT
+        token = auth_manager.create_admin_token(admin_password, provided_password)
+        
+        # Criar resposta de redirecionamento para o dashboard
+        response = RedirectResponse(url="/dashboard", status_code=302)
+        
+        # Detectar se está em produção (Render)
+        is_production = os.environ.get("RENDER") == "true" or request.url.scheme == "https"
+        
+        # Definir cookie seguro com o token JWT
+        response.set_cookie(
+            key="corteus_admin_token",
+            value=token,
+            httponly=True,  # Impede acesso via JavaScript
+            secure=is_production,  # True em produção (HTTPS), False em desenvolvimento (HTTP)
+            samesite="lax", # Proteção CSRF
+            max_age=86400   # 24 horas em segundos
+        )
+        
+        return response
+        
+    except HTTPException as e:
+        # Senha incorreta ou outro erro de autenticação
+        return RedirectResponse(
+            url=f"/?login_error=true&message={e.detail}", 
+            status_code=302
+        )
+    except Exception as e:
+        # Erro interno do servidor
+        return RedirectResponse(
+            url="/?login_error=true&message=Erro interno do servidor", 
+            status_code=302
+        )
+
+@app.post("/admin/logout")
+async def admin_logout():
+    """Endpoint para logout do administrador"""
+    response = RedirectResponse(url="/", status_code=302)
+    
+    # Detectar se está em produção
+    is_production = os.environ.get("RENDER") == "true"
+    
+    # Remover cookie de autenticação
+    response.delete_cookie(
+        key="corteus_admin_token",
+        httponly=True,
+        secure=is_production,  # True em produção, False em desenvolvimento
+        samesite="lax"
+    )
+    
+    return response
+
 @app.get("/dashboard", response_class=HTMLResponse)
+@app.head("/dashboard")
 async def analytics_dashboard(request: Request):
     """Dashboard de Analytics - Requer autenticação de admin"""
     
-    # Verificar se o usuário está autenticado como admin
-    # O frontend define 'corteus_admin_mode=true' quando autenticado
-    admin_auth = request.cookies.get('corteus_admin_mode')
-    
-    # Se não estiver autenticado, redirecionar para a página principal com mensagem de erro
-    if admin_auth != 'true':
-        # Retornar erro HTTP 403 ou redirecionar para página principal
+    # Verificar se o usuário está autenticado como admin usando JWT
+    if not auth_manager.is_admin_authenticated(request):
+        # Para requisições HEAD, retornar status 401
+        if request.method == "HEAD":
+            raise HTTPException(status_code=401, detail="Não autenticado")
+        
+        # Para requisições GET, redirecionar para a página principal com mensagem de erro
         return RedirectResponse(url="/?access_denied=true", status_code=302)
+    
+    # Para requisições HEAD, retornar apenas status 200
+    if request.method == "HEAD":
+        return HTMLResponse("")
     
     return templates.TemplateResponse("dashboard.html", {
         "request": request,

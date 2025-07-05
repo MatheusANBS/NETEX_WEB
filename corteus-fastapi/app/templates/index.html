@@ -361,16 +361,26 @@
         let bloqueadoAte = 0;
         
         function checkAdminAccess() {
-            // Verificar se já está no modo admin (localStorage)
-            if (localStorage.getItem('corteus_admin_mode') === 'true') {
-                // Definir cookie para sincronizar com o backend
-                document.cookie = 'corteus_admin_mode=true; path=/; max-age=86400'; // 24 horas
-                activateAdminMode();
-            }
+            // Verificar se há um cookie JWT válido fazendo uma requisição ao servidor
+            fetch('/dashboard', {
+                method: 'HEAD',
+                credentials: 'include' // Incluir cookies
+            }).then(response => {
+                if (response.status === 200) {
+                    // Token JWT válido - ativar modo admin
+                    document.getElementById('admin-access').classList.remove('hidden');
+                }
+                // Se response.status for 302 (redirect), significa que não está autenticado
+                // Isso é normal e não precisa fazer nada
+            }).catch(error => {
+                // Erro na requisição - não exibir modo admin
+                console.log('Verificação de admin falhou:', error);
+            });
         }
         
         function toggleAdminMode() {
-            if (localStorage.getItem('corteus_admin_mode') === 'true') {
+            // Verificar se já está logado
+            if (!document.getElementById('admin-access').classList.contains('hidden')) {
                 deactivateAdminMode();
             } else {
                 // Verificar se está bloqueado
@@ -381,7 +391,6 @@
                     return;
                 }
                 
-                // Mostrar modal de senha
                 showAdminPasswordModal();
             }
         }
@@ -427,32 +436,26 @@
         function validateAdminPassword() {
             const senha = document.getElementById('admin-password-input').value;
             
-            if (senha === "{{ admin_password }}") {
-                hideAdminPasswordModal();
-                activateAdminMode();
-                tentativasIncorretas = 0; // Reset tentativas
-            } else {
-                tentativasIncorretas++;
-                
-                if (tentativasIncorretas >= 3) {
-                    // Bloquear por 30 segundos após 3 tentativas
-                    bloqueadoAte = Date.now() + 30000;
-                    hideAdminPasswordModal();
-                    showNotification('Muitas tentativas! Bloqueado por 30s', 'fas fa-ban', 'bg-red-600/90');
-                } else {
-                    const restantes = 3 - tentativasIncorretas;
-                    showAdminPasswordError(`Senha incorreta! ${restantes} tentativa(s) restante(s)`);
-                    
-                    // Limpar campo para nova tentativa
-                    document.getElementById('admin-password-input').value = '';
-                }
-            }
+            // Criar formulário para enviar dados via POST
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/admin/login';
+            
+            const passwordField = document.createElement('input');
+            passwordField.type = 'hidden';
+            passwordField.name = 'password';
+            passwordField.value = senha;
+            
+            form.appendChild(passwordField);
+            document.body.appendChild(form);
+            
+            // Submeter formulário
+            form.submit();
         }
         
         function activateAdminMode() {
-            localStorage.setItem('corteus_admin_mode', 'true');
-            // Definir cookie para o backend também verificar
-            document.cookie = 'corteus_admin_mode=true; path=/; max-age=86400'; // 24 horas
+            // Não é mais necessário definir localStorage ou cookies aqui
+            // O servidor define o cookie JWT automaticamente
             document.getElementById('admin-access').classList.remove('hidden');
             
             // Mostrar notificação sutil
@@ -460,13 +463,18 @@
         }
         
         function deactivateAdminMode() {
-            localStorage.removeItem('corteus_admin_mode');
-            // Remover cookie também
-            document.cookie = 'corteus_admin_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-            document.getElementById('admin-access').classList.add('hidden');
-            
-            // Mostrar notificação de saída
-            showNotification('Modo Admin Desativado', 'fas fa-user-times', 'bg-red-500/90');
+            // Fazer logout via POST request
+            fetch('/admin/logout', {
+                method: 'POST',
+                credentials: 'include' // Incluir cookies
+            }).then(() => {
+                // Redirecionamento será feito pelo servidor
+                window.location.href = '/';
+            }).catch(error => {
+                console.error('Erro ao fazer logout:', error);
+                // Fallback: recarregar página
+                window.location.reload();
+            });
         }
         
         function showNotification(message, icon, bgColor) {
@@ -602,6 +610,26 @@
                 if (window.location.search.includes('access_denied=true')) {
                     const url = new URL(window.location.href);
                     url.searchParams.delete('access_denied');
+                    window.history.replaceState({}, document.title, url.pathname + url.search);
+                }
+            }, 500);
+        });
+    </script>
+    {% endif %}
+    
+    {% if login_error %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification(
+                '{{ login_error_message|e }}',
+                'fas fa-exclamation-triangle',
+                'bg-red-600/90'
+            );
+            setTimeout(function() {
+                if (window.location.search.includes('login_error=true')) {
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('login_error');
+                    url.searchParams.delete('message');
                     window.history.replaceState({}, document.title, url.pathname + url.search);
                 }
             }, 500);

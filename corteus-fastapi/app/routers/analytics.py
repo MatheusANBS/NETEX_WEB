@@ -8,14 +8,14 @@ import os
 import json
 
 from app.models.analytics import AnalyticsEvent, analytics_storage, active_users_tracker
+from app.auth import auth_manager
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 def verify_admin_auth(request: Request) -> bool:
-    """Verificar se o usuário está autenticado como admin"""
-    admin_auth = request.cookies.get('corteus_admin_mode')
-    if admin_auth != 'true':
+    """Verificar se o usuário está autenticado como admin usando JWT"""
+    if not auth_manager.is_admin_authenticated(request):
         raise HTTPException(status_code=403, detail="Acesso negado. Autenticação de admin necessária.")
     return True
 
@@ -103,10 +103,12 @@ async def track_batch_events(request: Request):
 async def get_analytics_data(
     request: Request,
     start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    admin_auth: bool = Depends(verify_admin_auth)
+    end_date: Optional[str] = None
 ):
     """Endpoint para obter dados do dashboard - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         # Converter strings de data para datetime
         start_dt = None
@@ -129,8 +131,11 @@ async def get_analytics_data(
         raise HTTPException(status_code=500, detail="Erro ao obter dados")
 
 @router.get("/analytics-stats")
-async def get_analytics_stats(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def get_analytics_stats(request: Request):
     """Endpoint para monitorar performance do sistema de analytics - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         # Estatísticas do arquivo
         file_size = 0
@@ -161,8 +166,11 @@ async def get_analytics_stats(request: Request, admin_auth: bool = Depends(verif
         raise HTTPException(status_code=500, detail="Erro ao obter estatísticas")
 
 @router.post("/clear-data")
-async def clear_analytics_data(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def clear_analytics_data(request: Request):
     """Endpoint para limpar todos os dados de analytics - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         analytics_storage.clear_all_data()
         return {"success": True, "message": "Dados de analytics limpos com sucesso"}
@@ -202,8 +210,10 @@ async def get_active_users():
         raise HTTPException(status_code=500, detail="Erro ao obter usuários ativos")
 
 @router.get("/active-users/details")
-async def get_active_users_details(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def get_active_users_details(request: Request):
     """Endpoint para obter detalhes dos usuários ativos - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
     try:
         return active_users_tracker.get_active_users_details()
     except Exception as e:
@@ -211,8 +221,11 @@ async def get_active_users_details(request: Request, admin_auth: bool = Depends(
         raise HTTPException(status_code=500, detail="Erro ao obter detalhes")
 
 @router.post("/compact")
-async def compact_analytics_log(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def compact_analytics_log(request: Request):
     """Endpoint para compactar o log de analytics - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         result = analytics_storage.compact_log()
         return result
@@ -220,8 +233,11 @@ async def compact_analytics_log(request: Request, admin_auth: bool = Depends(ver
         raise HTTPException(status_code=500, detail=f"Erro durante compactação: {str(e)}")
 
 @router.post("/auto-compact")
-async def auto_compact(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def auto_compact(request: Request):
     """Endpoint para executar compactação automática inteligente - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         result = analytics_storage.auto_compact_if_needed()
         return result
@@ -229,8 +245,11 @@ async def auto_compact(request: Request, admin_auth: bool = Depends(verify_admin
         raise HTTPException(status_code=500, detail=f"Erro durante auto-compactação: {str(e)}")
 
 @router.get("/compaction-analysis")
-async def get_compaction_analysis(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def get_compaction_analysis(request: Request):
     """Endpoint para obter análise detalhada de compactação - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         info = analytics_storage.get_log_info()
         
@@ -260,8 +279,11 @@ async def get_compaction_analysis(request: Request, admin_auth: bool = Depends(v
         raise HTTPException(status_code=500, detail=f"Erro ao obter análise de compactação: {str(e)}")
 
 @router.get("/log-info")
-async def get_log_info(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def get_log_info(request: Request):
     """Endpoint para obter informações sobre o log de analytics - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         info = analytics_storage.get_log_info()
         return info
@@ -269,8 +291,11 @@ async def get_log_info(request: Request, admin_auth: bool = Depends(verify_admin
         raise HTTPException(status_code=500, detail=f"Erro ao obter informações do log: {str(e)}")
 
 @router.get("/export-full-data")
-async def export_full_data(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def export_full_data(request: Request):
     """Endpoint para exportar TODOS os dados do analytics_data.json - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         from fastapi.responses import FileResponse
         import os
@@ -297,8 +322,11 @@ async def export_full_data(request: Request, admin_auth: bool = Depends(verify_a
         raise HTTPException(status_code=500, detail="Erro ao exportar dados")
 
 @router.post("/import-full-data")
-async def import_full_data(request: Request, admin_auth: bool = Depends(verify_admin_auth)):
+async def import_full_data(request: Request):
     """Endpoint para importar dados completos com validação e análise automática - Requer autenticação admin"""
+    # Verificar autenticação admin
+    verify_admin_auth(request)
+    
     try:
         import json
         import shutil

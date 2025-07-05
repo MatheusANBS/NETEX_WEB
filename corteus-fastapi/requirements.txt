@@ -7,3 +7,5 @@ aiofiles==23.2.1
 reportlab==4.0.7
 Pillow>=10.2.0
 python-decouple==3.8
+PyJWT==2.8.0
+cryptography==41.0.7
