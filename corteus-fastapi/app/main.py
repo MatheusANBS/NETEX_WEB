@@ -16,6 +16,8 @@ app = FastAPI(
     version="2.0.0"
 )
 
+#oi
+
 # Configurar arquivos estáticos
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
