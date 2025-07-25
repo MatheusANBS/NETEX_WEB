@@ -192,7 +192,13 @@
                 </div>
                 <div class="space-y-4">
                     <label for="cortes_desejados" class="block text-lg font-semibold text-gray-300">Cortes desejados (mm, separados por vírgula, espaço ou quebra de linha)</label>
-                    <textarea id="cortes_desejados" rows="5" placeholder="1500, 2000, 3000&#10;1200 800&#10;2500"
+                    <div class="text-sm text-gray-400 mb-2">
+                        <p>💡 <strong>Dica:</strong> Use "x" para quantificar cortes:</p>
+                        <p>• <code>200x20</code> = 20 cortes de 200mm</p>
+                        <p>• <code>1500, x3</code> = 3 cortes de 1500mm</p>
+                        <p>• <code>300x5, 450x2</code> = 5 cortes de 300mm + 2 cortes de 450mm</p>
+                    </div>
+                    <textarea id="cortes_desejados" rows="5" placeholder="1500, 2000x3, 3000&#10;1200x5, 800&#10;2500, x2"
                               class="w-full bg-gray-900/80 border border-gray-600 rounded-xl px-4 py-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all backdrop-blur-sm text-lg"></textarea>
                     <div id="cortes-error" class="text-red-400 text-sm mt-2 hidden"></div>
                 </div>
@@ -261,7 +267,13 @@
                     </div>
                     <div>
                         <h4 class="text-lg font-semibold text-white mb-2">3. Informe os cortes desejados</h4>
-                        <p>Digite os tamanhos das peças separados por vírgula (exemplo: 1500, 2000, 3000).</p>
+                        <p>Digite os tamanhos das peças separados por vírgula.</p>
+                        <p><strong>💡 Nova funcionalidade:</strong> Use "x" para quantificar cortes:</p>
+                        <ul class="list-disc list-inside mt-2 text-gray-400">
+                            <li><code>200x20</code> = 20 cortes de 200mm</li>
+                            <li><code>1500, x3</code> = 3 cortes de 1500mm</li>
+                            <li><code>300x5, 450x2</code> = múltiplas quantidades</li>
+                        </ul>
                     </div>
                     <div>
                         <h4 class="text-lg font-semibold text-white mb-2">4. Gere os relatórios</h4>

@@ -306,7 +306,7 @@ function validarCortes() {
         hideError(errorElement);
         return true;
     } catch (e) {
-        showError(errorElement, 'Formato inválido. Use números separados por vírgula, espaço ou quebra de linha');
+        showError(errorElement, `Formato inválido: ${e.message}. Use números separados por vírgula, espaço ou quebra de linha. Exemplo: "200x20, 1500, x3"`);
         return false;
     }
 }
@@ -340,14 +340,66 @@ function validarBarras() {
 
 function parseNumeros(str) {
     // Suporta separação por vírgula, espaço, quebra de linha ou combinações
-    const numeros = str.split(/[,\s\n\r]+/)
-              .map(s => s.trim())
-              .filter(s => s !== '')
-              .map(s => {
-                  const num = parseInt(s);
-                  if (isNaN(num)) throw new Error('Valor inválido');
-                  return num;
-              });
+    const partes = str.split(/[,\s\n\r]+/)
+                     .map(s => s.trim())
+                     .filter(s => s !== '');
+    
+    const numeros = [];
+    
+    for (const parte of partes) {
+        // Formato: 200x20 (valor x quantidade)
+        if (parte.includes('x')) {
+            const [valor, quantidade] = parte.split('x');
+            
+            if (valor && quantidade) {
+                // Formato: 200x20
+                const val = parseInt(valor);
+                const qty = parseInt(quantidade);
+                if (isNaN(val) || isNaN(qty) || val <= 0 || qty <= 0) {
+                    throw new Error(`Formato inválido: ${parte}`);
+                }
+                // Adicionar o valor 'qty' vezes
+                for (let i = 0; i < qty; i++) {
+                    numeros.push(val);
+                }
+            } else if (valor && !quantidade) {
+                // Formato: x20 (quantidade apenas, usar último valor)
+                const qty = parseInt(valor);
+                if (isNaN(qty) || qty <= 0) {
+                    throw new Error(`Quantidade inválida: ${parte}`);
+                }
+                if (numeros.length === 0) {
+                    throw new Error('Use "x" apenas após informar pelo menos um valor');
+                }
+                const ultimoValor = numeros[numeros.length - 1];
+                // Adicionar o último valor mais 'qty-1' vezes (pois já existe 1)
+                for (let i = 0; i < qty - 1; i++) {
+                    numeros.push(ultimoValor);
+                }
+            } else if (!valor && quantidade) {
+                // Formato: x20 (quantidade apenas)
+                const qty = parseInt(quantidade);
+                if (isNaN(qty) || qty <= 0) {
+                    throw new Error(`Quantidade inválida: ${parte}`);
+                }
+                if (numeros.length === 0) {
+                    throw new Error('Use "x" apenas após informar pelo menos um valor');
+                }
+                const ultimoValor = numeros[numeros.length - 1];
+                // Adicionar o último valor mais 'qty-1' vezes (pois já existe 1)
+                for (let i = 0; i < qty - 1; i++) {
+                    numeros.push(ultimoValor);
+                }
+            }
+        } else {
+            // Formato normal: apenas número
+            const num = parseInt(parte);
+            if (isNaN(num) || num <= 0) {
+                throw new Error(`Valor inválido: ${parte}`);
+            }
+            numeros.push(num);
+        }
+    }
     
     console.log('parseNumeros:', str, '->', numeros);
     return numeros;
@@ -568,7 +620,7 @@ function validarFormularioBase(dados, erros) {
         erros.push('Cortes Desejados é obrigatório');
         focusField('cortes_desejados');
     } else if (!validarCortes()) {
-        erros.push('Cortes Desejados contém valores inválidos (devem ser números positivos menores que 6000mm)');
+        erros.push('Cortes Desejados contém valores inválidos. Use formato: "200x20" para quantidades ou números separados por vírgula');
         focusField('cortes_desejados');
     }
     
