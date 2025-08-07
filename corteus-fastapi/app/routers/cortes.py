@@ -73,3 +73,20 @@ async def download_corte(nome_arquivo: str):
         filename=nome_arquivo,
         media_type='application/pdf'
     )
+
+@router.get("/cortes/preview/{nome_arquivo}")
+async def preview_corte(nome_arquivo: str):
+    """Preview do PDF gerado no navegador"""
+    if nome_arquivo not in temp_files:
+        raise HTTPException(status_code=404, detail="Arquivo não encontrado")
+    
+    caminho_pdf = temp_files[nome_arquivo]
+    
+    if not os.path.exists(caminho_pdf):
+        raise HTTPException(status_code=404, detail="Arquivo não encontrado no sistema")
+    
+    return FileResponse(
+        path=caminho_pdf,
+        media_type='application/pdf',
+        headers={"Content-Disposition": "inline"}
+    )

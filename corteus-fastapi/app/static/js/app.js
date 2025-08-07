@@ -781,16 +781,38 @@ function showResult(element, type, message, fileName = null, fileType = null) {
         element.appendChild(successDiv);
         
         if (fileName) {
-            console.log('Adicionando botão de download para:', fileName);
+            console.log('Adicionando botões para:', fileName);
             
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'flex flex-col sm:flex-row gap-3 mt-3';
+            
+            // Botão de Preview
+            const previewBtn = document.createElement('button');
+            previewBtn.type = 'button'; // Evita submit do formulário
+            previewBtn.className = 'flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-all';
+            previewBtn.innerHTML = '<i class="fas fa-eye mr-2"></i>Visualizar PDF';
+            previewBtn.onclick = (event) => {
+                event.preventDefault(); // Previne comportamento padrão
+                event.stopPropagation(); // Para a propagação do evento
+                console.log('Preview clicado:', fileName, fileType);
+                previewPDF(fileName, fileType);
+            };
+            
+            // Botão de Download
             const downloadBtn = document.createElement('button');
-            downloadBtn.className = 'mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-all';
+            downloadBtn.type = 'button'; // Evita submit do formulário
+            downloadBtn.className = 'flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-all';
             downloadBtn.innerHTML = '<i class="fas fa-download mr-2"></i>Baixar PDF';
-            downloadBtn.onclick = () => {
+            downloadBtn.onclick = (event) => {
+                event.preventDefault(); // Previne comportamento padrão
+                event.stopPropagation(); // Para a propagação do evento
                 console.log('Download clicado:', fileName, fileType);
                 downloadPDF(fileName, fileType);
             };
-            element.appendChild(downloadBtn);
+            
+            buttonsDiv.appendChild(previewBtn);
+            buttonsDiv.appendChild(downloadBtn);
+            element.appendChild(buttonsDiv);
         }
     } else {
         element.className = 'mt-4 p-4 bg-red-900 border border-red-500 rounded-lg';
@@ -867,6 +889,29 @@ function hideTutorial() {
     const modal = document.getElementById('tutorial-modal');
     if (modal) {
         modal.classList.add('hidden');
+    }
+}
+
+// Preview PDF
+function previewPDF(nomeArquivo, tipo) {
+    console.log('Iniciando preview:', nomeArquivo, tipo);
+    
+    let previewUrl;
+    if (tipo === 'corte') {
+        previewUrl = `/api/cortes/preview/${nomeArquivo}`;
+    } else {
+        previewUrl = `/api/minuta/preview/${nomeArquivo}`;
+    }
+    
+    // Abrir em nova aba/janela
+    window.open(previewUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    
+    // Analytics
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'preview', {
+            'event_category': 'pdf',
+            'event_label': tipo
+        });
     }
 }
 
