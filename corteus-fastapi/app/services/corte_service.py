@@ -16,6 +16,7 @@ from Modulação.formatacao import (
 )
 from Modulação.pdf_utils import gerar_pdf as gerar_pdf_func
 from Modulação.utils import parse_entrada
+from app.services.material_service import material_service
 
 class FakeVar:
     def __init__(self, value):
@@ -130,6 +131,9 @@ class CorteService:
             ("Material:", cod_material)
         ]
         
-        gerar_pdf_func(tmp_path, conteudo, campos, titulo=titulo)
+        # Obter descrição do material
+        descricao_material = material_service.obter_descricao_material(cod_material)
+        
+        gerar_pdf_func(tmp_path, conteudo, campos, titulo=titulo, descricao_material=descricao_material)
         
         return tmp_path

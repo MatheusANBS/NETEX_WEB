@@ -84,8 +84,21 @@ function setupEventListeners() {
     
     const codField = document.getElementById('cod_material');
     if (codField) {
-        codField.addEventListener('input', validarCodMaterial);
-        codField.addEventListener('blur', validarCodMaterial);
+        codField.addEventListener('input', function(e) {
+            validarCodMaterial();
+            handleAutocomplete(e.target.value);
+        });
+        codField.addEventListener('blur', function(e) {
+            // Delay para permitir clique no autocomplete
+            setTimeout(() => validarCodMaterial(), 150);
+        });
+        
+        // Fechar autocomplete ao pressionar Escape
+        codField.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideAutocomplete();
+            }
+        });
     }
     
     const cortesField = document.getElementById('cortes_desejados');
@@ -268,16 +281,77 @@ function validarCodMaterial() {
     
     if (!cod) {
         hideError(errorElement);
+        limparDescricaoMaterial();
         return true;
     }
     
     if (!/^\d{10}$/.test(cod)) {
         showError(errorElement, 'Código deve ter exatamente 10 dígitos');
+        limparDescricaoMaterial();
         return false;
     }
     
+    // Validação em tempo real com a API
+    validarMaterialNaBase(cod);
+    
     hideError(errorElement);
     return true;
+}
+
+async function validarMaterialNaBase(codigo) {
+    const errorElement = document.getElementById('cod-error');
+    const descricaoElement = document.getElementById('material-descricao');
+    
+    try {
+        const response = await fetch(`/api/materiais/validar/${codigo}`);
+        const data = await response.json();
+        
+        if (data.valido) {
+            hideError(errorElement);
+            mostrarDescricaoMaterial(data.descricao);
+        } else {
+            showError(errorElement, 'Código do material não encontrado na base de dados');
+            limparDescricaoMaterial();
+        }
+    } catch (error) {
+        console.error('Erro ao validar material:', error);
+        // Em caso de erro na API, não mostra erro para não bloquear o usuário
+        limparDescricaoMaterial();
+    }
+}
+
+function mostrarDescricaoMaterial(descricao) {
+    let descricaoElement = document.getElementById('material-descricao');
+    
+    if (!descricaoElement) {
+        // Criar elemento se não existir
+        descricaoElement = document.createElement('div');
+        descricaoElement.id = 'material-descricao';
+        descricaoElement.className = 'mt-2 p-3 bg-green-50 border border-green-200 rounded-lg';
+        
+        const codField = document.getElementById('cod_material');
+        codField.parentElement.appendChild(descricaoElement);
+    }
+    
+    descricaoElement.innerHTML = `
+        <div class="flex items-start space-x-2">
+            <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+                <p class="text-sm font-medium text-green-800">Material válido</p>
+                <p class="text-sm text-green-700">${descricao}</p>
+            </div>
+        </div>
+    `;
+    descricaoElement.classList.remove('hidden');
+}
+
+function limparDescricaoMaterial() {
+    const descricaoElement = document.getElementById('material-descricao');
+    if (descricaoElement) {
+        descricaoElement.classList.add('hidden');
+    }
 }
 
 function validarCortes() {
@@ -938,3 +1012,95 @@ function downloadPDF(nomeArquivo, tipo) {
 }
 
 console.log('=== ARQUIVO APP.JS CARREGADO ===');
+
+// ============== FUNCIONALIDADES DE AUTOCOMPLETE ==============
+
+let autocompleteTimeout = null;
+
+async function handleAutocomplete(value) {
+    const autocompleteDiv = document.getElementById('material-autocomplete');
+    
+    // Limpar timeout anterior
+    if (autocompleteTimeout) {
+        clearTimeout(autocompleteTimeout);
+    }
+    
+    // Se valor muito pequeno, esconder autocomplete
+    if (value.length < 3) {
+        hideAutocomplete();
+        return;
+    }
+    
+    // Debounce para evitar muitas requisições
+    autocompleteTimeout = setTimeout(async () => {
+        try {
+            const response = await fetch(`/api/materiais/autocomplete?q=${encodeURIComponent(value)}&limit=5`);
+            const data = await response.json();
+            
+            if (data.suggestions && data.suggestions.length > 0) {
+                showAutocomplete(data.suggestions);
+            } else {
+                hideAutocomplete();
+            }
+        } catch (error) {
+            console.error('Erro no autocomplete:', error);
+            hideAutocomplete();
+        }
+    }, 300);
+}
+
+function showAutocomplete(suggestions) {
+    const autocompleteDiv = document.getElementById('material-autocomplete');
+    
+    if (!autocompleteDiv) return;
+    
+    autocompleteDiv.innerHTML = '';
+    
+    suggestions.forEach((suggestion, index) => {
+        const item = document.createElement('div');
+        item.className = 'px-4 py-3 hover:bg-gray-700 cursor-pointer text-white border-b border-gray-600 last:border-b-0';
+        item.innerHTML = `
+            <div class="font-medium text-sm">${suggestion.codigo}</div>
+            <div class="text-xs text-gray-400 mt-1">${suggestion.descricao}</div>
+        `;
+        
+        item.addEventListener('click', () => {
+            selectMaterial(suggestion.codigo, suggestion.descricao);
+        });
+        
+        autocompleteDiv.appendChild(item);
+    });
+    
+    autocompleteDiv.classList.remove('hidden');
+}
+
+function hideAutocomplete() {
+    const autocompleteDiv = document.getElementById('material-autocomplete');
+    if (autocompleteDiv) {
+        autocompleteDiv.classList.add('hidden');
+    }
+}
+
+function selectMaterial(codigo, descricao) {
+    const codField = document.getElementById('cod_material');
+    if (codField) {
+        codField.value = codigo;
+        mostrarDescricaoMaterial(descricao);
+        hideAutocomplete();
+        
+        // Disparar validação
+        validarCodMaterial();
+    }
+}
+
+// Fechar autocomplete ao clicar fora
+document.addEventListener('click', function(e) {
+    const codField = document.getElementById('cod_material');
+    const autocompleteDiv = document.getElementById('material-autocomplete');
+    
+    if (codField && autocompleteDiv && 
+        !codField.contains(e.target) && 
+        !autocompleteDiv.contains(e.target)) {
+        hideAutocomplete();
+    }
+});

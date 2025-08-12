@@ -3,7 +3,7 @@ from typing import List, Optional
 import datetime
 
 # Importar suas funções de validação
-from Modulação.validação import validar_ss, validar_sk, validar_cod_material
+from Modulação.validação import validar_ss, validar_sk, validar_cod_material_com_base
 from Modulação.utils import parse_entrada
 
 class ProjetoRequest(BaseModel):
@@ -51,8 +51,8 @@ class ProjetoRequest(BaseModel):
         if not v:
             raise ValueError('Código do material é obrigatório')
         
-        if not validar_cod_material(v):
-            raise ValueError('Código do material deve ter exatamente 10 dígitos')
+        if not validar_cod_material_com_base(v):
+            raise ValueError('Código do material inválido ou não encontrado na base de dados')
         
         return v
 

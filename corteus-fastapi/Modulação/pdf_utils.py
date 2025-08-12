@@ -5,7 +5,7 @@ from reportlab.pdfgen import canvas
 
 def gerar_pdf(
     caminho, texto_relatorio, campos, titulo="RELATÓRIO DE CORTES",
-    fonte_normal="Times-Roman", fonte_bold="Times-Bold"
+    fonte_normal="Times-Roman", fonte_bold="Times-Bold", descricao_material=None
 ):
     # Não registra fontes customizadas, usa apenas as padrões do ReportLab
     try:
@@ -63,6 +63,29 @@ def gerar_pdf(
     largura_titulo = stringWidth(titulo, fonte_bold, tamanho_titulo)
     c.drawString((largura - largura_titulo) / 2, y_titulo, titulo)
     y = y_titulo - 2 * line_height
+
+    # Adicionar seção de descrição do material, se fornecida
+    if descricao_material:
+        c.setFont(fonte_bold, tamanho_subtitulo)
+        c.drawString(x, y, "Descrição do Material:")
+        y -= line_height * 1.2
+        c.setFont(fonte_normal, tamanho_normal)
+        
+        # Quebrar a descrição em múltiplas linhas se necessário
+        for sublinha in textwrap.wrap(descricao_material, width=85):
+            if y < margem + 60:
+                c.showPage()
+                c.rect(margem, margem, largura - 2 * margem, altura - 2 * margem, stroke=1, fill=0)
+                numero_pagina = c.getPageNumber()
+                texto_pagina = f"Página {numero_pagina}"
+                c.setFont(fonte_normal, 10)
+                largura_texto = stringWidth(texto_pagina, fonte_normal, 10)
+                c.drawString((largura - largura_texto) / 2, margem - 15, texto_pagina)
+                y = altura - 80
+                c.setFont(fonte_normal, tamanho_normal)
+            c.drawString(x, y, sublinha)
+            y -= line_height
+        y -= line_height  # Espaço extra após a descrição
 
     c.setFont(fonte_normal, tamanho_normal)
     i = 0

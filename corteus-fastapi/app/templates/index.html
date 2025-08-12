@@ -114,8 +114,14 @@
                     </div>
                     <div class="space-y-2">
                         <label for="cod_material" class="block text-sm font-semibold text-gray-300">Código do Material</label>
-                        <input type="text" id="cod_material" name="cod_material" maxlength="10" placeholder="1234567890" 
-                               class="w-full bg-gray-900/80 border border-gray-600 rounded-xl px-4 py-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-corteus-primary focus:border-corteus-primary transition-all backdrop-blur-sm">
+                        <div class="relative">
+                            <input type="text" id="cod_material" name="cod_material" maxlength="10" placeholder="1234567890" 
+                                   class="w-full bg-gray-900/80 border border-gray-600 rounded-xl px-4 py-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-corteus-primary focus:border-corteus-primary transition-all backdrop-blur-sm"
+                                   autocomplete="off">
+                            <!-- Dropdown para autocomplete -->
+                            <div id="material-autocomplete" class="absolute z-50 w-full bg-gray-800 border border-gray-600 rounded-lg mt-1 shadow-lg hidden max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
                         <div id="cod-error" class="text-red-400 text-sm mt-2 hidden"></div>
                     </div>
                 </div>

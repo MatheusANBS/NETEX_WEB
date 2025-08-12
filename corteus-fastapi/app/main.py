@@ -7,7 +7,7 @@ import base64
 import hashlib
 from decouple import config
 
-from app.routers import cortes, relatorios, analytics
+from app.routers import cortes, relatorios, analytics, materiais
 from app.auth import auth_manager
 
 app = FastAPI(
@@ -27,6 +27,7 @@ templates = Jinja2Templates(directory="app/templates")
 # Incluir routers
 app.include_router(cortes.router, prefix="/api", tags=["cortes"])
 app.include_router(relatorios.router, prefix="/api", tags=["relatorios"])
+app.include_router(materiais.router, prefix="/api", tags=["materiais"])
 # Analytics router sem prefixo para aceitar tanto /track quanto /analytics-data
 app.include_router(analytics.router, tags=["analytics"])
 
