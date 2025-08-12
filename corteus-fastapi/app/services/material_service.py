@@ -9,11 +9,30 @@ class MaterialService:
     
     def _carregar_materiais(self):
         """Carrega a base de dados de materiais do CSV"""
-        csv_path = "/workspaces/NETEX_WEB/materiais_unidade_M_descresumida.csv"
+        # Usar caminho relativo ao arquivo atual
+        current_dir = os.path.dirname(os.path.abspath(__file__))
         
-        if not os.path.exists(csv_path):
-            print(f"Arquivo CSV não encontrado: {csv_path}")
+        # Tentar diferentes caminhos possíveis
+        possible_paths = [
+            os.path.join(current_dir, '..', '..', 'materiais_unidade_M_descresumida.csv'),  # Pasta raiz do projeto
+            os.path.join(current_dir, '..', '..', '..', 'materiais_unidade_M_descresumida.csv'),  # Raiz do workspace
+            "./materiais_unidade_M_descresumida.csv",  # Diretório atual da aplicação
+            "../materiais_unidade_M_descresumida.csv",  # Um nível acima
+            "materiais_unidade_M_descresumida.csv",  # Diretório de execução
+        ]
+        
+        csv_path = None
+        for path in possible_paths:
+            abs_path = os.path.abspath(path)
+            if os.path.exists(abs_path):
+                csv_path = abs_path
+                break
+        
+        if not csv_path:
+            print(f"Arquivo CSV não encontrado em nenhum dos caminhos: {[os.path.abspath(p) for p in possible_paths]}")
             return
+        
+        print(f"Carregando materiais de: {csv_path}")
         
         try:
             with open(csv_path, 'r', encoding='utf-8') as file:
@@ -27,9 +46,13 @@ class MaterialService:
             
         except Exception as e:
             print(f"Erro ao carregar materiais: {e}")
+            print("Continuando sem base de materiais (validação básica)")
     
     def validar_codigo_material(self, codigo: str) -> bool:
         """Valida se o código do material existe na base de dados"""
+        if not self.materiais_db:
+            print("Base de materiais não carregada, retornando True")
+            return True
         return codigo in self.materiais_db
     
     def obter_descricao_material(self, codigo: str) -> Optional[str]:

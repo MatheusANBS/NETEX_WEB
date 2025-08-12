@@ -304,19 +304,32 @@ async function validarMaterialNaBase(codigo) {
     
     try {
         const response = await fetch(`/api/materiais/validar/${codigo}`);
+        
+        if (!response.ok) {
+            console.warn('API de validação não disponível, usando validação básica');
+            limparDescricaoMaterial();
+            return;
+        }
+        
         const data = await response.json();
         
         if (data.valido) {
             hideError(errorElement);
-            mostrarDescricaoMaterial(data.descricao);
+            if (data.descricao) {
+                mostrarDescricaoMaterial(data.descricao);
+            } else {
+                limparDescricaoMaterial();
+            }
         } else {
             showError(errorElement, 'Código do material não encontrado na base de dados');
             limparDescricaoMaterial();
         }
     } catch (error) {
-        console.error('Erro ao validar material:', error);
-        // Em caso de erro na API, não mostra erro para não bloquear o usuário
+        console.warn('Erro ao validar material:', error);
+        // Em caso de erro na API, limpa descrição mas não mostra erro
         limparDescricaoMaterial();
+        // Remove qualquer erro anterior
+        hideError(errorElement);
     }
 }
 
@@ -1035,6 +1048,13 @@ async function handleAutocomplete(value) {
     autocompleteTimeout = setTimeout(async () => {
         try {
             const response = await fetch(`/api/materiais/autocomplete?q=${encodeURIComponent(value)}&limit=5`);
+            
+            if (!response.ok) {
+                console.warn('API de autocomplete não disponível');
+                hideAutocomplete();
+                return;
+            }
+            
             const data = await response.json();
             
             if (data.suggestions && data.suggestions.length > 0) {
@@ -1043,7 +1063,7 @@ async function handleAutocomplete(value) {
                 hideAutocomplete();
             }
         } catch (error) {
-            console.error('Erro no autocomplete:', error);
+            console.warn('Erro no autocomplete:', error);
             hideAutocomplete();
         }
     }, 300);

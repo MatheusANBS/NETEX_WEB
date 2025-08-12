@@ -12,13 +12,19 @@ def validar_cod_material(cod):
 
 def validar_cod_material_com_base(cod):
     """Validação completa usando a base de dados de materiais"""
+    # Primeiro verifica o formato básico
+    if not validar_cod_material(cod):
+        return False
+    
     try:
         from app.services.material_service import material_service
-        # Primeiro verifica o formato
-        if not validar_cod_material(cod):
-            return False
-        # Depois verifica se existe na base
+        # Se não há materiais carregados, usa validação básica
+        if not material_service.materiais_db:
+            print("Base de materiais vazia, usando validação básica")
+            return True
+        # Verifica se existe na base
         return material_service.validar_codigo_material(cod)
-    except:
-        # Se não conseguir importar o serviço, usa apenas validação de formato
-        return validar_cod_material(cod)
+    except Exception as e:
+        print(f"Erro na validação com base: {e}")
+        # Se não conseguir importar o serviço ou houver erro, usa apenas validação básica
+        return True  # Permite passar para não bloquear usuário

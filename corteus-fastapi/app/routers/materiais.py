@@ -1,8 +1,18 @@
 from fastapi import APIRouter, HTTPException, Query
 from typing import Dict, Optional
 from app.services.material_service import material_service
+import os
 
 router = APIRouter()
+
+@router.get("/materiais/status")
+async def status_materiais():
+    """Status da base de dados de materiais (para debug)"""
+    return {
+        "total_materiais": len(material_service.materiais_db),
+        "status": "carregado" if material_service.materiais_db else "vazio",
+        "primeiros_5": dict(list(material_service.materiais_db.items())[:5]) if material_service.materiais_db else {}
+    }
 
 @router.get("/materiais/validar/{codigo}")
 async def validar_material(codigo: str):
